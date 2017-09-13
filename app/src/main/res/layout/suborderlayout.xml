@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+   android:layout_marginTop="10dp"
+    android:paddingBottom="20dp">
+    <TextView
+        android:id="@+id/tw_itemname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="17dp"
+        android:text="Latte"
+        android:textColor="@color/colorPrimary"
+        android:layout_marginStart="20dp"
+        />
+    <ImageView
+        android:id="@+id/iv_itemimage"
+        android:layout_width="50dp"
+        android:layout_height="35dp"
+        android:src="@drawable/graycup1"
+        android:layout_below="@+id/tw_itemname"
+        android:layout_marginStart="9dp" />
+    <TextView
+        android:id="@+id/tw_small"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="17dp"
+        android:text="Small"
+        android:textColor="@color/colorPrimary"
+        android:layout_toRightOf="@+id/iv_itemimage"
+        android:layout_marginTop="39dp"
+        android:layout_marginLeft="10dp"
+        />
+    <TextView
+        android:id="@+id/et_notehint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Your Note"
+        android:textSize="12dp"
+        android:textColor="@color/colorPrimary"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="20dp"
+        android:layout_below="@+id/iv_itemimage"
+     />
+    <EditText
+        android:id="@+id/et_note"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:lines="3"
+        android:layout_below="@+id/et_notehint"
+        android:layout_marginStart="20dp"
+        android:hint="Add a note"
+
+        android:gravity="top"
+        android:inputType="textMultiLine"
+        android:scrollHorizontally="false"
+        />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/et_note"
+        android:layout_marginTop="20dp">
+    <TextView
+        android:id="@+id/bt_sitin"
+        android:layout_width="95dp"
+        android:layout_height="30dp"
+        android:background="@drawable/border_hollow_white"
+        android:text="Sit In"
+        android:textColor="@color/colorPrimary"
+        android:textAllCaps="false"
+        android:textSize="15dp"
+        android:gravity="center"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="20dp"
+
+        android:layout_alignParentLeft="true"
+
+         />
+    <TextView
+        android:id="@+id/bt_pickcup"
+        android:layout_width="95dp"
+        android:layout_height="30dp"
+        android:background="@drawable/border_hollow_full_black"
+        android:text="PickCup"
+        android:textColor="@color/white"
+        android:layout_marginEnd="22dp"
+        android:textAllCaps="false"
+        android:layout_marginTop="20dp"
+        android:textSize="15dp"
+        android:gravity="center"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true" />
+    </RelativeLayout>
+
+</RelativeLayout>

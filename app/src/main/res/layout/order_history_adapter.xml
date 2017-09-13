@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        >
+        <ImageView
+            android:id="@+id/tittleimage"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:src="@drawable/cofeecup"
+            android:scaleType="centerCrop"
+            />
+        <RelativeLayout
+            android:id="@+id/toplayout"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:background="#88ffffff">
+            <TextView
+                android:id="@+id/tittle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Urban Cafe"
+                android:textColor="#000"
+                android:textSize="18dp"
+                android:textAllCaps="true"
+                android:layout_marginStart="10dp"
+                android:layout_centerVertical="true"
+                android:layout_alignParentStart="true" />
+        </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/header"
+            android:background="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/toplayout">
+            <RelativeLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp">
+            <TextView
+                android:id="@+id/orderno"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Order No :"
+                android:textColor="@color/colorPrimary"
+
+                android:textSize="17dp"/>
+            <TextView
+                android:id="@+id/tw_orderno"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+               android:layout_toRightOf="@+id/orderno"
+                android:textColor="@color/colorPrimary"
+
+                android:text="1230"
+                android:textSize="17dp"/>
+            <TextView
+                android:id="@+id/tw_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Feb 22,2017"
+                android:textSize="17dp"
+                android:textColor="@color/colorPrimary"
+
+                android:layout_alignParentRight="true"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Sit In"
+                    android:textColor="@color/colorPrimary"
+
+                    android:textAllCaps="false"
+                    android:textSize="12dp"
+                    android:layout_below="@+id/orderno"/>
+        </RelativeLayout>
+        </RelativeLayout>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycleView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#ffffff"
+          android:padding="10dp"
+            android:layout_below="@+id/header"></android.support.v7.widget.RecyclerView>
+         <RelativeLayout
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:background="@color/gray"
+             android:padding="10dp"
+             android:layout_below="@+id/recycleView">
+             <TextView
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:text="Total"
+                 android:textAllCaps="true"
+                 android:textColor="@color/colorPrimary"
+                 android:textSize="17dp"
+                 android:layout_alignParentLeft="true"
+                 />
+             <TextView
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:id="@+id/tw_total"
+                 android:text="£ 29.20"
+                 android:textColor="@color/colorPrimary"
+                 android:textSize="17dp"
+                 android:layout_alignParentRight="true"/>
+
+
+         </RelativeLayout>
+
+    </RelativeLayout>
+
+</RelativeLayout>
+

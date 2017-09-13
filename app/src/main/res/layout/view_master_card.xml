@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_marginTop="15dp"
+        android:padding="20dp"
+
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+
+
+            android:layout_centerHorizontal="true"
+            android:layout_width="wrap_content"
+            android:layout_height="150dp"
+            android:padding="@dimen/activity_horizontal_margin"
+
+            android:layout_alignParentTop="true"
+            android:background="@drawable/round_card_view"
+            android:id="@+id/relativeLayout6">
+            <ImageView
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/brand_logo"
+                android:src="@drawable/mastercard_logo_opt"
+                android:layout_above="@+id/card_4"
+                android:layout_marginBottom="@dimen/appbar_padding_top"
+                android:layout_alignEnd="@+id/card_4" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textSize="@dimen/activity_vertical_margin"
+                android:layout_gravity="center"
+                android:text="XXXX"
+
+                android:layout_marginTop="43dp"
+                android:id="@+id/card_2"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+
+                android:layout_alignParentTop="true"
+                android:layout_toEndOf="@+id/card_1"
+                android:layout_marginStart="25dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textSize="@dimen/activity_vertical_margin"
+                android:layout_gravity="center"
+                android:text="XXXX"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+
+                android:layout_alignTop="@+id/card_2"
+                android:layout_toEndOf="@+id/card_2"
+                android:layout_marginStart="25dp"
+                android:id="@+id/card_3" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textSize="@dimen/activity_vertical_margin"
+                android:layout_gravity="center"
+                android:text="XXXX"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+
+                android:layout_marginRight="30dp"
+                android:layout_alignTop="@+id/card_3"
+                android:layout_toEndOf="@+id/card_3"
+                android:layout_marginStart="25dp"
+                android:layout_marginEnd="10dp"
+                android:id="@+id/card_4" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textSize="@dimen/activity_vertical_margin"
+                android:textStyle="bold"
+
+                android:layout_gravity="center"
+                android:text="XXXX"
+                android:textColor="@color/white"
+
+                android:id="@+id/card_1"
+                android:layout_marginLeft="10dp"
+                android:layout_alignTop="@+id/card_2"
+                android:layout_alignParentStart="true" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="VALID\nTHRU"
+                android:textColor="@color/white"
+                android:textSize="5dp"
+                android:layout_marginTop="3dp"
+                android:layout_alignTop="@+id/tv_card_expiry"
+                android:layout_alignEnd="@+id/card_1" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="03 / 2015"
+
+                android:id="@+id/tv_card_expiry"
+                android:textColor="@color/white"
+                android:layout_below="@+id/card_2"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:layout_alignEnd="@+id/card_2" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="SUSHIL PdsdsdsAWAR"
+                android:singleLine="true"
+                android:id="@+id/tv_cardCustomerName"
+                android:textColor="@color/white"
+                android:layout_below="@+id/tv_card_expiry"
+                android:layout_alignEnd="@+id/card_2" />
+
+        </RelativeLayout>
+
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_marginTop="70dp"
+            android:id="@+id/detail_card"
+
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/relativeLayout6"
+
+            >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:weightSum="1"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_weight="0.5"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Name : "
+                    android:textStyle="bold"
+                    android:textSize="@dimen/activity_horizontal_margin"
+                    android:layout_marginBottom="@dimen/appbar_padding_top"
+
+                    />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_weight="0.5"
+
+                    android:layout_height="wrap_content"
+                    android:text="dfdfd"
+                    android:textAlignment="textEnd"
+                    android:textSize="@dimen/activity_horizontal_margin"
+                    android:id="@+id/tv_Name"
+                    android:layout_marginBottom="@dimen/appbar_padding_top"
+
+                    />
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginBottom="@dimen/appbar_padding_top"
+                android:background="@color/grey"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:weightSum="1"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Brand : "
+                    android:layout_marginBottom="@dimen/appbar_padding_top"
+                    android:layout_weight="0.5"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/activity_horizontal_margin"
+                    />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_weight="0.5"
+
+                    android:layout_height="wrap_content"
+                    android:text="dfdfd"
+                    android:textAlignment="textEnd"
+                    android:textSize="@dimen/activity_horizontal_margin"
+                    android:id="@+id/tv_brand"
+                    android:layout_marginBottom="@dimen/appbar_padding_top"
+
+                    />
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginBottom="@dimen/appbar_padding_top"
+
+
+                android:background="@color/grey"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:weightSum="1"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Expiry Date : "
+                    android:layout_marginBottom="@dimen/appbar_padding_top"
+                    android:layout_weight="0.5"
+                    android:textStyle="bold"
+
+                    android:textSize="@dimen/activity_horizontal_margin"
+
+                    />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_weight="0.5"
+
+                    android:layout_height="wrap_content"
+                    android:text="dfdfd"
+                    android:textAlignment="textEnd"
+                    android:textSize="@dimen/activity_horizontal_margin"
+                    android:id="@+id/tv_card_no"
+                    android:layout_marginBottom="@dimen/appbar_padding_top"
+
+                    />
+            </LinearLayout>
+
+
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/no_credit_card"
+            android:gravity="center"
+            android:id="@+id/tv_no_credit_card"
+            android:layout_centerInParent="true"
+            android:visibility="invisible"
+            android:textSize="@dimen/no_card_yet"/>
+    </RelativeLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/containerViewCard"></FrameLayout>
+
+
+</RelativeLayout>
