@@ -41,7 +41,7 @@ public class order_history extends AppCompatActivity {
         setContentView(R.layout.activity_reward);
         ButterKnife.bind(this);
         twReward.setText("Order history");
-        icon.setBackground(getResources().getDrawable(R.drawable.order));
+        icon.setBackground(getResources().getDrawable(R.drawable.ic_history_black_48dp));
         Orders orders=new Orders("Espresso","£ 2.20","small","1");
         Orders orders1=new Orders("Latte","£ 15","medium","3");
         Orders orders2=new Orders("Brownie","£ 12","large","4");

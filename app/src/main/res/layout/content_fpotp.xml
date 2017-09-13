@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="20dp"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.example.infiny.pickup.Activity.FpotpActivity"
+    tools:showIn="@layout/activity_fpotp">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <ImageView
+            android:id="@+id/logo"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:focusableInTouchMode="true"
+            android:src="@drawable/blackcup"
+            android:layout_centerHorizontal="true"
+            >
+        </ImageView>
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/logo"
+            android:layout_marginTop="20dp">
+            <TextView
+                android:id="@+id/tw_header"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Please enter verification code sent to your email"
+                android:textSize="20dp"
+                android:gravity="center"/>
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/et_otp"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:layout_below="@+id/tw_header"
+                android:hint="Verification Code">
+
+                <EditText
+                    android:id="@+id/tie_otp"
+                    android:layout_width="match_parent"
+                    android:layout_height="54dp"
+                    android:singleLine="true"
+                    android:textSize="17dp"
+                    android:backgroundTint="#1e1d1e"
+                    android:textColor="@color/colorPrimary" />
+            </android.support.design.widget.TextInputLayout>
+            <Button
+                android:id="@+id/bt_otp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/border_hollow_full_black"
+                android:textColor="@android:color/white"
+                android:layout_marginTop="10dp"
+                android:layout_below="@+id/et_otp"
+                android:text="Proceed"
+                />
+            <TextView
+                android:id="@+id/tw_recent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Dont't Receive code? Resend now"
+                android:gravity="center"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="5dp"
+                android:layout_below="@+id/bt_otp"
+                />
+
+        </RelativeLayout>
+    </RelativeLayout>
+
+
+</RelativeLayout>

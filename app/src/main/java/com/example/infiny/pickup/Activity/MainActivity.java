@@ -163,6 +163,9 @@ public class MainActivity extends AppCompatActivity
             startActivity(intent);
 
         } else if (id == R.id.nav_cart) {
+            Intent intent=new Intent(MainActivity.this,OrderActivity.class);
+            startActivity(intent);
+
 
         } else if (id == R.id.nav_order) {
             Intent intent=new Intent(MainActivity.this,order_history.class);
@@ -179,6 +182,11 @@ public class MainActivity extends AppCompatActivity
         }
         else if (id == R.id.nav_card) {
             Intent intent=new Intent(MainActivity.this,Card_Activity.class);
+            startActivity(intent);
+
+        }
+        else if (id == R.id.nav_notification) {
+            Intent intent=new Intent(MainActivity.this,NotificationActivity.class);
             startActivity(intent);
 
         }

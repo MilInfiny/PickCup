@@ -3,14 +3,14 @@
 
     <item>
         <shape>
-            <padding android:bottom="0dp" android:left="1dp" android:right="2dp"
+            <padding android:bottom="0dp" android:left="2dp" android:right="2dp"
                 android:top="0dp"/>
             <solid android:color="#30CCCCCC"/>
         </shape>
     </item>
     <item>
         <shape>
-            <padding android:bottom="0dp" android:left="1dp" android:right="2dp" android:top="0dp"/>
+            <padding android:bottom="0dp" android:left="2dp" android:right="2dp" android:top="0dp"/>
             <solid android:color="#50CCCCCC"/>
         </shape>
     </item>

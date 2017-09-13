@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
+    android:id="@+id/relativeLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
     <RelativeLayout
@@ -47,7 +48,7 @@
                 android:id="@+id/orderno"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Order No :"
+                android:text="Order#: "
                 android:textColor="@color/colorPrimary"
 
                 android:textSize="17dp"/>
@@ -61,10 +62,10 @@
                 android:text="1230"
                 android:textSize="17dp"/>
             <TextView
-                android:id="@+id/tw_date"
+                android:id="@+id/tw_total"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Feb 22,2017"
+                android:text="£ 27"
                 android:textSize="17dp"
                 android:textColor="@color/colorPrimary"
 
@@ -72,47 +73,35 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Sit In"
+                    android:id="@+id/tw_otp"
+                    android:layout_below="@+id/tw_total"
+                    android:layout_alignParentRight="true"
+                    android:text="OTP: 2547"
+                    android:textSize="17dp"
                     android:textColor="@color/colorPrimary"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Order Type: Sit In"
+                    android:textColor="@color/colorPrimary"
+                      android:id="@+id/type"
+                    android:textAllCaps="false"
+                    android:textSize="17dp"
+                    android:layout_below="@+id/orderno"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Feb 22,2017"
+                    android:textColor="@color/colorPrimary"
+                    android:layout_below="@+id/type"
 
                     android:textAllCaps="false"
-                    android:textSize="12dp"
-                    android:layout_below="@+id/orderno"/>
+                    android:textSize="17dp"
+                    android:id="@+id/tw_date"/>
         </RelativeLayout>
         </RelativeLayout>
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recycleView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#ffffff"
-          android:padding="10dp"
-            android:layout_below="@+id/header"></android.support.v7.widget.RecyclerView>
-         <RelativeLayout
-             android:layout_width="match_parent"
-             android:layout_height="wrap_content"
-             android:background="@color/gray"
-             android:padding="10dp"
-             android:layout_below="@+id/recycleView">
-             <TextView
-                 android:layout_width="wrap_content"
-                 android:layout_height="wrap_content"
-                 android:text="Total"
-                 android:textAllCaps="true"
-                 android:textColor="@color/colorPrimary"
-                 android:textSize="17dp"
-                 android:layout_alignParentLeft="true"
-                 />
-             <TextView
-                 android:layout_width="wrap_content"
-                 android:layout_height="wrap_content"
-                 android:id="@+id/tw_total"
-                 android:text="£ 29.20"
-                 android:textColor="@color/colorPrimary"
-                 android:textSize="17dp"
-                 android:layout_alignParentRight="true"/>
 
-
-         </RelativeLayout>
 
     </RelativeLayout>
 

@@ -1,3 +1,4 @@
+/*
 package com.example.infiny.pickup.Adapters;
 
 import android.content.Context;
@@ -13,9 +14,11 @@ import com.example.infiny.pickup.R;
 
 import java.util.ArrayList;
 
+*/
 /**
  * Created by infiny on 9/12/17.
- */
+ *//*
+
 
 public class Order_History_Details_Adapter extends RecyclerView.Adapter<Order_History_Details_Adapter.MyViewHolder> {
     Context context;
@@ -59,3 +62,4 @@ public class Order_History_Details_Adapter extends RecyclerView.Adapter<Order_Hi
         }
     }
 }
+*/

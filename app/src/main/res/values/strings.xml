@@ -23,7 +23,6 @@
     <string name="visa_card">Visa Card</string>
 
 
-
     <string name="title_activity_registration">RegistrationActivity</string>
 
     <!-- TODO: Remove or change this placeholder text -->
@@ -41,4 +40,9 @@
     <string name="title_activity_reward">RewardActivity</string>
     <string name="title_activity_order_history">order_history</string>
     <string name="title_activity_card_">Card_Activity</string>
+    <string name="title_activity_notification">NotificationActivity</string>
+    <string name="title_activity_fpemailsubmit">FpemailsubmitActivity</string>
+    <string name="title_activity_fpotp">FpotpActivity</string>
+    <string name="title_activity_fpresetpassword">fpresetpassword</string>
+    <string name="title_activity_order_details">OrderDetailsActivity</string>
 </resources>

@@ -1,6 +1,7 @@
 package com.example.infiny.pickup.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -10,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.example.infiny.pickup.Activity.OrderDetailsActivity;
 import com.example.infiny.pickup.Activity.order_history;
 import com.example.infiny.pickup.Helpers.Order_History_Helpers;
 import com.example.infiny.pickup.R;
@@ -23,7 +25,6 @@ import java.util.ArrayList;
 public class Order_History_Adapter  extends RecyclerView.Adapter<Order_History_Adapter.MyViewHolder>  {
     Context context;
     ArrayList<Order_History_Helpers> partyName;
-    Order_History_Details_Adapter order_history_details_adapter;
 
 
 
@@ -44,11 +45,13 @@ public class Order_History_Adapter  extends RecyclerView.Adapter<Order_History_A
 
         Order_History_Helpers f1=partyName.get(position);
         holder.partyName.setText(f1.getPartyname());
-
-        order_history_details_adapter=new Order_History_Details_Adapter(context,this.partyName.get(position).getOrders());
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(context.getApplicationContext());
-        holder.recyclerView.setLayoutManager(mLayoutManager);
-        holder.recyclerView.setAdapter(order_history_details_adapter);
+        holder.relativeLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(context, OrderDetailsActivity.class);
+                context.startActivity(intent);
+            }
+        });
 
 
     }
@@ -62,14 +65,13 @@ public class Order_History_Adapter  extends RecyclerView.Adapter<Order_History_A
         RelativeLayout relativeLayout;
         TextView partyName;
         ImageView imageView;
-        RecyclerView recyclerView;
+
 
         public MyViewHolder(View itemView) {
             super(itemView);
             partyName=(TextView)itemView.findViewById(R.id.tittle);
             imageView=(ImageView)itemView.findViewById(R.id.tittleimage);
-            relativeLayout=(RelativeLayout)itemView.findViewById(R.id.toplayout);
-            recyclerView=(RecyclerView)itemView.findViewById(R.id.recycleView);
+            relativeLayout=(RelativeLayout)itemView.findViewById(R.id.relativeLayout);
         }
     }
 }

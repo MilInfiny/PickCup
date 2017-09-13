@@ -83,6 +83,7 @@
             </RelativeLayout>
 
             <RelativeLayout
+                android:id="@+id/button_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/rel_edit_text"
@@ -110,6 +111,16 @@
                     android:text="Log in"
                     />
             </RelativeLayout>
+            <TextView
+                android:id="@+id/tw_forgot_password"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Forgot Password?"
+                android:textColor="@color/white"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="5dp"
+                android:layout_below="@+id/button_layout"/>
         </RelativeLayout>
     </ScrollView>
 

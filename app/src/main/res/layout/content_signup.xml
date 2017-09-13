@@ -58,6 +58,7 @@
                         android:id="@+id/tie_password"
                         android:layout_width="match_parent"
                         android:layout_height="54dp"
+                        android:inputType="textPassword"
                         android:singleLine="true"
                         android:backgroundTint="#1e1d1e"
                         android:textColor="@color/colorPrimary" />
@@ -67,6 +68,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="70dp"
                     android:hint="Confirm Password"
+
                     android:layout_below="@+id/et_password">
 
                     <EditText
@@ -74,6 +76,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="54dp"
                         android:singleLine="true"
+                        android:inputType="textPassword"
                         android:backgroundTint="#1e1d1e"
                         android:textColor="@color/colorPrimary" />
                 </android.support.design.widget.TextInputLayout>

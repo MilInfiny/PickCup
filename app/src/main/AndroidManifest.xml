@@ -70,6 +70,26 @@
         <activity
             android:name=".Activity.Card_Activity"
             android:label="@string/title_activity_card_"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Activity.NotificationActivity"
+            android:label="@string/title_activity_notification"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Activity.FpemailsubmitActivity"
+            android:label="@string/title_activity_fpemailsubmit"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Activity.FpotpActivity"
+            android:label="@string/title_activity_fpotp"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Activity.fpresetpassword"
+            android:label="@string/title_activity_fpresetpassword"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Activity.OrderDetailsActivity"
+            android:label="@string/title_activity_order_details"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
