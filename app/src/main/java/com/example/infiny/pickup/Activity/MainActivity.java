@@ -113,6 +113,8 @@ public class MainActivity extends AppCompatActivity
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         recycleView.setLayoutManager(mLayoutManager);
         recycleView.setAdapter(CafeListAdapter);
+        recycleView.setNestedScrollingEnabled(false);
+
         //recycleView.getLayoutManager().smoothScrollToPosition(recycleView, null, 0);
         logo.setFocusable(true) ;
 
