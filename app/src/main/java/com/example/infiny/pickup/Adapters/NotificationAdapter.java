@@ -39,6 +39,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         CafeLIstingHelpers f1=strings.get(position);
         holder.textView.setText(f1.getStatus());
         holder.imageView.setImageResource(f1.getImage());
+        holder.posteddate.setText(f1.getRating());
     }
 
     @Override
@@ -47,7 +48,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView textView;
+        TextView textView,posteddate;
         RelativeLayout img;
         ImageView imageView;
         public MyViewHolder(View itemView) {
@@ -55,6 +56,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
             textView=(TextView)itemView.findViewById(R.id.notificationHeading);
             img=(RelativeLayout) itemView.findViewById(R.id.img);
             imageView=(ImageView)itemView.findViewById(R.id.img1);
+            posteddate=(TextView)itemView.findViewById(R.id.posteddate);
         }
     }
 }

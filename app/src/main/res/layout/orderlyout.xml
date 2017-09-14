@@ -29,6 +29,8 @@
             android:id="@+id/list_item_genre_arrow"
             android:layout_width="20dp"
             android:layout_height="20dp"
+            android:layout_marginTop="2dp"
+
             android:src="@drawable/right_arrow"
             android:layout_alignParentRight="true"
             />
@@ -40,6 +42,8 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:visibility="gone"
+        android:layout_marginTop="2dp"
+
         android:background="@color/lightgray"
         android:layout_below="@+id/relativeLayout"></View>
 </RelativeLayout>

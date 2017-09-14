@@ -36,6 +36,7 @@ public class NotificationActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        appbar.setOutlineProvider(null);
 
         getSupportActionBar().setTitle("Notifications");
 
@@ -46,29 +47,29 @@ public class NotificationActivity extends AppCompatActivity {
         CafeLIstingHelpers cafeLIstingHelpers2 = new CafeLIstingHelpers();
         CafeLIstingHelpers cafeLIstingHelpers3 = new CafeLIstingHelpers();
         CafeLIstingHelpers cafeLIstingHelpers4 = new CafeLIstingHelpers();
-        cafeLIstingHelpers.setStatus("You are order is ready for pickup");
+        cafeLIstingHelpers.setStatus("Your order is ready for pickup");
         cafeLIstingHelpers.setPartyname("urban cafe");
         cafeLIstingHelpers.setImage(R.drawable.cofee3);
-        cafeLIstingHelpers.setRating("2");
+        cafeLIstingHelpers.setRating("today");
         cafeLIstingHelperseslist.add(cafeLIstingHelpers);
-        cafeLIstingHelpers1.setStatus("You are order is ready for pickup");
+        cafeLIstingHelpers1.setStatus("You can pickup your order in Urban cafe");
         cafeLIstingHelpers1.setPartyname("Yorks");
-        cafeLIstingHelpers1.setRating("4");
+        cafeLIstingHelpers1.setRating("1 day to go");
 
         cafeLIstingHelpers1.setImage(R.drawable.cofee2);
         cafeLIstingHelperseslist.add(cafeLIstingHelpers1);
-        cafeLIstingHelpers2.setStatus("You are order is ready for pickup");
-        cafeLIstingHelpers2.setRating("1");
+        cafeLIstingHelpers2.setStatus("Your order is successfully placed");
+        cafeLIstingHelpers2.setRating("2 days to go");
         cafeLIstingHelpers2.setPartyname("7/8 kafe");
         cafeLIstingHelpers2.setImage(R.drawable.cofee3);
         cafeLIstingHelperseslist.add(cafeLIstingHelpers2);
-        cafeLIstingHelpers3.setRating("2");
-        cafeLIstingHelpers3.setStatus("You are order is ready for pickup");
+        cafeLIstingHelpers3.setRating("3 days to go");
+        cafeLIstingHelpers3.setStatus("You can pickup your order in Yorks");
         cafeLIstingHelpers3.setPartyname("snack adda");
         cafeLIstingHelpers3.setImage(R.drawable.cofee4);
         cafeLIstingHelperseslist.add(cafeLIstingHelpers3);
-        cafeLIstingHelpers4.setStatus("You are order is ready for pickup");
-        cafeLIstingHelpers4.setRating("3");
+        cafeLIstingHelpers4.setStatus("Your order is ready for pickup");
+        cafeLIstingHelpers4.setRating("4 days to go");
         cafeLIstingHelpers4.setPartyname("urban adda");
         cafeLIstingHelpers4.setImage(R.drawable.cofee5);
         cafeLIstingHelperseslist.add(cafeLIstingHelpers4);

@@ -58,8 +58,8 @@
                         android:id="@+id/tie_password"
                         android:layout_width="match_parent"
                         android:layout_height="54dp"
-                        android:inputType="textPassword"
-                        android:singleLine="true"
+                        android:textSize="17dp"
+                        android:minLines="1"
                         android:backgroundTint="#1e1d1e"
                         android:textColor="@color/colorPrimary" />
                 </android.support.design.widget.TextInputLayout>
@@ -76,7 +76,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="54dp"
                         android:singleLine="true"
-                        android:inputType="textPassword"
+                        android:textSize="17dp"
                         android:backgroundTint="#1e1d1e"
                         android:textColor="@color/colorPrimary" />
                 </android.support.design.widget.TextInputLayout>

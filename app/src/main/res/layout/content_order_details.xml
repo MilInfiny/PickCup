@@ -14,6 +14,7 @@
         android:fillViewport="true"
         android:scrollbars="none">
 
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -27,7 +28,8 @@
                 android:paddingLeft="16sp"
                 android:textAllCaps="true"
                 android:paddingTop="24sp"
-                android:text="Customer Details"
+                android:layout_below="@+id/logo"
+                android:text="Cafe  Details"
                 android:textColor="@color/darkergray"
                 android:textSize="16sp" />
 
@@ -59,7 +61,7 @@
                             android:layout_height="wrap_content"
                             android:paddingLeft="8dp"
                             android:paddingRight="16dp"
-                            android:text="Paul Richarad"
+                            android:text="Urban Cafe"
                             android:textSize="19sp" />
 
                         <TextView
@@ -73,30 +75,20 @@
                             android:textSize="19sp"
                             android:visibility="gone" />
 
-                        <TextView
-                            android:id="@+id/tv_CustomerPhoneNumber"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@+id/tv_CustomerName"
-                            android:paddingLeft="8dp"
-                            android:paddingRight="16dp"
-                            android:paddingTop="5dp"
-                            android:text="Contact#: 55545458744"
-                            android:textSize="14sp" />
 
                         <TextView
                             android:id="@+id/tv_OrderNumber"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_below="@+id/tv_CustomerPhoneNumber"
+                            android:layout_below="@+id/tv_CustomerName"
                             android:paddingLeft="8dp"
                             android:paddingRight="16dp"
                             android:paddingTop="4dp"
-                            android:text="Order#: #155545458744"
+                            android:text="Order#: 12340"
                             android:textSize="14sp" />
 
                         <TextView
-                            android:id="@+id/tv_TimeOfOrder"
+                            android:id="@+id/tv_CustomerNametv_CustomerName"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_below="@+id/tv_OrderNumber"
@@ -105,6 +97,26 @@
                             android:paddingTop="4dp"
                             android:text="Order Type: Sit In"
                             android:textSize="14sp" />
+                        <TextView
+                            android:id="@+id/tv_otp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/tv_CustomerNametv_CustomerName"
+                            android:text="OTP: 2345"
+                            android:paddingLeft="8dp"
+                            android:paddingRight="16dp"
+                            android:paddingTop="4dp"
+                            android:textSize="14sp"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/tv_CustomerNametv_CustomerName"
+                            android:text="6:20 PM"
+                            android:layout_alignParentRight="true"
+                            android:paddingLeft="8dp"
+                            android:paddingRight="16dp"
+                            android:paddingTop="4dp"
+                            android:textSize="14sp"/>
 
                         <TextView
                             android:id="@+id/tv_VerifyBtn"
@@ -195,7 +207,7 @@
                         android:paddingLeft="16dp"
                         android:id="@+id/tv_grandtotal"
                         android:paddingTop="8sp"
-                        android:text="Total"
+                        android:text="Grand Total"
                         android:textColor="@color/colorPrimary"
                         android:textSize="14sp"
                         android:textStyle="bold" />

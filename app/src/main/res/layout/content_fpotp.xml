@@ -62,7 +62,7 @@
                 android:id="@+id/tw_recent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Dont't Receive code? Resend now"
+                android:text="Didn't Receive code? Resend now"
                 android:gravity="center"
                 android:layout_centerInParent="true"
                 android:layout_marginTop="5dp"

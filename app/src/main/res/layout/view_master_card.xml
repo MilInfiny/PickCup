@@ -29,7 +29,7 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:id="@+id/master_card"
-                android:src="@drawable/master"
+                android:src="@drawable/visa"
                android:layout_alignParentRight="true"
                 android:layout_marginBottom="@dimen/appbar_padding_top"
                />
@@ -274,9 +274,9 @@
               android:layout_height="wrap_content"
               android:layout_weight="0.5"
               android:layout_marginRight="10dp"
-
+              android:textAllCaps="false"
               android:background="@drawable/border_hollow_full_black"
-              android:text="primary"
+              android:text="Set Primary"
               android:textColor="@color/white"
               android:layout_gravity="center"
 
@@ -288,6 +288,7 @@
               android:layout_weight="0.5"
               android:background="@drawable/border_hollow_full_black"
               android:text="Delete"
+              android:textAllCaps="false"
               android:layout_marginLeft="10dp"
               android:textColor="@color/white"
 

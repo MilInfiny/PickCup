@@ -45,6 +45,7 @@ public class Order_History_Adapter  extends RecyclerView.Adapter<Order_History_A
 
         Order_History_Helpers f1=partyName.get(position);
         holder.partyName.setText(f1.getPartyname());
+        holder.imageView.setImageResource(f1.getImage());
         holder.relativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

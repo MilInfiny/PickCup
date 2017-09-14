@@ -11,13 +11,23 @@ public class Order_History_Helpers {
     String type;
     String orderno;
     String date;
+    int image;
 
-    public Order_History_Helpers(String partyname, String type, ArrayList<Orders> orders,String orderno,String date) {
+    public int getImage() {
+        return image;
+    }
+
+    public void setImage(int image) {
+        this.image = image;
+    }
+
+    public Order_History_Helpers(String partyname, String type, int image, String orderno, String date) {
         Partyname = partyname;
         this.type = type;
-        this.orders = orders;
+        this.image = image;
         this.orderno=orderno;
         this.date=date;
+
     }
 
     ArrayList<Orders> orders;

@@ -8,47 +8,44 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.example.infiny.pickup.Activity.OrderActivity"
     tools:showIn="@layout/activity_order">
-
-    <RelativeLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingLeft="15dp"
-        android:paddingRight="15dp"
-        android:paddingTop="20dp">
-
-        <ImageView
-            android:id="@+id/logo"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_centerHorizontal="true"
-            android:src="@drawable/blackcup" />
-
+        android:fillViewport="true"
+        android:scrollbars="none"
+        android:layout_height="match_parent">
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/logo"
-            android:layout_marginTop="20dp">
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:paddingTop="20dp">
 
-            <android.support.v7.widget.CardView
-                android:id="@+id/card_view"
+            <ImageView
+                android:id="@+id/logo"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/blackcup" />
+
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/logo"
+                android:layout_marginTop="20dp">
 
-                >
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/button_selector">
+                    android:layout_height="match_parent">
 
                     <ImageView
                         android:id="@+id/tittleimage"
-                        android:layout_width="wrap_content"
-                        android:layout_height="80dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="46dp"
                         android:scaleType="centerCrop"
-
+                       android:background="@drawable/button_selector3"
                         android:src="@drawable/cofeecup" />
+
 
                     <RelativeLayout
                         android:id="@+id/toplayout"
@@ -107,78 +104,103 @@
                     </RelativeLayout>
 
 
-                    <ScrollView
-                        android:id="@+id/scrollview"
+                    <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_below="@+id/toplayout"
-                        android:scrollbars="none">
-                        <RelativeLayout
+                        android:layout_below="@+id/toplayout">
+
+                        <android.support.v7.widget.CardView
+                            android:id="@+id/card_view1"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent">
-
-
-                                <android.support.v7.widget.RecyclerView
-                                    android:id="@+id/orderrecycleview"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:background="@drawable/shadow_except_top">
-
-                                </android.support.v7.widget.RecyclerView>
-
-
-
-                                <android.support.v7.widget.RecyclerView
-                                    android:id="@+id/timerecycleview"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_below="@+id/orderrecycleview"
-                                    android:background="@drawable/shadow_all_side">
-
-                                </android.support.v7.widget.RecyclerView>
-
-
+                            android:layout_height="wrap_content"
+                            >
 
                             <RelativeLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_below="@+id/timerecycleview"
-                                android:paddingLeft="15dp"
-                                android:background="@drawable/shadow_all_side"
-                                android:paddingRight="15dp">
+                                android:background="@drawable/button_selector2">
 
-                                <RelativeLayout
-                                    android:id="@+id/paylayout"
+                                <android.support.v7.widget.RecyclerView
+                                    android:id="@+id/orderrecycleview"
                                     android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:paddingTop="10dp"
-                                    android:paddingRight="10dp"
-                                    android:paddingBottom="10dp">
+                                    android:layout_height="wrap_content">
 
-                                    <TextView
-                                        android:id="@+id/tw_order"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="20dp"
-                                        android:text="Pay"
-                                        android:textAllCaps="true"
-                                        android:textColor="@color/colorPrimary"
-                                        android:textSize="17dp" />
-
-                                    <ImageView
-                                        android:id="@+id/list_item_genre_arrow"
-                                        android:layout_width="20dp"
-                                        android:layout_height="20dp"
-                                        android:layout_alignParentRight="true"
-                                        android:src="@drawable/right_arrow" />
-
-
-                                </RelativeLayout>
+                                </android.support.v7.widget.RecyclerView>
                             </RelativeLayout>
-                        </RelativeLayout>
+                        </android.support.v7.widget.CardView>
 
-                    </ScrollView>
+                        <android.support.v7.widget.CardView
+                            android:id="@+id/card_view"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/card_view1"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="10dp"
+
+
+                            >
+
+                            <RelativeLayout
+                                android:id="@+id/rel_time"
+                                android:layout_width="match_parent"
+
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/button_selector2">
+
+                                <android.support.v7.widget.RecyclerView
+                                    android:id="@+id/timerecycleview"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"                                android:layout_below="@+id/card_view1"
+                                    >
+
+                                </android.support.v7.widget.RecyclerView>
+                            </RelativeLayout>
+                        </android.support.v7.widget.CardView>
+
+                        <android.support.v7.widget.CardView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/card_pay"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="10dp"
+                            android:layout_below="@+id/card_view"
+                         >
+
+                            <RelativeLayout
+                                android:id="@+id/paylayout"
+                                android:layout_width="match_parent"
+                                android:paddingTop="10dp"
+                                android:paddingBottom="12dp"
+                                android:paddingLeft="18dp"
+                                android:paddingRight="15dp"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/button_selector2">
+
+                                <TextView
+                                    android:id="@+id/tw_order"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="20dp"
+                                    android:text="Pay"
+                                    android:textAllCaps="true"
+                                    android:textColor="@color/colorPrimary"
+                                    android:textSize="17dp"
+                                    android:gravity="center"/>
+
+                                <ImageView
+                                    android:id="@+id/list_item_genre_arrow"
+                                    android:layout_width="20dp"
+                                    android:layout_height="20dp"
+                                    android:layout_marginTop="1dp"
+                                    android:layout_marginRight="10dp"
+                                    android:layout_alignParentRight="true"
+                                    android:src="@drawable/right_arrow" />
+
+
+                            </RelativeLayout>
+                        </android.support.v7.widget.CardView>
+                    </RelativeLayout>
                 </RelativeLayout>
-            </android.support.v7.widget.CardView>
+            </RelativeLayout>
         </RelativeLayout>
-    </RelativeLayout>
+    </ScrollView>
 </RelativeLayout>

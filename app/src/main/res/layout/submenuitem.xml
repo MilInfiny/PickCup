@@ -18,7 +18,7 @@
         android:id="@+id/iv_mediumsize"
         android:layout_alignParentTop="true"
         android:layout_toEndOf="@+id/tw_small"
-        android:layout_marginLeft="65dp" />
+        android:layout_marginLeft="50dp" />
     <ImageView
         android:layout_width="70dp"
         android:layout_height="50dp"
@@ -26,7 +26,7 @@
         android:layout_centerHorizontal="true"
         android:id="@+id/iv_largesize"
         android:layout_toRightOf="@+id/iv_mediumsize"
-       android:layout_marginLeft="50dp"
+       android:layout_marginLeft="40dp"
         android:layout_above="@+id/tw_large"
         />
     <TextView
