@@ -85,7 +85,6 @@ public class MainActivity extends AppCompatActivity
         cafeLIstingHelpers1.setStatus("online");
         cafeLIstingHelpers1.setPartyname("Yorks");
         cafeLIstingHelpers1.setRating("4");
-
         cafeLIstingHelpers1.setImage(R.drawable.cofee2);
         cafeLIstingHelperseslist.add(cafeLIstingHelpers1);
         cafeLIstingHelpers2.setStatus("online");

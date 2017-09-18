@@ -128,6 +128,8 @@ public class MenuActivity extends AppCompatActivity {
         }, this);
         drinksmenuview.setLayoutManager(layoutManager);
         drinksmenuview.setAdapter(drinksadapter);
+        drinksmenuview.setNestedScrollingEnabled(false);
+
         ArrayList<MenuItemData> tittles = new ArrayList<MenuItemData>();
 
         tittles.add(new MenuItemData("Brownie", "£ 3.00"));
@@ -146,6 +148,8 @@ public class MenuActivity extends AppCompatActivity {
         });
         dessertsmenuview.setLayoutManager(layoutManager1);
         dessertsmenuview.setAdapter(dessertadapter);
+        dessertsmenuview.setNestedScrollingEnabled(false);
+
         ArrayList<MenuItemData> tittles1 = new ArrayList<MenuItemData>();
         tittles1.add(new MenuItemData("Tuna Sandwich", "£ 5.20"));
         tittles1.add(new MenuItemData("Avocado Sandwich", "£ 5.50"));
@@ -164,6 +168,7 @@ public class MenuActivity extends AppCompatActivity {
         });
         sandwitchesmenuview.setLayoutManager(layoutManager2);
         sandwitchesmenuview.setAdapter(sandwitchadapter);
+        sandwitchesmenuview.setNestedScrollingEnabled(false);
 
     }
     @Override

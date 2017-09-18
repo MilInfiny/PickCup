@@ -3,7 +3,7 @@
     <gradient
         android:angle="225"
         android:centerColor="@color/pine_tree1"
-        android:endColor="@color/wheat"
-        android:startColor="@color/pine_tree"
+        android:endColor="@color/pine_tree"
+        android:startColor="@color/white"
         android:type="linear" />
 </shape>

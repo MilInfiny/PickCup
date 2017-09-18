@@ -54,6 +54,8 @@ public class RewardActivity extends AppCompatActivity {
         appbar.setOutlineProvider(null);
         getSupportActionBar().setTitle("");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        logo.requestFocus();
+
         ArrayList<String> partyname = new ArrayList<>();
         icon.setImageDrawable(getResources().getDrawable(R.drawable.rewards));
         ArrayList<CafeLIstingHelpers> cafeLIstingHelperseslist = new ArrayList<>();
@@ -82,11 +84,12 @@ public class RewardActivity extends AppCompatActivity {
         cafeLIstingHelpers4.setPartyname("urban adda");
         cafeLIstingHelpers4.setImage(R.drawable.cofee5);
         cafeLIstingHelperseslist.add(cafeLIstingHelpers4);
+
         rewardAdapter = new RewardAdapter(this, cafeLIstingHelperseslist);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         recycleView.setLayoutManager(mLayoutManager);
         recycleView.setAdapter(rewardAdapter);
-
+        recycleView.setNestedScrollingEnabled(false);
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

@@ -23,10 +23,11 @@
 
             <ImageView
                 android:id="@+id/logo"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:src="@drawable/logo1"
                 android:layout_centerHorizontal="true"
-                android:src="@drawable/blackcup" />
+                />
 
             <RelativeLayout
                 android:layout_width="match_parent"

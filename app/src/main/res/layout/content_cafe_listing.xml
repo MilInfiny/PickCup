@@ -16,9 +16,9 @@
        android:padding="20dp">
     <ImageView
         android:id="@+id/logo"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:src="@drawable/blackcup"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:src="@drawable/logo1"
         android:layout_centerHorizontal="true"
         />
 

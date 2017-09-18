@@ -16,16 +16,15 @@ android:paddingTop="20dp"
         android:paddingLeft="15dp"
         android:paddingRight="15dp"
         >
-            <ImageView
-                android:id="@+id/logo"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:focusableInTouchMode="true"
-                android:src="@drawable/blackcup"
-                android:layout_centerHorizontal="true"
-                >
+        <ImageView
+            android:id="@+id/logo"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:src="@drawable/logo1"
+            android:layout_centerHorizontal="true"
+            />
 
-            </ImageView>
+
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

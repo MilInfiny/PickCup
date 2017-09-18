@@ -12,13 +12,11 @@
         android:layout_height="match_parent">
         <ImageView
             android:id="@+id/logo"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:focusableInTouchMode="true"
-            android:src="@drawable/blackcup"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:src="@drawable/logo1"
             android:layout_centerHorizontal="true"
-            >
-        </ImageView>
+            />
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
