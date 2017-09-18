@@ -4,21 +4,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    android:paddingTop="20dp"
     tools:context="com.example.infiny.pickup.Activity.SignupActivity"
     tools:showIn="@layout/activity_signup">
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:paddingRight="30dp"
+        android:paddingLeft="30dp"
+        android:scrollbars="none"
+        android:paddingBottom="20dp"
         >
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingRight="30dp"
-            android:paddingLeft="30dp"
-            android:paddingTop="20dp"
-            android:paddingBottom="20dp">
+           >
 
             <ImageView
                 android:id="@+id/logo"

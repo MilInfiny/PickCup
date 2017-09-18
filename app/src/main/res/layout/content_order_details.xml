@@ -2,9 +2,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:showIn="@layout/activity_order_details">
 
     <ScrollView
@@ -29,7 +29,7 @@
                 android:textAllCaps="true"
                 android:paddingTop="24sp"
                 android:layout_below="@+id/logo"
-                android:text="Cafe  Details"
+                android:text="Order Details"
                 android:textColor="@color/darkergray"
                 android:textSize="16sp" />
 
@@ -239,7 +239,7 @@
                 android:paddingLeft="16sp"
                 android:paddingTop="24sp"
                 android:textAllCaps="true"
-                android:text="Special Notes"
+                android:text="Notes"
                 android:textColor="@color/darkergray"
                 android:textSize="16sp" />
 

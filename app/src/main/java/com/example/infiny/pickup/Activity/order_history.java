@@ -2,10 +2,13 @@ package com.example.infiny.pickup.Activity;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -35,12 +38,21 @@ public class order_history extends AppCompatActivity {
     Order_History_Adapter order_history_adapter;
     @BindView(R.id.view)
     View view;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+    @BindView(R.id.appbar)
+    AppBarLayout appbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reward);
         ButterKnife.bind(this);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        appbar.setOutlineProvider(null);
+        getSupportActionBar().setTitle("");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         twReward.setText("Order history");
         icon.setBackground(getResources().getDrawable(R.drawable.ic_history_black_48dp));
         view.setVisibility(View.VISIBLE);
@@ -56,6 +68,15 @@ public class order_history extends AppCompatActivity {
 
 
     }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                super.onBackPressed();  // optional depending on your needs
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
 
     @Override
     protected void attachBaseContext(Context newBase) {

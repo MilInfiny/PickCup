@@ -4,16 +4,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+android:paddingTop="20dp"
     tools:context="com.example.infiny.pickup.Activity.MainActivity"
     tools:showIn="@layout/app_bar_main"
-    android:padding="20dp">
-<ScrollView
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:scrollbars="none">
+   >
+
+
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        >
             <ImageView
                 android:id="@+id/logo"
                 android:layout_width="100dp"
@@ -32,10 +34,10 @@
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/recycleView"
                     android:layout_width="match_parent"
+                    android:scrollbars="none"
                     android:layout_height="match_parent">
                 </android.support.v7.widget.RecyclerView>
             </RelativeLayout>
     </RelativeLayout>
-</ScrollView>
         </RelativeLayout>
 

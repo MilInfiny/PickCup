@@ -22,6 +22,8 @@ public class MenuItem {
     }
     public static List<Drinks> makeJazzLatte() {
         Drinks milesDavis = new Drinks("Small","Medium","Large","£ 2.20","£ 2.25","£ 2.30");
+
+
         return Arrays.asList(milesDavis);
     }
 

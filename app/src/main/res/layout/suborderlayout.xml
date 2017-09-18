@@ -5,33 +5,14 @@
     android:layout_height="wrap_content"
    android:layout_marginTop="10dp"
     android:paddingBottom="20dp">
-    <TextView
-        android:id="@+id/tw_itemname"
-        android:layout_width="wrap_content"
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycleView"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="17dp"
-        android:text="Latte"
-        android:textColor="@color/colorPrimary"
-        android:layout_marginStart="20dp"
-        />
-    <ImageView
-        android:id="@+id/iv_itemimage"
-        android:layout_width="50dp"
-        android:layout_height="35dp"
-        android:src="@drawable/graycup1"
-        android:layout_below="@+id/tw_itemname"
-        android:layout_marginStart="9dp" />
-    <TextView
-        android:id="@+id/tw_small"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="17dp"
-        android:text="Small"
-        android:textColor="@color/colorPrimary"
-        android:layout_toRightOf="@+id/iv_itemimage"
-        android:layout_marginTop="39dp"
-        android:layout_marginLeft="10dp"
-        />
+        >
+    </android.support.v7.widget.RecyclerView>
+
     <TextView
         android:id="@+id/et_notehint"
         android:layout_width="wrap_content"
@@ -41,7 +22,7 @@
         android:textColor="@color/colorPrimary"
         android:layout_marginStart="25dp"
         android:layout_marginTop="20dp"
-        android:layout_below="@+id/iv_itemimage"
+        android:layout_below="@+id/recycleView"
      />
     <EditText
         android:id="@+id/et_note"

@@ -17,6 +17,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 
 import com.example.infiny.pickup.Adapters.CafeListAdapter;
@@ -47,6 +48,7 @@ public class MainActivity extends AppCompatActivity
     Toolbar toolbar;
     @BindView(R.id.appbar)
     AppBarLayout appbar;
+    ImageView imageView;
 
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -55,11 +57,19 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         appbar.setOutlineProvider(null);
        getSupportActionBar().setTitle("");
+        navView.setNavigationItemSelectedListener(this);
+        imageView=(ImageView)navView.getHeaderView(0).findViewById(R.id.imageView);
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(MainActivity.this,ProfileActivity.class);
+                startActivity(intent);
+            }
+        });
 
         ArrayList<CafeLIstingHelpers> cafeLIstingHelperseslist = new ArrayList<>();
         CafeLIstingHelpers cafeLIstingHelpers = new CafeLIstingHelpers();
@@ -136,13 +146,12 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                super.onBackPressed();  // optional depending on your needs
         }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -180,6 +189,8 @@ public class MainActivity extends AppCompatActivity
 
 
         } else if (id == R.id.nav_logout) {
+            Intent intent=new Intent(MainActivity.this,LoginActivity.class);
+            startActivity(intent);
 
         }
         else if (id == R.id.nav_card) {

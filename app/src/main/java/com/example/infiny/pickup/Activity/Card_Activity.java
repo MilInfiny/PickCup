@@ -2,8 +2,11 @@ package com.example.infiny.pickup.Activity;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 
 import com.example.infiny.pickup.Adapters.CustomPagerAdapter;
 import com.example.infiny.pickup.R;
@@ -17,14 +20,25 @@ public class Card_Activity extends AppCompatActivity {
 
     @BindView(R.id.viewpager)
     ViewPager viewpager;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+    @BindView(R.id.appbar)
+    AppBarLayout appbar;
+    @BindView(R.id.indicator)
+    CirclePageIndicator indicator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_card_);
         ButterKnife.bind(this);
-        CirclePageIndicator indicator = (CirclePageIndicator)findViewById(R.id.indicator);
-        CustomPagerAdapter mAdapter= new CustomPagerAdapter(this);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        appbar.setOutlineProvider(null);
+        getSupportActionBar().setTitle("");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        CirclePageIndicator indicator = (CirclePageIndicator) findViewById(R.id.indicator);
+        CustomPagerAdapter mAdapter = new CustomPagerAdapter(this);
         viewpager.setAdapter(mAdapter);
         indicator.setFillColor(getResources().getColor(R.color.colorPrimary));
         indicator.setPageColor(getResources().getColor(R.color.gray));
@@ -32,6 +46,16 @@ public class Card_Activity extends AppCompatActivity {
 
 
     }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                super.onBackPressed();  // optional depending on your needs
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));

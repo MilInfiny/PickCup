@@ -3,10 +3,12 @@ package com.example.infiny.pickup.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -82,12 +84,21 @@ public class MenuActivity extends AppCompatActivity {
     ImageView tittleimage;
     @BindView(R.id.order)
     RelativeLayout order;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+    @BindView(R.id.appbar)
+    AppBarLayout appbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
         ButterKnife.bind(this);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        appbar.setOutlineProvider(null);
+        getSupportActionBar().setTitle("");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         Intent intent = getIntent();
         tittle.setText(intent.getStringExtra("tittle"));
         tittleimage.setImageResource(intent.getIntExtra("image", 0));
@@ -98,7 +109,7 @@ public class MenuActivity extends AppCompatActivity {
         order.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent1=new Intent(MenuActivity.this,OrderActivity.class);
+                Intent intent1 = new Intent(MenuActivity.this, OrderActivity.class);
                 startActivity(intent1);
             }
         });
@@ -110,7 +121,7 @@ public class MenuActivity extends AppCompatActivity {
 
             @Override
             public void onimageclickLister() {
-              order.setVisibility(View.VISIBLE);
+                order.setVisibility(View.VISIBLE);
 
 
             }
@@ -119,9 +130,9 @@ public class MenuActivity extends AppCompatActivity {
         drinksmenuview.setAdapter(drinksadapter);
         ArrayList<MenuItemData> tittles = new ArrayList<MenuItemData>();
 
-        tittles.add(new MenuItemData("Brownie","£ 3.00"));
-        tittles.add(new MenuItemData("Cheesecake","£ 3.10"));
-        tittles.add(new MenuItemData("Carrot Cake","£ 3.10"));
+        tittles.add(new MenuItemData("Brownie", "£ 3.00"));
+        tittles.add(new MenuItemData("Cheesecake", "£ 3.10"));
+        tittles.add(new MenuItemData("Carrot Cake", "£ 3.10"));
         dessertadapter = new NormalMenuAdapter(this, tittles, new OnItemClickListener() {
             @Override
             public void OnItemClickListener(CafeLIstingHelpers item) {
@@ -136,10 +147,10 @@ public class MenuActivity extends AppCompatActivity {
         dessertsmenuview.setLayoutManager(layoutManager1);
         dessertsmenuview.setAdapter(dessertadapter);
         ArrayList<MenuItemData> tittles1 = new ArrayList<MenuItemData>();
-        tittles1.add(new MenuItemData("Tuna Sandwich","£ 5.20"));
-        tittles1.add(new MenuItemData("Avocado Sandwich","£ 5.50"));
-        tittles1.add(new MenuItemData("Egg Sandwich","£ 5.20"));
-        tittles1.add(new MenuItemData("Ham Sandwich","£ 5.50"));
+        tittles1.add(new MenuItemData("Tuna Sandwich", "£ 5.20"));
+        tittles1.add(new MenuItemData("Avocado Sandwich", "£ 5.50"));
+        tittles1.add(new MenuItemData("Egg Sandwich", "£ 5.20"));
+        tittles1.add(new MenuItemData("Ham Sandwich", "£ 5.50"));
         sandwitchadapter = new NormalMenuAdapter(this, tittles1, new OnItemClickListener() {
             @Override
             public void OnItemClickListener(CafeLIstingHelpers item) {
@@ -155,6 +166,15 @@ public class MenuActivity extends AppCompatActivity {
         sandwitchesmenuview.setAdapter(sandwitchadapter);
 
     }
+    @Override
+    public boolean onOptionsItemSelected(android.view.MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                super.onBackPressed();  // optional depending on your needs
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {

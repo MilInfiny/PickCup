@@ -1,5 +1,9 @@
 package com.example.infiny.pickup.Adapters;
 
+import android.content.Context;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +19,7 @@ import com.thoughtbot.expandablerecyclerview.models.ExpandableGroup;
 import com.thoughtbot.expandablerecyclerview.viewholders.ChildViewHolder;
 import com.thoughtbot.expandablerecyclerview.viewholders.GroupViewHolder;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static android.view.animation.Animation.RELATIVE_TO_SELF;
@@ -24,8 +29,10 @@ import static android.view.animation.Animation.RELATIVE_TO_SELF;
  */
 
 public class OrderAdapter extends ExpandableRecyclerViewAdapter<OrderAdapter.orderViewHolder, OrderAdapter.ItemViewHolder> {
-    public OrderAdapter(List<? extends ExpandableGroup> groups) {
+    Context context;
+    public OrderAdapter(Context context,List<? extends ExpandableGroup> groups) {
         super(groups);
+        this.context=context;
     }
 
     @Override
@@ -44,8 +51,13 @@ public class OrderAdapter extends ExpandableRecyclerViewAdapter<OrderAdapter.ord
 
     @Override
     public void onBindChildViewHolder(OrderAdapter.ItemViewHolder holder, int flatPosition, ExpandableGroup group, int childIndex) {
-            final Drinks drinks = ((Menu) group).getItems().get(childIndex);
-
+        final Drinks drinks = ((Menu) group).getItems().get(0);
+        ArrayList<String> drinkses=new ArrayList<>();
+        drinkses.add(drinks.getSmall());
+        Sub_Menu_Adapter subMenuAdapter=new Sub_Menu_Adapter(context,drinkses);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(context.getApplicationContext());
+        holder.recyclerView.setLayoutManager(mLayoutManager);
+        holder.recyclerView.setAdapter(subMenuAdapter);
     }
 
     @Override
@@ -103,8 +115,11 @@ public class OrderAdapter extends ExpandableRecyclerViewAdapter<OrderAdapter.ord
 
 
     public class ItemViewHolder extends ChildViewHolder {
+        RecyclerView recyclerView;
+
         public ItemViewHolder(View itemView) {
             super(itemView);
+            recyclerView=(RecyclerView)itemView.findViewById(R.id.recycleView);
 
         }
     }

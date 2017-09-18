@@ -175,7 +175,7 @@
                     android:layout_weight="0.5"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Name : "
+                    android:text="Name: "
                     android:textStyle="bold"
                     android:textSize="@dimen/activity_horizontal_margin"
                     android:layout_marginBottom="@dimen/appbar_padding_top"
@@ -208,7 +208,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Number : "
+                    android:text="Number: "
                     android:layout_marginBottom="@dimen/appbar_padding_top"
                     android:layout_weight="0.5"
                     android:textStyle="bold"
@@ -243,7 +243,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Expiry Date : "
+                    android:text="Expiry Date: "
                     android:layout_marginBottom="@dimen/appbar_padding_top"
                     android:layout_weight="0.5"
                     android:textStyle="bold"

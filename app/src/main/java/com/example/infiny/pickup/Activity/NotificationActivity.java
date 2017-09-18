@@ -39,6 +39,7 @@ public class NotificationActivity extends AppCompatActivity {
         appbar.setOutlineProvider(null);
 
         getSupportActionBar().setTitle("Notifications");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
         ArrayList<CafeLIstingHelpers> cafeLIstingHelperseslist = new ArrayList<>();
@@ -50,26 +51,26 @@ public class NotificationActivity extends AppCompatActivity {
         cafeLIstingHelpers.setStatus("Your order is ready for pickup");
         cafeLIstingHelpers.setPartyname("urban cafe");
         cafeLIstingHelpers.setImage(R.drawable.cofee3);
-        cafeLIstingHelpers.setRating("today");
+        cafeLIstingHelpers.setRating("Yesterday");
         cafeLIstingHelperseslist.add(cafeLIstingHelpers);
         cafeLIstingHelpers1.setStatus("You can pickup your order in Urban cafe");
         cafeLIstingHelpers1.setPartyname("Yorks");
-        cafeLIstingHelpers1.setRating("1 day to go");
+        cafeLIstingHelpers1.setRating("Sep 1");
 
         cafeLIstingHelpers1.setImage(R.drawable.cofee2);
         cafeLIstingHelperseslist.add(cafeLIstingHelpers1);
         cafeLIstingHelpers2.setStatus("Your order is successfully placed");
-        cafeLIstingHelpers2.setRating("2 days to go");
+        cafeLIstingHelpers2.setRating("Jul 13");
         cafeLIstingHelpers2.setPartyname("7/8 kafe");
         cafeLIstingHelpers2.setImage(R.drawable.cofee3);
         cafeLIstingHelperseslist.add(cafeLIstingHelpers2);
-        cafeLIstingHelpers3.setRating("3 days to go");
+        cafeLIstingHelpers3.setRating("Jul 11");
         cafeLIstingHelpers3.setStatus("You can pickup your order in Yorks");
         cafeLIstingHelpers3.setPartyname("snack adda");
         cafeLIstingHelpers3.setImage(R.drawable.cofee4);
         cafeLIstingHelperseslist.add(cafeLIstingHelpers3);
         cafeLIstingHelpers4.setStatus("Your order is ready for pickup");
-        cafeLIstingHelpers4.setRating("4 days to go");
+        cafeLIstingHelpers4.setRating("Jun 22");
         cafeLIstingHelpers4.setPartyname("urban adda");
         cafeLIstingHelpers4.setImage(R.drawable.cofee5);
         cafeLIstingHelperseslist.add(cafeLIstingHelpers4);
@@ -79,17 +80,15 @@ public class NotificationActivity extends AppCompatActivity {
         recycleView.setAdapter(notificationAdapter);
 
     }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                Intent intent = new Intent(NotificationActivity.this, MainActivity.class);
-                startActivity(intent);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+                super.onBackPressed();  // optional depending on your needs
         }
+        return super.onOptionsItemSelected(item);
     }
 
-}
+    }
+
+

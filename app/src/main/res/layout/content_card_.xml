@@ -4,9 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    android:padding="20dp"
     tools:context="com.example.infiny.pickup.Activity.Card_Activity"
-    android:paddingTop="20dp"
     tools:showIn="@layout/activity_card_">
     <RelativeLayout
         android:layout_width="match_parent"
