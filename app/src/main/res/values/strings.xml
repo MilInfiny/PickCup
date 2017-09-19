@@ -45,4 +45,10 @@
     <string name="title_activity_fpotp">FpotpActivity</string>
     <string name="title_activity_fpresetpassword">fpresetpassword</string>
     <string name="title_activity_order_details">OrderDetailsActivity</string>
+    <string name="Something_went_wrong">Something went wrong</string>
+    <string name="server_not_responding">Server not found</string>
+    <string name="login_success">Login success</string>
+    <string name="email_sent_please_check">Email sent please check</string>
+    <string name="verified_successfull">Verify successfull</string>
+    <string name="Password_set">password set seccesfully</string>
 </resources>

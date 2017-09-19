@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+   android:layout_marginTop="10dp"
+    android:paddingBottom="20dp">
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycleView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+    </android.support.v7.widget.RecyclerView>
+
+    <TextView
+        android:id="@+id/et_notehint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Your Note"
+        android:textSize="12dp"
+        android:textColor="@color/colorPrimary"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="20dp"
+        android:layout_below="@+id/recycleView"
+     />
+    <EditText
+        android:id="@+id/et_note"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:lines="3"
+        android:layout_below="@+id/et_notehint"
+        android:layout_marginStart="20dp"
+        android:hint="Add a note"
+
+        android:gravity="top"
+        android:inputType="textMultiLine"
+        android:scrollHorizontally="false"
+        />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/et_note"
+        android:layout_marginTop="20dp">
+    <TextView
+        android:id="@+id/bt_sitin"
+        android:layout_width="95dp"
+        android:layout_height="30dp"
+        android:background="@drawable/border_hollow_white"
+        android:text="Sit In"
+        android:textColor="@color/colorPrimary"
+        android:textAllCaps="false"
+        android:textSize="15dp"
+        android:gravity="center"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="20dp"
+
+        android:layout_alignParentLeft="true"
+
+         />
+    <TextView
+        android:id="@+id/bt_pickcup"
+        android:layout_width="95dp"
+        android:layout_height="30dp"
+        android:background="@drawable/border_hollow_full_black"
+        android:text="PickCup"
+        android:textColor="@color/white"
+        android:layout_marginEnd="22dp"
+        android:textAllCaps="false"
+        android:layout_marginTop="20dp"
+        android:textSize="15dp"
+        android:gravity="center"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true" />
+    </RelativeLayout>
+
+</RelativeLayout>

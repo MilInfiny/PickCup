@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_marginTop="15dp"
+        android:padding="20dp"
+
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_centerHorizontal="true"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:padding="@dimen/activity_horizontal_margin"
+
+            android:layout_alignParentTop="true"
+            android:background="@drawable/round_card_view"
+            android:id="@+id/relativeLayout6">
+            <ImageView
+                android:id="@+id/iv_chip"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/chip"
+               android:layout_alignParentLeft="true"
+               />
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:id="@+id/master_card"
+                android:src="@drawable/visa"
+               android:layout_alignParentRight="true"
+                android:layout_marginBottom="@dimen/appbar_padding_top"
+               />
+            <TextView
+                android:id="@+id/tw_card_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Card number"
+                android:layout_below="@+id/iv_chip"
+                android:textAllCaps="true"
+                android:textSize="7dp"
+                android:layout_marginTop="50dp"
+                android:textColor="@color/white"/>
+            <RelativeLayout
+                android:id="@+id/layout_cardname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+              android:layout_below="@+id/tw_card_number"
+                >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:textSize="@dimen/activity_vertical_margin"
+                    android:textStyle="bold"
+                    android:text="7589"
+                    android:layout_below="@+id/tw_card_number"
+                    android:textColor="@color/white"
+                    android:id="@+id/card_1"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/activity_vertical_margin"
+                    android:text="8542"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:layout_marginLeft="10dp"
+                    android:layout_toRightOf="@+id/card_1"
+                    android:layout_below="@+id/tw_card_number"
+                    android:id="@+id/card_2" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/activity_vertical_margin"
+                    android:text="5674"
+                    android:textStyle="bold"
+                    android:textColor="@color/white"
+                    android:layout_below="@+id/tw_card_number"
+                    android:layout_marginLeft="10dp"
+                    android:layout_toRightOf="@+id/card_2"
+                    android:id="@+id/card_3" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:textSize="@dimen/activity_vertical_margin"
+                    android:text="1234"
+                    android:id="@+id/card_4"
+                    android:textStyle="bold"
+                    android:layout_below="@+id/tw_card_number"
+                    android:layout_toRightOf="@+id/card_3"
+                    android:layout_marginLeft="10dp"
+                    android:textColor="@color/white"
+                    />
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/layout_cardname">
+                <TextView
+                    android:id="@+id/tw_card_holder"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="card holder"
+                    android:textAllCaps="true"
+                    android:textSize="7dp"
+                    android:textColor="@color/white"/>
+                <TextView
+                    android:id="@+id/cardholdername"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="john"
+
+                    android:textAllCaps="true"
+                    android:textStyle="bold"
+                    android:textColor="@color/white"
+                    android:layout_below="@+id/tw_card_holder"/>
+                <TextView
+                    android:id="@+id/tw_expires"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Expires"
+                    android:textSize="7dp"
+                   android:layout_toRightOf="@+id/tw_card_holder"
+                    android:layout_marginLeft="42dp"
+                    android:textColor="@color/white"
+
+                   />
+                <TextView
+                    android:id="@+id/expires"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="08/2020"
+                    android:textSize="12dp"
+                    android:layout_marginTop="3dp"
+                    android:layout_below="@+id/tw_expires"
+                    android:layout_marginLeft="52dp"
+                    android:textStyle="bold"
+                    android:layout_toRightOf="@+id/cardholdername"
+                    android:textColor="@color/white"
+
+                    />
+
+
+            </RelativeLayout>
+
+
+
+        </RelativeLayout>
+
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_marginTop="70dp"
+            android:id="@+id/detail_card"
+
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/relativeLayout6"
+
+            >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:weightSum="1"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_weight="0.5"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Name: "
+                    android:textStyle="bold"
+                    android:textSize="@dimen/activity_horizontal_margin"
+                    android:layout_marginBottom="@dimen/appbar_padding_top"
+
+                    />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_weight="0.5"
+
+                    android:layout_height="wrap_content"
+                    android:text="John"
+                    android:textAlignment="textEnd"
+                    android:textSize="@dimen/activity_horizontal_margin"
+                    android:id="@+id/tv_Name"
+                    android:layout_marginBottom="@dimen/appbar_padding_top"
+
+                    />
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginBottom="@dimen/appbar_padding_top"
+                android:background="@color/grey"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:weightSum="1"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Number: "
+                    android:layout_marginBottom="@dimen/appbar_padding_top"
+                    android:layout_weight="0.5"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/activity_horizontal_margin"
+                    />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_weight="0.5"
+
+                    android:layout_height="wrap_content"
+                    android:text="758985425674"
+                    android:textAlignment="textEnd"
+                    android:textSize="@dimen/activity_horizontal_margin"
+                    android:id="@+id/tv_brand"
+                    android:layout_marginBottom="@dimen/appbar_padding_top"
+
+                    />
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginBottom="@dimen/appbar_padding_top"
+
+
+                android:background="@color/grey"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:weightSum="1"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Expiry Date: "
+                    android:layout_marginBottom="@dimen/appbar_padding_top"
+                    android:layout_weight="0.5"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/activity_horizontal_margin"
+
+                    />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_weight="0.5"
+                    android:layout_height="wrap_content"
+                    android:text="08/2020"
+                    android:textAlignment="textEnd"
+                    android:textSize="@dimen/activity_horizontal_margin"
+                    android:id="@+id/tv_card_no"
+                    android:layout_marginBottom="@dimen/appbar_padding_top"
+
+                    />
+            </LinearLayout>
+        </LinearLayout>
+      <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:orientation="horizontal"
+          android:weightSum="1"
+          android:layout_marginTop="40dp"
+          android:layout_below="@+id/detail_card">
+          <Button
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_weight="0.5"
+              android:layout_marginRight="10dp"
+              android:textAllCaps="false"
+              android:background="@drawable/border_hollow_full_black"
+              android:text="Set Primary"
+              android:textColor="@color/white"
+              android:layout_gravity="center"
+
+
+              />
+          <Button
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_weight="0.5"
+              android:background="@drawable/border_hollow_full_black"
+              android:text="Delete"
+              android:textAllCaps="false"
+              android:layout_marginLeft="10dp"
+              android:textColor="@color/white"
+
+              />
+
+
+      </LinearLayout>
+
+    </RelativeLayout>
+
+
+</RelativeLayout>

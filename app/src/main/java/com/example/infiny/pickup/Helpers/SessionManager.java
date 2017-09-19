@@ -1,7 +1,10 @@
 package com.example.infiny.pickup.Helpers;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+
+import com.example.infiny.pickup.Activity.LoginActivity;
 
 /**
  * Created by infiny on 9/4/17.
@@ -21,6 +24,12 @@ public class SessionManager {
     // Context
     Context context;
 
+    //data
+    public static final String name = "name";
+    public static final String email = "email";
+    public static final String surname = "surname";
+
+
     // Shared pref mode
     int PRIVATE_MODE = 0;
 
@@ -34,6 +43,19 @@ public class SessionManager {
         pref = context.getSharedPreferences(PREF_NAME, PRIVATE_MODE);
         editor = pref.edit();
     }
+    public void createLoginSession(String name, String email,  String surname) {
+
+        editor.putBoolean(IS_LOGIN, true);
+
+        editor.putString(this.name, name);
+//        editor.putString(name, fname);
+        editor.putString(this.email, email);
+        editor.putString(this.surname, surname);
+
+
+        editor.commit();
+    }
+
 
     public boolean isLoggedIn() {
         return pref.getBoolean(IS_LOGIN, false);
@@ -43,8 +65,6 @@ public class SessionManager {
     public void clear() {
         editor.clear();
         editor.commit();
-
     }
-
 
 }

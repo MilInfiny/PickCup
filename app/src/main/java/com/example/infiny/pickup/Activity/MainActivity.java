@@ -1,17 +1,16 @@
 package com.example.infiny.pickup.Activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -19,9 +18,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 
 import com.example.infiny.pickup.Adapters.CafeListAdapter;
 import com.example.infiny.pickup.Helpers.CafeLIstingHelpers;
+import com.example.infiny.pickup.Helpers.SessionManager;
 import com.example.infiny.pickup.Interfaces.OnItemClickListener;
 import com.example.infiny.pickup.R;
 
@@ -49,7 +50,12 @@ public class MainActivity extends AppCompatActivity
     @BindView(R.id.appbar)
     AppBarLayout appbar;
     ImageView imageView;
+    @BindView(R.id.progressBar_cyclic)
+    ProgressBar progressBarCyclic;
 
+
+    SessionManager sessionManager;
+    Context context;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -60,13 +66,15 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         appbar.setOutlineProvider(null);
-       getSupportActionBar().setTitle("");
+        getSupportActionBar().setTitle("");
+         context=this;
+        sessionManager=new SessionManager(context);
         navView.setNavigationItemSelectedListener(this);
-        imageView=(ImageView)navView.getHeaderView(0).findViewById(R.id.imageView);
+        imageView = (ImageView) navView.getHeaderView(0).findViewById(R.id.imageView);
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(MainActivity.this,ProfileActivity.class);
+                Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
                 startActivity(intent);
             }
         });
@@ -125,7 +133,7 @@ public class MainActivity extends AppCompatActivity
         recycleView.setNestedScrollingEnabled(false);
 
         //recycleView.getLayoutManager().smoothScrollToPosition(recycleView, null, 0);
-        logo.setFocusable(true) ;
+        logo.setFocusable(true);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -169,36 +177,36 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_home) {
         } else if (id == R.id.nav_reward) {
-            Intent intent=new Intent(MainActivity.this,RewardActivity.class);
+            Intent intent = new Intent(MainActivity.this, RewardActivity.class);
             startActivity(intent);
 
         } else if (id == R.id.nav_cart) {
-            Intent intent=new Intent(MainActivity.this,OrderActivity.class);
+            Intent intent = new Intent(MainActivity.this, OrderActivity.class);
             startActivity(intent);
 
 
         } else if (id == R.id.nav_order) {
-            Intent intent=new Intent(MainActivity.this,order_history.class);
+            Intent intent = new Intent(MainActivity.this, order_history.class);
             startActivity(intent);
 
 
         } else if (id == R.id.nav_profile) {
-            Intent intent=new Intent(MainActivity.this,ProfileActivity.class);
+            Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
             startActivity(intent);
 
 
         } else if (id == R.id.nav_logout) {
+            sessionManager.clear();
             Intent intent=new Intent(MainActivity.this,LoginActivity.class);
             startActivity(intent);
+            finish();
 
-        }
-        else if (id == R.id.nav_card) {
-            Intent intent=new Intent(MainActivity.this,Card_Activity.class);
+        } else if (id == R.id.nav_card) {
+            Intent intent = new Intent(MainActivity.this, Card_Activity.class);
             startActivity(intent);
 
-        }
-        else if (id == R.id.nav_notification) {
-            Intent intent=new Intent(MainActivity.this,NotificationActivity.class);
+        } else if (id == R.id.nav_notification) {
+            Intent intent = new Intent(MainActivity.this, NotificationActivity.class);
             startActivity(intent);
 
         }

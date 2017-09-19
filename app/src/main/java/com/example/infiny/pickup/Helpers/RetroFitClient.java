@@ -2,6 +2,8 @@ package com.example.infiny.pickup.Helpers;
 
 import android.content.Context;
 
+import com.example.infiny.pickup.Utils.CommonUtils;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -31,6 +33,7 @@ public class RetroFitClient {
 
     public RetroFitClient(Context mContext) {
         this.mContext=mContext;
+     //  isOnline= CommonUtils.isOnline(mContext);
     }
 
 
@@ -63,12 +66,12 @@ public class RetroFitClient {
 
         OkHttpClient httpClient = new OkHttpClient.Builder()
                 .addNetworkInterceptor(REWRITE_RESPONSE_INTERCEPTOR)
-                .addInterceptor(OFFLINE_INTERCEPTOR)
+      //          .addInterceptor(OFFLINE_INTERCEPTOR)
                 .cache(cache)
                 .build();
 
         retrofit = new Retrofit.Builder()
-                .baseUrl("http://test1.reademption.com")
+                .baseUrl("http://dev2.infiny.in:3000/api/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(httpClient)
                 .build();

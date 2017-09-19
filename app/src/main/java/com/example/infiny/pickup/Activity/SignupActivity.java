@@ -7,17 +7,31 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.text.method.PasswordTransformationMethod;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
+import com.example.infiny.pickup.Helpers.RetroFitClient;
+import com.example.infiny.pickup.Helpers.SessionManager;
+import com.example.infiny.pickup.Interfaces.ApiIntegration;
+import com.example.infiny.pickup.Model.SignUpData;
 import com.example.infiny.pickup.R;
+import com.github.rahatarmanahmed.cpv.CircularProgressView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class SignupActivity extends AppCompatActivity {
@@ -66,7 +80,13 @@ public class SignupActivity extends AppCompatActivity {
     Toolbar toolbar;
     @BindView(R.id.appbar)
     AppBarLayout appbar;
-
+    @BindView(R.id.progressBar_cyclic)
+    ProgressBar progressBarCyclic;
+    private boolean status;
+    Retrofit retroFitClient;
+    private Context context;
+    SignUpData signUpData;
+    SessionManager sessionManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,18 +97,130 @@ public class SignupActivity extends AppCompatActivity {
         appbar.setOutlineProvider(null);
         getSupportActionBar().setTitle("");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        context = this;
+        sessionManager = new SessionManager(context);
         tiePassword.setTransformationMethod(new PasswordTransformationMethod());
         tieConfipassword.setTransformationMethod(new PasswordTransformationMethod());
         btSignup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(SignupActivity.this, MainActivity.class);
-                startActivity(intent);
+                if (submitForm()) {
+                    progressBarCyclic.setVisibility(View.VISIBLE);
+                    getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                    retroFitClient = new RetroFitClient(context).getBlankRetrofit();
+                    Call<SignUpData> call = retroFitClient
+                            .create(ApiIntegration.class)
+                            .getsignup(etName.getEditText().getText().toString(),
+                                    etSurname.getEditText().getText().toString(),
+                                    etEmail.getEditText().getText().toString(),
+                                    etPassword.getEditText().getText().toString(),
+                                    etDob.getEditText().getText().toString(),
+                                    etPostcode.getEditText().getText().toString(),
+                                    etAdd.getEditText().getText().toString(),
+                                    etCity.getEditText().getText().toString());
+                    call.enqueue(new Callback<SignUpData>() {
+                        @Override
+                        public void onResponse(Call<SignUpData> call, Response<SignUpData> response) {
+                            if (response != null) {
+                                signUpData = response.body();
+                                if (signUpData != null) {
+                                    if (response.code() == 404 || response.code() == 500) {
+                                        progressBarCyclic.setVisibility(View.GONE);
+                                        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                        Toast.makeText(context, R.string.server_not_responding, Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        Toast.makeText(context, R.string.login_success, Toast.LENGTH_SHORT).show();
+                                        sessionManager.createLoginSession(signUpData.getUser().getFirstname(),signUpData.getUser().getEmail(),signUpData.getUser().getLastname());
+                                        progressBarCyclic.setVisibility(View.GONE);
+                                        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                        Intent intent = new Intent(context, MainActivity.class);
+                                        startActivity(intent);
+                                        finish();
+                                    }
+
+                                }else {
+                                    if (response.code() == 404 || response.code() == 500) {
+                                        progressBarCyclic.setVisibility(View.GONE);
+                                        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                        Toast.makeText(context, R.string.server_not_responding, Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<SignUpData> call, Throwable t) {
+                            progressBarCyclic.setVisibility(View.GONE);
+                            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                            Toast.makeText(context,R.string.Something_went_wrong,Toast.LENGTH_SHORT);
+
+                        }
+                    });
+
+                }
+
 
             }
         });
 
     }
+
+    public boolean submitForm() {
+        status = true;
+        Log.d("password", etPassword.getEditText().getText().toString());
+        Log.d("samepasword", String.valueOf(!etPassword.getEditText().getText().equals(etConfirmpassword.getEditText().getText())));
+        if (TextUtils.isEmpty(etEmail.getEditText().getText().toString())) {
+            etEmail.setError("Please enter your User ID");
+            status = false;
+        }
+        if (TextUtils.isEmpty(etPassword.getEditText().getText().toString())) {
+            etPassword.setError("Please enter your Pin");
+            status = false;
+        }
+        if (TextUtils.isEmpty(etConfirmpassword.getEditText().getText().toString())) {
+            etConfirmpassword.setError("Please enter your Org ID");
+            status = false;
+        }
+        if (TextUtils.isEmpty(etName.getEditText().getText().toString())) {
+            etName.setError("Please enter your Org ID");
+            status = false;
+        }
+        if (TextUtils.isEmpty(etSurname.getEditText().getText().toString())) {
+            etSurname.setError("Please enter your Org ID");
+            status = false;
+        }
+        if (TextUtils.isEmpty(etDob.getEditText().getText().toString())) {
+            etDob.setError("Please enter your Org ID");
+            status = false;
+        }
+        if (TextUtils.isEmpty(etAdd.getEditText().getText().toString())) {
+            etAdd.setError("Please enter your Org ID");
+            status = false;
+        }
+        if (TextUtils.isEmpty(etCity.getEditText().getText().toString())) {
+            etCity.setError("Please enter your Org ID");
+            status = false;
+        }
+        if (TextUtils.isEmpty(etPostcode.getEditText().getText().toString())) {
+            etPostcode.setError("Please enter your Org ID");
+            status = false;
+        }
+        if (!etPassword.getEditText().getText().toString().equals(etConfirmpassword.getEditText().getText().toString())) {
+            etPassword.setError("password & confirm password should be same");
+            etConfirmpassword.setError("password & confirm password should be same");
+            status = false;
+        }
+
+
+        return status;
+    }
+
+    public void getData() {
+
+
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -102,6 +234,12 @@ public class SignupActivity extends AppCompatActivity {
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
+    @Override
+    public void onBackPressed()
+    {
+        Intent intent=new Intent(SignupActivity.this,LoginActivity.class);
+        startActivity(intent);
     }
 
 }

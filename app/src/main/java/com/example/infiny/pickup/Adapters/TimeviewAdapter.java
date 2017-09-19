@@ -98,13 +98,7 @@ public class TimeviewAdapter extends ExpandableRecyclerViewAdapter<TimeviewAdapt
             super(itemView);
             rl = (RelativeLayout)itemView.findViewById(R.id.rl);
             timebutton=(TextView)itemView.findViewById(R.id.bt_time);
-            clk = new AnalogClock (context);
-            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams
-                    ((int) LayoutParams.WRAP_CONTENT, (int) LayoutParams.WRAP_CONTENT);
-            params.addRule(RelativeLayout.CENTER_IN_PARENT);
-            clk.setLayoutParams(params);
-            rl.addView(clk);
-            clk.setOnClickListener(new View.OnClickListener() {
+            rl.setOnClickListener(new View.OnClickListener() {
 
                 @Override
                 public void onClick(View v) {

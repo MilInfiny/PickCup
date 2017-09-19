@@ -84,9 +84,11 @@ public class OrderActivity extends AppCompatActivity {
         orderAdapter = new OrderAdapter(this, MenuItem.makeorder());
         orderrecycleview.setLayoutManager(layoutManager);
         orderrecycleview.setAdapter(orderAdapter);
+        orderrecycleview.setNestedScrollingEnabled(false);
         timeviewAdapter = new TimeviewAdapter(MenuItem.makeorder(), this);
         timerecycleview.setLayoutManager(layoutManager1);
         timerecycleview.setAdapter(timeviewAdapter);
+        timerecycleview.setNestedScrollingEnabled(false);
 
     }
 

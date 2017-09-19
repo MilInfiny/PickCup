@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        >
+        <ImageView
+            android:id="@+id/tittleimage"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:src="@drawable/cofeecup"
+            android:scaleType="centerCrop"
+              />
+        <RelativeLayout
+            android:id="@+id/toplayout"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:background="#88ffffff">
+            <TextView
+                android:id="@+id/tittle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Urban Cafe"
+                android:textColor="#000"
+                android:textSize="18dp"
+                android:textAllCaps="true"
+                android:layout_marginStart="17dp"
+                android:layout_centerVertical="true"
+                android:layout_alignParentStart="true" />
+            </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+       android:background="#ffffff"
+        android:layout_below="@+id/toplayout">
+
+        <ImageView
+            android:id="@+id/rating1"
+            android:layout_width="30dp"
+            android:layout_height="50dp"
+            android:visibility="gone"
+
+            android:layout_marginStart="12dp"
+            android:src="@drawable/rating"
+            />
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="50dp"
+            android:src="@drawable/rating"
+            android:id="@+id/rating2"
+            android:visibility="gone"
+
+
+            android:layout_toRightOf="@+id/rating1"/>
+        <ImageView
+            android:id="@+id/rating3"
+            android:layout_width="30dp"
+            android:layout_height="50dp"
+            android:visibility="gone"
+
+            android:src="@drawable/rating"
+            android:layout_toRightOf="@+id/rating2"
+             />
+        <ImageView
+            android:id="@+id/rating4"
+            android:layout_width="30dp"
+            android:layout_height="50dp"
+            android:visibility="gone"
+
+            android:src="@drawable/rating"
+            android:layout_toRightOf="@+id/rating3"
+            />
+        <ImageView
+            android:id="@+id/rating5"
+            android:visibility="gone"
+
+            android:layout_width="30dp"
+            android:layout_height="50dp"
+            android:src="@drawable/rating"
+            android:layout_toRightOf="@+id/rating4"
+            />
+        </LinearLayout>
+</RelativeLayout>
+
+    </RelativeLayout>
+
