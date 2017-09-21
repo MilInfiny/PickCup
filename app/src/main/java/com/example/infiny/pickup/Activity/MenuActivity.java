@@ -2,6 +2,7 @@ package com.example.infiny.pickup.Activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -9,89 +10,82 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.example.infiny.pickup.Adapters.MenuAdapter;
-import com.example.infiny.pickup.Adapters.NormalMenuAdapter;
-import com.example.infiny.pickup.Helpers.CafeLIstingHelpers;
-import com.example.infiny.pickup.Helpers.MenuItem;
+import com.example.infiny.pickup.Adapters.CafeListAdapter;
+import com.example.infiny.pickup.Adapters.MenuNormalAdapter;
 import com.example.infiny.pickup.Helpers.MenuItemData;
+import com.example.infiny.pickup.Helpers.RetroFitClient;
+import com.example.infiny.pickup.Helpers.SessionManager;
+import com.example.infiny.pickup.Interfaces.ApiIntegration;
 import com.example.infiny.pickup.Interfaces.OnItemClickListener;
+import com.example.infiny.pickup.Model.CafeListingData;
 import com.example.infiny.pickup.Model.Cafes;
+import com.example.infiny.pickup.Model.Data;
+import com.example.infiny.pickup.Model.MenuListData;
 import com.example.infiny.pickup.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class MenuActivity extends AppCompatActivity {
 
+
+    MenuNormalAdapter menuNormalAdapter;
+    Context context;
+    String sid;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+    @BindView(R.id.appbar)
+    AppBarLayout appbar;
     @BindView(R.id.logo)
     ImageView logo;
+    @BindView(R.id.tittleimage)
+    ImageView tittleimage;
     @BindView(R.id.tittle)
     TextView tittle;
+    @BindView(R.id.status_button)
+    Button statusButton;
     @BindView(R.id.rating1)
     ImageView rating1;
     @BindView(R.id.rating2)
     ImageView rating2;
     @BindView(R.id.rating3)
     ImageView rating3;
-
     @BindView(R.id.toplayout)
     RelativeLayout toplayout;
-    @BindView(R.id.drinksmenuview)
-    RecyclerView drinksmenuview;
-
-
-    MenuAdapter drinksadapter;
-    @BindView(R.id.tw_tittledrinks)
-    TextView twTittledrinks;
-    @BindView(R.id.view1)
-    View view1;
-    @BindView(R.id.drinklayout)
-    RelativeLayout drinklayout;
-    @BindView(R.id.tw_tittledessert)
-    TextView twTittledessert;
-    @BindView(R.id.view2)
-    View view2;
-    @BindView(R.id.dessertsmenuview)
-    RecyclerView dessertsmenuview;
-    @BindView(R.id.dessertlayout)
-    RelativeLayout dessertlayout;
-    @BindView(R.id.tw_tittlesandwitch)
-    TextView twTittlesandwitch;
-    @BindView(R.id.view3)
-    View view3;
-    @BindView(R.id.sandwitchesmenuview)
-    RecyclerView sandwitchesmenuview;
-    @BindView(R.id.sandwitchlayout)
-    RelativeLayout sandwitchlayout;
     @BindView(R.id.scrollview)
     ScrollView scrollview;
-
-    NormalMenuAdapter dessertadapter, sandwitchadapter;
-    @BindView(R.id.status_button)
-    Button statusButton;
     @BindView(R.id.card_view)
     CardView cardView;
-    @BindView(R.id.tittleimage)
-    ImageView tittleimage;
     @BindView(R.id.order)
     RelativeLayout order;
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
-    @BindView(R.id.appbar)
-    AppBarLayout appbar;
-    Context context;
-    String sid;
+    @BindView(R.id.recycleView)
+    RecyclerView recycleView;
+    @BindView(R.id.progressBar_cyclic)
+    ProgressBar progressBarCyclic;
+    Retrofit retroFitClient;
+    SharedPreferences sharedPreferences;
+    SessionManager sessionManager;
+    MenuListData menuItemData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,16 +98,15 @@ public class MenuActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         Intent intent = getIntent();
-        context=this;
+        context = this;
+        sessionManager=new SessionManager(context);
+        sharedPreferences=getSharedPreferences(sessionManager.PREF_NAME,0);
         tittle.setText(intent.getStringExtra("tittle"));
-        sid=intent.getStringExtra("sid");
+        sid = intent.getStringExtra("sid");
         Picasso.with(context)
                 .load(intent.getStringExtra("image"))
                 .placeholder(R.drawable.cofeecup)
                 .into(tittleimage);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        LinearLayoutManager layoutManager1 = new LinearLayoutManager(this);
-        LinearLayoutManager layoutManager2 = new LinearLayoutManager(this);
         order.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -121,87 +114,71 @@ public class MenuActivity extends AppCompatActivity {
                 startActivity(intent1);
             }
         });
-        drinksadapter = new MenuAdapter(MenuItem.makeGenres(), new OnItemClickListener() {
+        progressBarCyclic.setVisibility(View.VISIBLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+        retroFitClient = new RetroFitClient(context).getBlankRetrofit();
+        Call<MenuListData> call = retroFitClient
+                .create(ApiIntegration.class)
+                .getMenuListing(sharedPreferences.getString("token",null),
+                        sid);
+        call.enqueue(new Callback<MenuListData>() {
+
             @Override
-            public void OnItemClickListener(Cafes item) {
+            public void onResponse(Call<MenuListData> call, Response<MenuListData> response) {
+                if (response != null) {
+                    menuItemData = response.body();
+                    if (menuItemData != null) {
+                        if (menuItemData.getError().equals("true")) {
+                            progressBarCyclic.setVisibility(View.GONE);
+                            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                            Toast.makeText(context,menuItemData.getTitle(), Toast.LENGTH_SHORT).show();
+                        } else {
+                            progressBarCyclic.setVisibility(View.GONE);
+                            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                            ArrayList<Data> datas = new ArrayList<>(Arrays.asList(menuItemData.getData()));
+                            menuNormalAdapter = new MenuNormalAdapter(context, datas);
+                            RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
+                            recycleView.setLayoutManager(mLayoutManager);
+                            recycleView.setAdapter(menuNormalAdapter);
+                            recycleView.setNestedScrollingEnabled(false);
+
+                        }
+
+                    }else {
+                        if (response.code() == 404 || response.code() == 500) {
+                            progressBarCyclic.setVisibility(View.GONE);
+                            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                            Toast.makeText(context, R.string.server_not_responding, Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }
+
+
+
 
             }
 
             @Override
-            public void onimageclickLister() {
-                order.setVisibility(View.VISIBLE);
+            public void onFailure(Call<MenuListData> call, Throwable t) {
+                progressBarCyclic.setVisibility(View.GONE);
+                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                Toast.makeText(context,R.string.Something_went_wrong,Toast.LENGTH_SHORT);
 
-
-            }
-        }, this);
-        drinksmenuview.setLayoutManager(layoutManager);
-        drinksmenuview.setAdapter(drinksadapter);
-        drinksmenuview.setNestedScrollingEnabled(false);
-
-        ArrayList<MenuItemData> tittles = new ArrayList<MenuItemData>();
-
-        tittles.add(new MenuItemData("Brownie", "£ 3.00"));
-        tittles.add(new MenuItemData("Cheesecake", "£ 3.10"));
-        tittles.add(new MenuItemData("Carrot Cake", "£ 3.10"));
-        dessertadapter = new NormalMenuAdapter(this, tittles, new OnItemClickListener() {
-            @Override
-            public void OnItemClickListener(Cafes item) {
-
-            }
-
-            @Override
-            public void onimageclickLister() {
-                order.setVisibility(View.VISIBLE);
             }
         });
-        dessertsmenuview.setLayoutManager(layoutManager1);
-        dessertsmenuview.setAdapter(dessertadapter);
-        dessertsmenuview.setNestedScrollingEnabled(false);
 
-        ArrayList<MenuItemData> tittles1 = new ArrayList<MenuItemData>();
-        tittles1.add(new MenuItemData("Tuna Sandwich", "£ 5.20"));
-        tittles1.add(new MenuItemData("Avocado Sandwich", "£ 5.50"));
-        tittles1.add(new MenuItemData("Egg Sandwich", "£ 5.20"));
-        tittles1.add(new MenuItemData("Ham Sandwich", "£ 5.50"));
-        sandwitchadapter = new NormalMenuAdapter(this, tittles1, new OnItemClickListener() {
-            @Override
-            public void OnItemClickListener(Cafes item) {
 
-            }
-
-            @Override
-            public void onimageclickLister() {
-                order.setVisibility(View.VISIBLE);
-            }
-        });
-        sandwitchesmenuview.setLayoutManager(layoutManager2);
-        sandwitchesmenuview.setAdapter(sandwitchadapter);
-        sandwitchesmenuview.setNestedScrollingEnabled(false);
 
     }
     @Override
-    public boolean onOptionsItemSelected(android.view.MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
                 super.onBackPressed();  // optional depending on your needs
         }
         return super.onOptionsItemSelected(item);
     }
-
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        drinksadapter.onSaveInstanceState(outState);
-
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        drinksadapter.onRestoreInstanceState(savedInstanceState);
-    }
-
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));

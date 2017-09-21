@@ -1,5 +1,8 @@
 package com.example.infiny.pickup.Helpers;
 
+import android.os.Parcel;
+
+import com.example.infiny.pickup.Model.ItemData;
 import com.thoughtbot.expandablerecyclerview.models.ExpandableGroup;
 
 import java.util.List;
@@ -7,9 +10,7 @@ import java.util.List;
 /**
  * Created by infiny on 9/5/17.
  */
-
 public class Menu extends ExpandableGroup<Drinks> {
-
     List<Drinks> drinkses;
     String title;
 

@@ -1,9 +1,11 @@
 package com.example.infiny.pickup.Interfaces;
 
+import com.example.infiny.pickup.Helpers.MenuItemData;
 import com.example.infiny.pickup.Model.CafeListingData;
 import com.example.infiny.pickup.Model.ForgotPasswordData;
 import com.example.infiny.pickup.Model.FpResetPasswordData;
 import com.example.infiny.pickup.Model.LoginData;
+import com.example.infiny.pickup.Model.MenuListData;
 import com.example.infiny.pickup.Model.SignUpData;
 import com.example.infiny.pickup.Model.VerifyFpOtp;
 
@@ -48,5 +50,10 @@ public interface ApiIntegration {
     @POST("resetPassword")
     Call<FpResetPasswordData> getResetpassword(@Field("token") String  token,
                                                @Field("password") String  password);
+
+    @FormUrlEncoded
+    @POST("menulisting")
+    Call<MenuListData> getMenuListing(@Field("userToken") String  token,
+                                      @Field("sid") String  sid);
 
 }

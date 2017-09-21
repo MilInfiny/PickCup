@@ -10,9 +10,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.infiny.pickup.Helpers.CafeLIstingHelpers;
-import com.example.infiny.pickup.Helpers.MenuItem;
+
 import com.example.infiny.pickup.Helpers.MenuItemData;
 import com.example.infiny.pickup.Interfaces.OnItemClickListener;
+import com.example.infiny.pickup.Model.ItemData;
 import com.example.infiny.pickup.R;
 
 import java.util.ArrayList;
@@ -23,13 +24,12 @@ import java.util.ArrayList;
 
 public class NormalMenuAdapter extends RecyclerView.Adapter<NormalMenuAdapter.MyViewHolder> {
     Context context;
-    ArrayList<MenuItemData> tittles;
-    private final OnItemClickListener listener;
+    ArrayList<ItemData> tittles;
 
-    public NormalMenuAdapter(Context context, ArrayList<MenuItemData> tittles, OnItemClickListener listener) {
+    public NormalMenuAdapter(Context context, ArrayList<ItemData> tittles) {
         this.context = context;
         this.tittles = tittles;
-        this.listener = listener;
+
     }
 
     @Override
@@ -40,12 +40,34 @@ public class NormalMenuAdapter extends RecyclerView.Adapter<NormalMenuAdapter.My
     }
 
     @Override
-    public void onBindViewHolder(MyViewHolder holder, int position) {
-        MenuItemData f1=tittles.get(position);
-        holder.bind(context,listener);
-        holder.view2.setVisibility(View.INVISIBLE);
-        holder.menuname.setText(f1.getMenuItem());
-        holder.price.setText(f1.getPrice());
+    public void onBindViewHolder(final MyViewHolder holder, int position) {
+        ItemData f1=tittles.get(position);
+        holder.menuname.setText(f1.getItemName());
+        holder.price.setText("£ "+f1.getItemPrice());
+
+            String k = f1.getItemSmallPrice();
+            if (k == null) {
+                holder.view2.setVisibility(View.GONE);
+            } else {
+                holder.small.setText("£ "+f1.getItemSmallPrice());
+                holder.large.setText("£ "+f1.getItemLargePrice());
+                holder.medium.setText("£ "+f1.getItemMediumPrice());
+                holder.relativeLayout.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(holder.sublayout.getVisibility()==View.VISIBLE) {
+                            holder.sublayout.setVisibility(View.GONE);
+                            holder.view2.setRotation(360);
+                        }
+
+                       else{
+                            holder.sublayout.setVisibility(View.VISIBLE);
+                            holder.view2.setRotation(180);
+                        }
+
+                    }
+                });
+            }
     }
 
     @Override
@@ -56,24 +78,24 @@ public class NormalMenuAdapter extends RecyclerView.Adapter<NormalMenuAdapter.My
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         TextView menuname,price;
-        RelativeLayout relativeLayout;
-        ImageView view2;
+        TextView small,medium,large;
+        RelativeLayout relativeLayout,sublayout;
+        ImageView view2,iv_Small,iv_Mediuam,iv_Large;
         public MyViewHolder(View itemView) {
             super(itemView);
             menuname=(TextView)itemView.findViewById(R.id.tw_manuname);
             view2=(ImageView) itemView.findViewById(R.id.list_item_genre_arrow);
             relativeLayout=(RelativeLayout)itemView.findViewById(R.id.relativeLayout);
+            sublayout=(RelativeLayout)itemView.findViewById(R.id.sublayout);
             price=(TextView)itemView.findViewById(R.id.price);
+            small=(TextView)itemView.findViewById(R.id.tw_smallprice);
+            medium=(TextView)itemView.findViewById(R.id.tw_mediumprice);
+            large=(TextView)itemView.findViewById(R.id.tw_largeprice);
+            iv_Small=(ImageView) itemView.findViewById(R.id.iv_smallsize);
+            iv_Mediuam=(ImageView) itemView.findViewById(R.id.iv_mediumsize);
+            iv_Large=(ImageView) itemView.findViewById(R.id.iv_largesize);
         }
-        public void bind(final Context item, final OnItemClickListener listener) {
-            relativeLayout.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    listener.onimageclickLister();
-                }
-            });
 
-        }
 
     }
 }

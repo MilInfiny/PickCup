@@ -3,9 +3,9 @@ package com.example.infiny.pickup.Helpers;
 import java.util.Arrays;
 import java.util.List;
 
-/**
- * Created by infiny on 9/5/17.
- */
+
+
+
 
 public class MenuItem {
     public static List<Menu> makeGenres() {

@@ -1,3 +1,4 @@
+/*
 package com.example.infiny.pickup.Adapters;
 
 import android.content.Context;
@@ -12,19 +13,23 @@ import com.example.infiny.pickup.Helpers.CafeLIstingHelpers;
 import com.example.infiny.pickup.Helpers.Drinks;
 import com.example.infiny.pickup.Helpers.Menu;
 import com.example.infiny.pickup.Interfaces.OnItemClickListener;
+import com.example.infiny.pickup.Model.ItemData;
 import com.example.infiny.pickup.R;
 import com.thoughtbot.expandablerecyclerview.ExpandableRecyclerViewAdapter;
 import com.thoughtbot.expandablerecyclerview.models.ExpandableGroup;
 import com.thoughtbot.expandablerecyclerview.viewholders.ChildViewHolder;
 import com.thoughtbot.expandablerecyclerview.viewholders.GroupViewHolder;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static android.view.animation.Animation.RELATIVE_TO_SELF;
 
+*/
 /**
  * Created by infiny on 9/5/17.
- */
+ *//*
+
 
 public class MenuAdapter extends ExpandableRecyclerViewAdapter<MenuAdapter.MenuViewHolder, MenuAdapter.ItemViewHolder> {
     private final OnItemClickListener listener;
@@ -52,7 +57,7 @@ public class MenuAdapter extends ExpandableRecyclerViewAdapter<MenuAdapter.MenuV
 
     @Override
     public void onBindChildViewHolder(ItemViewHolder holder, int flatPosition, ExpandableGroup group, int childIndex) {
-        final Drinks drinks = ((Menu) group).getItems().get(childIndex);
+
         holder.bind(context,listener);
         holder.small.setText(drinks.getSmall());
         holder.medium.setText(drinks.getMedium());
@@ -180,3 +185,4 @@ public class MenuAdapter extends ExpandableRecyclerViewAdapter<MenuAdapter.MenuV
         }
     }
 }
+*/

@@ -21,6 +21,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.infiny.pickup.Adapters.CafeListAdapter;
@@ -43,6 +44,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -71,7 +73,7 @@ public class MainActivity extends AppCompatActivity
     CafeListingData cafeListingData;
     Context context;
     Retrofit retroFitClient;
-
+TextView username,email;
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,9 +96,6 @@ public class MainActivity extends AppCompatActivity
                 startActivity(intent);
             }
         });
-
-
-
 
         progressBarCyclic.setVisibility(View.VISIBLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
@@ -163,6 +162,9 @@ public class MainActivity extends AppCompatActivity
 
             @Override
             public void onFailure(Call<CafeListingData> call, Throwable t) {
+                progressBarCyclic.setVisibility(View.GONE);
+                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                Toast.makeText(context,R.string.Something_went_wrong,Toast.LENGTH_SHORT);
 
             }
         });
@@ -179,6 +181,10 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        username = (TextView) navigationView.getHeaderView(0).findViewById(R.id.username);
+        email = (TextView) navigationView.getHeaderView(0).findViewById(R.id.email);
+        username.setText(sharedPreferences.getString("name",null)+" "+sharedPreferences.getString("surname",null));
+        email.setText(sharedPreferences.getString("email",null));
     }
 
     @Override
@@ -252,4 +258,9 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
+
 }

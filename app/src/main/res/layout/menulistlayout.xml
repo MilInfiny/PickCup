@@ -39,6 +39,100 @@
              />
 
     </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/sublayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:layout_below="@+id/relativeLayout">
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="35dp"
+            android:src="@drawable/graycup1"
+            android:id="@+id/iv_smallsize"
+            android:layout_above="@+id/tw_small"
+            android:layout_alignStart="@+id/tw_small" />
+        <ImageView
+            android:layout_width="60dp"
+            android:layout_height="40dp"
+            android:src="@drawable/graycup1"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/iv_mediumsize"
+            android:layout_alignParentTop="true"
+            android:layout_toEndOf="@+id/tw_small"
+            android:layout_marginLeft="50dp" />
+        <ImageView
+            android:layout_width="70dp"
+            android:layout_height="50dp"
+            android:src="@drawable/graycup1"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/iv_largesize"
+            android:layout_toRightOf="@+id/iv_mediumsize"
+            android:layout_marginLeft="40dp"
+            android:layout_above="@+id/tw_large"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Small"
+            android:id="@+id/tw_small"
+            android:textSize="15dp"
+            android:layout_marginStart="18dp"
+            android:layout_alignBaseline="@+id/tw_medium"
+            android:layout_alignBottom="@+id/tw_medium"
+            android:layout_alignParentStart="true" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Medium"
+            android:id="@+id/tw_medium"
+            android:textSize="15dp"
+            android:layout_below="@+id/iv_mediumsize"
+            android:layout_alignStart="@+id/iv_mediumsize"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Large"
+            android:id="@+id/tw_large"
+            android:textSize="15dp"
+            android:layout_below="@+id/iv_mediumsize"
+            android:layout_alignStart="@+id/iv_largesize"
+            android:layout_marginStart="13dp" />
+        <TextView
+            android:id="@+id/tw_smallprice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="£ 2.20"
+            android:textSize="14dp"
+            android:layout_below="@+id/tw_small"
+            android:layout_alignStart="@+id/tw_small" />
+        <TextView
+            android:id="@+id/tw_mediumprice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="£ 2.25"
+            android:layout_marginStart="9dp"
+            android:textSize="14dp"
+            android:layout_below="@+id/tw_medium"
+            android:layout_alignStart="@+id/tw_medium" />
+        <TextView
+            android:id="@+id/tw_largeprice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="£ 2.30"
+            android:textSize="14dp"
+            android:layout_below="@+id/tw_large"
+            android:layout_alignStart="@+id/tw_large" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/lightgray"
+            android:layout_marginTop="15dp"
+            android:layout_below="@+id/tw_largeprice"
+            ></View>
+
+    </RelativeLayout>
     <View
         android:id="@+id/view"
         android:layout_width="match_parent"
