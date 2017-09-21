@@ -51,4 +51,5 @@
     <string name="email_sent_please_check">Email sent please check</string>
     <string name="verified_successfull">Verify successfull</string>
     <string name="Password_set">password set seccesfully</string>
+    <string name="Base_url">http://192.168.1.175:3000</string>
 </resources>

@@ -28,13 +28,14 @@ public class SessionManager {
     public static final String name = "name";
     public static final String email = "email";
     public static final String surname = "surname";
+    public static final String token = "token";
 
 
     // Shared pref mode
     int PRIVATE_MODE = 0;
 
     // Sharedpref file name
-    private static final String PREF_NAME = "LoginData";
+    public static final String PREF_NAME = "LoginData";
 
 
     // Constructor
@@ -43,7 +44,7 @@ public class SessionManager {
         pref = context.getSharedPreferences(PREF_NAME, PRIVATE_MODE);
         editor = pref.edit();
     }
-    public void createLoginSession(String name, String email,  String surname) {
+    public void createLoginSession(String name, String email,  String surname,String token) {
 
         editor.putBoolean(IS_LOGIN, true);
 
@@ -51,6 +52,7 @@ public class SessionManager {
 //        editor.putString(name, fname);
         editor.putString(this.email, email);
         editor.putString(this.surname, surname);
+        editor.putString(this.token, token);
 
 
         editor.commit();

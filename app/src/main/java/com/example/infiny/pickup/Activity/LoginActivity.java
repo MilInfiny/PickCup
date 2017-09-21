@@ -112,7 +112,7 @@ public class LoginActivity extends AppCompatActivity {
                                         Toast.makeText(context,loginData.getTitle(), Toast.LENGTH_SHORT).show();
                                     } else {
                                         Toast.makeText(context, R.string.login_success, Toast.LENGTH_SHORT).show();
-                                        sessionManager.createLoginSession(loginData.getUser().getFirstname(),loginData.getUser().getEmail(),loginData.getUser().getLastname());
+                                        sessionManager.createLoginSession(loginData.getUser().getFirstname(),loginData.getUser().getEmail(),loginData.getUser().getLastname(),loginData.getToken());
                                         progressBarCyclic.setVisibility(View.GONE);
                                         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);

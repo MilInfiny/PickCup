@@ -129,7 +129,7 @@ public class FpemailsubmitActivity extends AppCompatActivity {
     public boolean submitForm() {
         status = true;
         if (TextUtils.isEmpty(etEmail.getEditText().getText().toString())) {
-            etEmail.setError("Please enter your email");
+            etEmail.getEditText().setError("Please enter your email");
             status = false;
         }
 

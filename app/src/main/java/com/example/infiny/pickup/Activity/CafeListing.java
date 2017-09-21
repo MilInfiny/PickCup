@@ -1,3 +1,4 @@
+/*
 package com.example.infiny.pickup.Activity;
 
 import android.content.Context;
@@ -73,7 +74,7 @@ public class CafeListing extends AppCompatActivity {
         CafeListAdapter=new CafeListAdapter(this,cafeLIstingHelperseslist, new OnItemClickListener() {
 
             @Override
-            public void OnItemClickListener(CafeLIstingHelpers item) {
+            public void OnItemClickListener(Cafes item) {
                 Intent intent=new Intent(CafeListing.this,MenuActivity.class);
                 intent.putExtra("tittle",item.getPartyname());
                 intent.putExtra("image",item.getImage());
@@ -98,3 +99,4 @@ public class CafeListing extends AppCompatActivity {
     }
 
 }
+*/

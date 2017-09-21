@@ -13,7 +13,9 @@ import android.widget.TextView;
 
 import com.example.infiny.pickup.Helpers.CafeLIstingHelpers;
 import com.example.infiny.pickup.Interfaces.OnItemClickListener;
+import com.example.infiny.pickup.Model.Cafes;
 import com.example.infiny.pickup.R;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -25,13 +27,13 @@ import butterknife.BindView;
 
 public class CafeListAdapter extends RecyclerView.Adapter<CafeListAdapter.MyViewHolder> {
     Context context;
-    ArrayList<CafeLIstingHelpers> tittles;
+    ArrayList<Cafes> list;
     private final OnItemClickListener listener;
 
 
-    public CafeListAdapter(Context context, ArrayList<CafeLIstingHelpers> tittles, OnItemClickListener listener) {
+    public CafeListAdapter(Context context, ArrayList<Cafes> list, OnItemClickListener listener) {
         this.context = context;
-        this.tittles = tittles;
+        this.list = list;
         this.listener = listener;
     }
 
@@ -44,46 +46,50 @@ public class CafeListAdapter extends RecyclerView.Adapter<CafeListAdapter.MyView
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        CafeLIstingHelpers f1=tittles.get(position);
-        holder.bind(f1, listener);
-        if(f1.getStatus()=="online")
+        Cafes cafes=list.get(position);
+
+        holder.bind(cafes, listener);
+        if(cafes.getStatus().equals("ready"))
         {
             holder.status.setBackground(context.getResources().getDrawable(R.drawable.button_bg_round_green));
         }
-        if(f1.getStatus()=="offline")
+        if(cafes.getStatus().equals("offline"))
         {
             holder.status.setBackground(context.getResources().getDrawable(R.drawable.button_bg_round_red));
         }
-        if(f1.getStatus()=="await")
+        if(cafes.getStatus().equals("await"))
         {
             holder.status.setBackground(context.getResources().getDrawable(R.drawable.button_bg_round_yellow));
 
         }
-        holder.bgimage.setImageResource(f1.getImage());
-        holder.tittle.setText(f1.getPartyname());
-        if(f1.getRating()=="1")
+        Picasso.with(context)
+                .load(cafes.getImageurl())
+                .placeholder(R.drawable.cofeecup)
+                .into(holder.bgimage);
+        holder.tittle.setText(cafes.getCafe_name());
+        if(cafes.getRating().equals("1"))
         {
             holder.r1.setVisibility(View.VISIBLE);
         }
-        if(f1.getRating()=="2")
+        if(cafes.getRating().equals("2"))
         {
             holder.r1.setVisibility(View.VISIBLE);
             holder.r2.setVisibility(View.VISIBLE);
         }
-        if(f1.getRating()=="3")
+        if(cafes.getRating().equals("3"))
         {
             holder.r1.setVisibility(View.VISIBLE);
             holder.r2.setVisibility(View.VISIBLE);
             holder.r3.setVisibility(View.VISIBLE);
         }
-        if(f1.getRating()=="4")
+        if(cafes.getRating().equals("4"))
         {
             holder.r1.setVisibility(View.VISIBLE);
             holder.r2.setVisibility(View.VISIBLE);
             holder.r3.setVisibility(View.VISIBLE);
             holder.r4.setVisibility(View.VISIBLE);
         }
-        if(f1.getRating()=="5")
+        if(cafes.getRating().equals("5"))
         {
             holder.r1.setVisibility(View.VISIBLE);
             holder.r2.setVisibility(View.VISIBLE);
@@ -96,7 +102,7 @@ public class CafeListAdapter extends RecyclerView.Adapter<CafeListAdapter.MyView
 
     @Override
     public int getItemCount() {
-        return tittles.size();
+        return list.size();
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
@@ -119,7 +125,7 @@ public class CafeListAdapter extends RecyclerView.Adapter<CafeListAdapter.MyView
 
 
         }
-        public void bind(final CafeLIstingHelpers item, final OnItemClickListener listener) {
+        public void bind(final Cafes item, final OnItemClickListener listener) {
             framelayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

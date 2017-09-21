@@ -36,7 +36,7 @@ public interface ApiIntegration {
     @POST("cafelisting")
     Call<CafeListingData> getcafelisting(@Field("userToken") String  token,
                                     @Field("lat") String  lat,
-                                         @Field("lang") String  lang);
+                                         @Field("lng") String  lang);
     @FormUrlEncoded
     @POST("forgotPassword")
     Call<ForgotPasswordData> getForgotPassword(@Field("email") String  email);

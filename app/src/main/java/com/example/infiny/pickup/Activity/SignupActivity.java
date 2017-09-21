@@ -1,5 +1,6 @@
 package com.example.infiny.pickup.Activity;
 
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -25,6 +27,10 @@ import com.example.infiny.pickup.Interfaces.ApiIntegration;
 import com.example.infiny.pickup.Model.SignUpData;
 import com.example.infiny.pickup.R;
 import com.github.rahatarmanahmed.cpv.CircularProgressView;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -86,6 +92,7 @@ public class SignupActivity extends AppCompatActivity {
     Retrofit retroFitClient;
     private Context context;
     SignUpData signUpData;
+    Calendar myCalendar;
     SessionManager sessionManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,6 +108,30 @@ public class SignupActivity extends AppCompatActivity {
         sessionManager = new SessionManager(context);
         tiePassword.setTransformationMethod(new PasswordTransformationMethod());
         tieConfipassword.setTransformationMethod(new PasswordTransformationMethod());
+         myCalendar = Calendar.getInstance();
+        final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
+
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear,
+                                  int dayOfMonth) {
+                // TODO Auto-generated method stub
+                myCalendar.set(Calendar.YEAR, year);
+                myCalendar.set(Calendar.MONTH, monthOfYear);
+                myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                updateLabel();
+            }
+
+        };
+        etDob.getEditText().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new DatePickerDialog(context, date, myCalendar
+                        .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+                        myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+
+            }
+        });
+
         btSignup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -125,13 +156,13 @@ public class SignupActivity extends AppCompatActivity {
                             if (response != null) {
                                 signUpData = response.body();
                                 if (signUpData != null) {
-                                    if (response.code() == 404 || response.code() == 500) {
+                                    if (signUpData.getError().equals("true")) {
                                         progressBarCyclic.setVisibility(View.GONE);
                                         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                                        Toast.makeText(context, R.string.server_not_responding, Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(context, signUpData.getMessage(), Toast.LENGTH_SHORT).show();
                                     } else {
                                         Toast.makeText(context, R.string.login_success, Toast.LENGTH_SHORT).show();
-                                        sessionManager.createLoginSession(signUpData.getUser().getFirstname(),signUpData.getUser().getEmail(),signUpData.getUser().getLastname());
+                                        sessionManager.createLoginSession(signUpData.getUser().getFirstname(),signUpData.getUser().getEmail(),signUpData.getUser().getLastname(),signUpData.getToken());
                                         progressBarCyclic.setVisibility(View.GONE);
                                         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                                         Intent intent = new Intent(context, MainActivity.class);
@@ -165,50 +196,57 @@ public class SignupActivity extends AppCompatActivity {
         });
 
     }
+    private void updateLabel() {
+        String myFormat = "MM/dd/yy"; //In which you need put here
+        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+
+        etDob.getEditText().setText(sdf.format(myCalendar.getTime()));
+    }
+
 
     public boolean submitForm() {
         status = true;
         Log.d("password", etPassword.getEditText().getText().toString());
         Log.d("samepasword", String.valueOf(!etPassword.getEditText().getText().equals(etConfirmpassword.getEditText().getText())));
         if (TextUtils.isEmpty(etEmail.getEditText().getText().toString())) {
-            etEmail.setError("Please enter your User ID");
+            etEmail.getEditText().setError("Please enter email");
             status = false;
         }
         if (TextUtils.isEmpty(etPassword.getEditText().getText().toString())) {
-            etPassword.setError("Please enter your Pin");
+            etPassword.getEditText().setError("Please enter password");
             status = false;
         }
         if (TextUtils.isEmpty(etConfirmpassword.getEditText().getText().toString())) {
-            etConfirmpassword.setError("Please enter your Org ID");
+            etConfirmpassword.getEditText().setError("Please enter confirmpassword");
             status = false;
         }
         if (TextUtils.isEmpty(etName.getEditText().getText().toString())) {
-            etName.setError("Please enter your Org ID");
+            etName.getEditText().setError("Please enter name");
             status = false;
         }
         if (TextUtils.isEmpty(etSurname.getEditText().getText().toString())) {
-            etSurname.setError("Please enter your Org ID");
+            etSurname.getEditText().setError("Please enter surname");
             status = false;
         }
         if (TextUtils.isEmpty(etDob.getEditText().getText().toString())) {
-            etDob.setError("Please enter your Org ID");
+            etDob.getEditText().setError("Please enter date of birth");
             status = false;
         }
         if (TextUtils.isEmpty(etAdd.getEditText().getText().toString())) {
-            etAdd.setError("Please enter your Org ID");
+            etAdd.getEditText().setError("Please enter address");
             status = false;
         }
         if (TextUtils.isEmpty(etCity.getEditText().getText().toString())) {
-            etCity.setError("Please enter your Org ID");
+            etCity.getEditText().setError("Please enter city");
             status = false;
         }
         if (TextUtils.isEmpty(etPostcode.getEditText().getText().toString())) {
-            etPostcode.setError("Please enter your Org ID");
+            etPostcode.getEditText().setError("Please enter postcode");
             status = false;
         }
         if (!etPassword.getEditText().getText().toString().equals(etConfirmpassword.getEditText().getText().toString())) {
-            etPassword.setError("password & confirm password should be same");
-            etConfirmpassword.setError("password & confirm password should be same");
+            etPassword.getEditText().setError("password & confirm password should be same");
+            etConfirmpassword.getEditText().setError("password & confirm password should be same");
             status = false;
         }
 
@@ -225,7 +263,7 @@ public class SignupActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                super.onBackPressed();  // optional depending on your needs
+                onBackPressed();
         }
         return super.onOptionsItemSelected(item);
     }

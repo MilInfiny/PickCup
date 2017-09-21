@@ -22,7 +22,9 @@ import com.example.infiny.pickup.Helpers.CafeLIstingHelpers;
 import com.example.infiny.pickup.Helpers.MenuItem;
 import com.example.infiny.pickup.Helpers.MenuItemData;
 import com.example.infiny.pickup.Interfaces.OnItemClickListener;
+import com.example.infiny.pickup.Model.Cafes;
 import com.example.infiny.pickup.R;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -88,6 +90,8 @@ public class MenuActivity extends AppCompatActivity {
     Toolbar toolbar;
     @BindView(R.id.appbar)
     AppBarLayout appbar;
+    Context context;
+    String sid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,9 +104,13 @@ public class MenuActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         Intent intent = getIntent();
+        context=this;
         tittle.setText(intent.getStringExtra("tittle"));
-        tittleimage.setImageResource(intent.getIntExtra("image", 0));
-
+        sid=intent.getStringExtra("sid");
+        Picasso.with(context)
+                .load(intent.getStringExtra("image"))
+                .placeholder(R.drawable.cofeecup)
+                .into(tittleimage);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         LinearLayoutManager layoutManager1 = new LinearLayoutManager(this);
         LinearLayoutManager layoutManager2 = new LinearLayoutManager(this);
@@ -115,7 +123,7 @@ public class MenuActivity extends AppCompatActivity {
         });
         drinksadapter = new MenuAdapter(MenuItem.makeGenres(), new OnItemClickListener() {
             @Override
-            public void OnItemClickListener(CafeLIstingHelpers item) {
+            public void OnItemClickListener(Cafes item) {
 
             }
 
@@ -137,7 +145,7 @@ public class MenuActivity extends AppCompatActivity {
         tittles.add(new MenuItemData("Carrot Cake", "£ 3.10"));
         dessertadapter = new NormalMenuAdapter(this, tittles, new OnItemClickListener() {
             @Override
-            public void OnItemClickListener(CafeLIstingHelpers item) {
+            public void OnItemClickListener(Cafes item) {
 
             }
 
@@ -157,7 +165,7 @@ public class MenuActivity extends AppCompatActivity {
         tittles1.add(new MenuItemData("Ham Sandwich", "£ 5.50"));
         sandwitchadapter = new NormalMenuAdapter(this, tittles1, new OnItemClickListener() {
             @Override
-            public void OnItemClickListener(CafeLIstingHelpers item) {
+            public void OnItemClickListener(Cafes item) {
 
             }
 
