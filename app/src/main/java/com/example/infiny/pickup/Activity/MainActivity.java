@@ -32,6 +32,7 @@ import com.example.infiny.pickup.Interfaces.ApiIntegration;
 import com.example.infiny.pickup.Interfaces.OnItemClickListener;
 import com.example.infiny.pickup.Model.CafeListingData;
 import com.example.infiny.pickup.Model.Cafes;
+import com.example.infiny.pickup.Model.ItemData;
 import com.example.infiny.pickup.Model.LoginData;
 import com.example.infiny.pickup.R;
 
@@ -133,9 +134,11 @@ TextView username,email;
                                 }
 
                                 @Override
-                                public void onimageclickLister() {
+                                public void voidOnAddCart(ItemData itemData) {
 
                                 }
+
+
                             });
 
                             RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());

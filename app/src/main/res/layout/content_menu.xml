@@ -143,6 +143,7 @@
         android:background="@color/colorPrimaryopacity"
         >
         <TextView
+            android:id="@+id/bt_order"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="left"
@@ -152,6 +153,7 @@
             android:padding="10dp"
             android:textSize="20dp"/>
         <TextView
+            android:id="@+id/order_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"

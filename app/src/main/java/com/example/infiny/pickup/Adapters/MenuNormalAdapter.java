@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.infiny.pickup.Interfaces.OnItemClickListener;
 import com.example.infiny.pickup.Model.Data;
 import com.example.infiny.pickup.Model.ItemData;
 import com.example.infiny.pickup.Model.MenuListData;
@@ -26,9 +27,11 @@ import retrofit2.Callback;
 public class MenuNormalAdapter extends RecyclerView.Adapter<MenuNormalAdapter.MyViewHolder> {
     Context context;
     ArrayList<Data> datas;
-    public MenuNormalAdapter(Context context, ArrayList<Data> datas) {
+    OnItemClickListener onItemClickListener;
+    public MenuNormalAdapter(Context context, ArrayList<Data> datas,OnItemClickListener onItemClickListener) {
         this.context = context;
         this.datas = datas;
+        this.onItemClickListener=onItemClickListener;
     }
 
 
@@ -45,8 +48,9 @@ public class MenuNormalAdapter extends RecyclerView.Adapter<MenuNormalAdapter.My
         holder.menutype.setText(menuListData.getItemCategory());
 
       ItemData [] itemdata=menuListData.getItemData();
+        String category=menuListData.getItemCategory();
         ArrayList<ItemData> itemDatas=new ArrayList<>(Arrays.asList(itemdata));
-        NormalMenuAdapter normalMenuAdapter=new NormalMenuAdapter(context,itemDatas);
+        NormalMenuAdapter normalMenuAdapter=new NormalMenuAdapter(context,itemDatas,onItemClickListener, category);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(context.getApplicationContext());
         holder.recyclerView.setLayoutManager(mLayoutManager);
         holder.recyclerView.setAdapter(normalMenuAdapter);

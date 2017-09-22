@@ -21,16 +21,15 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.infiny.pickup.Adapters.CafeListAdapter;
 import com.example.infiny.pickup.Adapters.MenuNormalAdapter;
-import com.example.infiny.pickup.Helpers.MenuItemData;
 import com.example.infiny.pickup.Helpers.RetroFitClient;
 import com.example.infiny.pickup.Helpers.SessionManager;
 import com.example.infiny.pickup.Interfaces.ApiIntegration;
 import com.example.infiny.pickup.Interfaces.OnItemClickListener;
-import com.example.infiny.pickup.Model.CafeListingData;
+import com.example.infiny.pickup.Model.AddToCartData;
 import com.example.infiny.pickup.Model.Cafes;
 import com.example.infiny.pickup.Model.Data;
+import com.example.infiny.pickup.Model.ItemData;
 import com.example.infiny.pickup.Model.MenuListData;
 import com.example.infiny.pickup.R;
 import com.squareup.picasso.Picasso;
@@ -46,7 +45,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-public class MenuActivity extends AppCompatActivity {
+public class MenuActivity extends AppCompatActivity implements OnItemClickListener {
 
 
     MenuNormalAdapter menuNormalAdapter;
@@ -76,8 +75,8 @@ public class MenuActivity extends AppCompatActivity {
     ScrollView scrollview;
     @BindView(R.id.card_view)
     CardView cardView;
-    @BindView(R.id.order)
-    RelativeLayout order;
+
+    public static RelativeLayout order;
     @BindView(R.id.recycleView)
     RecyclerView recycleView;
     @BindView(R.id.progressBar_cyclic)
@@ -86,6 +85,12 @@ public class MenuActivity extends AppCompatActivity {
     SharedPreferences sharedPreferences;
     SessionManager sessionManager;
     MenuListData menuItemData;
+    AddToCartData addToCartData;
+   ItemData itemData;
+    public static TextView btOrder;
+    OnItemClickListener onItemClickListener;
+
+    public static TextView orderPrice;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,28 +104,83 @@ public class MenuActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         Intent intent = getIntent();
         context = this;
-        sessionManager=new SessionManager(context);
-        sharedPreferences=getSharedPreferences(sessionManager.PREF_NAME,0);
+        onItemClickListener=this;
+        sessionManager = new SessionManager(context);
+        sharedPreferences = getSharedPreferences(sessionManager.PREF_NAME, 0);
         tittle.setText(intent.getStringExtra("tittle"));
         sid = intent.getStringExtra("sid");
         Picasso.with(context)
                 .load(intent.getStringExtra("image"))
                 .placeholder(R.drawable.cofeecup)
                 .into(tittleimage);
+        order=(RelativeLayout) findViewById(R.id.order);
+        btOrder=(TextView)findViewById(R.id.bt_order);
+        orderPrice=(TextView)findViewById(R.id.order_price);
+
         order.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent1 = new Intent(MenuActivity.this, OrderActivity.class);
-                startActivity(intent1);
-            }
+        @Override
+        public void onClick(View v) {
+
+            progressBarCyclic.setVisibility(View.VISIBLE);
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            retroFitClient = new RetroFitClient(context).getBlankRetrofit();
+            Call<AddToCartData> call = retroFitClient
+                    .create(ApiIntegration.class)
+                    .getAddtocart(sharedPreferences.getString("token", null),
+                            itemData.get_id(),
+                            itemData.getSize(),
+                            itemData.getItemName(),
+                            itemData.getItemPrice(),
+                            sid);
+            call.enqueue(new Callback<AddToCartData>() {
+
+                @Override
+                public void onResponse(Call<AddToCartData> call, Response<AddToCartData> response) {
+                    if (response != null) {
+                        addToCartData = response.body();
+                        if (addToCartData != null) {
+                            if (addToCartData.getError().equals("true")) {
+                                progressBarCyclic.setVisibility(View.GONE);
+                                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                Toast.makeText(context, menuItemData.getTitle(), Toast.LENGTH_SHORT).show();
+                            } else {
+                                progressBarCyclic.setVisibility(View.GONE);
+                                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                Intent intent1=new Intent(MenuActivity.this,OrderActivity.class);
+                                startActivity(intent1);
+
+                            }
+
+                        } else {
+                            if (response.code() == 404 || response.code() == 500) {
+                                progressBarCyclic.setVisibility(View.GONE);
+                                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                Toast.makeText(context, R.string.server_not_responding, Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<AddToCartData> call, Throwable t) {
+                    progressBarCyclic.setVisibility(View.GONE);
+                    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                    Toast.makeText(context, R.string.server_not_responding, Toast.LENGTH_SHORT).show();
+                }
+            });
+
+
+        }
         });
+
         progressBarCyclic.setVisibility(View.VISIBLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
                 WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
         retroFitClient = new RetroFitClient(context).getBlankRetrofit();
         Call<MenuListData> call = retroFitClient
                 .create(ApiIntegration.class)
-                .getMenuListing(sharedPreferences.getString("token",null),
+                .getMenuListing(sharedPreferences.getString("token", null),
                         sid);
         call.enqueue(new Callback<MenuListData>() {
 
@@ -132,12 +192,12 @@ public class MenuActivity extends AppCompatActivity {
                         if (menuItemData.getError().equals("true")) {
                             progressBarCyclic.setVisibility(View.GONE);
                             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                            Toast.makeText(context,menuItemData.getTitle(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context, menuItemData.getTitle(), Toast.LENGTH_SHORT).show();
                         } else {
                             progressBarCyclic.setVisibility(View.GONE);
                             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                             ArrayList<Data> datas = new ArrayList<>(Arrays.asList(menuItemData.getData()));
-                            menuNormalAdapter = new MenuNormalAdapter(context, datas);
+                            menuNormalAdapter = new MenuNormalAdapter(context, datas,onItemClickListener);
                             RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
                             recycleView.setLayoutManager(mLayoutManager);
                             recycleView.setAdapter(menuNormalAdapter);
@@ -145,7 +205,7 @@ public class MenuActivity extends AppCompatActivity {
 
                         }
 
-                    }else {
+                    } else {
                         if (response.code() == 404 || response.code() == 500) {
                             progressBarCyclic.setVisibility(View.GONE);
                             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
@@ -153,24 +213,20 @@ public class MenuActivity extends AppCompatActivity {
                         }
                     }
                 }
-
-
-
-
             }
 
             @Override
             public void onFailure(Call<MenuListData> call, Throwable t) {
                 progressBarCyclic.setVisibility(View.GONE);
                 getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                Toast.makeText(context,R.string.Something_went_wrong,Toast.LENGTH_SHORT);
+                Toast.makeText(context, R.string.Something_went_wrong, Toast.LENGTH_SHORT);
 
             }
         });
 
 
-
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -179,9 +235,20 @@ public class MenuActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
+    @Override
+    public void OnItemClickListener(Cafes item) {
+
+    }
+
+    @Override
+    public void voidOnAddCart(ItemData itemData) {
+        this.itemData=itemData;
+
+    }
 }

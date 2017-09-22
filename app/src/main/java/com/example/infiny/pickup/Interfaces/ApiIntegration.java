@@ -1,6 +1,7 @@
 package com.example.infiny.pickup.Interfaces;
 
 import com.example.infiny.pickup.Helpers.MenuItemData;
+import com.example.infiny.pickup.Model.AddToCartData;
 import com.example.infiny.pickup.Model.CafeListingData;
 import com.example.infiny.pickup.Model.ForgotPasswordData;
 import com.example.infiny.pickup.Model.FpResetPasswordData;
@@ -56,4 +57,13 @@ public interface ApiIntegration {
     Call<MenuListData> getMenuListing(@Field("userToken") String  token,
                                       @Field("sid") String  sid);
 
+
+    @FormUrlEncoded
+    @POST("addItemToCart")
+    Call<AddToCartData> getAddtocart(@Field("userToken") String  token,
+                                     @Field("itemId") String  itemId,
+                                     @Field("itemSize") String  itemSize,
+                                     @Field("itemName") String  itemName,
+                                     @Field("itemPrice") String  itemPrice,
+                                     @Field("shopDetail") String  shopDetail);
 }

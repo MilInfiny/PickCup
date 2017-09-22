@@ -11,6 +11,28 @@ public class ItemData implements Parcelable {
     private String itemName;
 
     private String _id;
+    private String size;
+    String categoty;
+
+    public String getCategoty() {
+        return categoty;
+    }
+
+    public void setCategoty(String categoty) {
+        this.categoty = categoty;
+    }
+
+    public String getSize() {
+        return size;
+    }
+
+    public void setSize(String size) {
+        this.size = size;
+    }
+
+    public static Creator<ItemData> getCREATOR() {
+        return CREATOR;
+    }
 
     private String itemMediumPrice;
 
