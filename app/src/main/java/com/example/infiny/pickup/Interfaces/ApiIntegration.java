@@ -7,6 +7,8 @@ import com.example.infiny.pickup.Model.ForgotPasswordData;
 import com.example.infiny.pickup.Model.FpResetPasswordData;
 import com.example.infiny.pickup.Model.LoginData;
 import com.example.infiny.pickup.Model.MenuListData;
+import com.example.infiny.pickup.Model.OrderData;
+import com.example.infiny.pickup.Model.OrderListData;
 import com.example.infiny.pickup.Model.SignUpData;
 import com.example.infiny.pickup.Model.VerifyFpOtp;
 
@@ -57,10 +59,22 @@ public interface ApiIntegration {
     Call<MenuListData> getMenuListing(@Field("userToken") String  token,
                                       @Field("sid") String  sid);
 
+    @FormUrlEncoded
+    @POST("cartListing")
+    Call<OrderListData> getOrderListing(@Field("userToken") String  token);
 
     @FormUrlEncoded
     @POST("addItemToCart")
     Call<AddToCartData> getAddtocart(@Field("userToken") String  token,
+                                     @Field("itemId") String  itemId,
+                                     @Field("itemSize") String  itemSize,
+                                     @Field("itemName") String  itemName,
+                                     @Field("itemPrice") String  itemPrice,
+                                     @Field("itemQuantity") String  itemQuantity,
+                                     @Field("shopDetail") String  shopDetail);
+    @FormUrlEncoded
+    @POST("addItemToCartwithOkclick")
+    Call<AddToCartData> getDeleteCart(@Field("userToken") String  token,
                                      @Field("itemId") String  itemId,
                                      @Field("itemSize") String  itemSize,
                                      @Field("itemName") String  itemName,

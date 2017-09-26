@@ -2,7 +2,7 @@
 <resources>
     <color name="colorPrimary">#171717</color>
     <color name="colorPrimaryDark">#000000</color>
-    <color name="colorAccent">@android:color/darker_gray</color>
+    <color name="colorAccent">#171717</color>
     <color name="wheatLess">#fcf5e7 </color>
     <color name="lightgray">#EFEFEF</color>
     <color name="green">#07CE55</color>

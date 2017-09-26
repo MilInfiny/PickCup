@@ -24,6 +24,7 @@
             android:minHeight="50dp"
             android:minWidth="50dp"
             android:visibility="gone"
+            android:indeterminateTint="@color/colorPrimary"
             android:indeterminate="true"
             android:layout_centerVertical="true"
             android:layout_centerHorizontal="true" />

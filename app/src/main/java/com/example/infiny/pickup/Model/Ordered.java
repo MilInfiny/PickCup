@@ -11,10 +11,18 @@ public class Ordered
     private String itemSize;
 
     private String _id;
-
+    private  String  itemName;
     private String itemPrice;
-
+    private String itemQuantity;
     private String itemId;
+
+    public String getItemQuantity() {
+        return itemQuantity;
+    }
+
+    public void setItemQuantity(String itemQuantity) {
+        this.itemQuantity = itemQuantity;
+    }
 
     public String getItemCat ()
     {
@@ -29,6 +37,14 @@ public class Ordered
     public String getItemSize ()
     {
         return itemSize;
+    }
+
+    public String getItemName() {
+        return itemName;
+    }
+
+    public void setItemName(String itemName) {
+        this.itemName = itemName;
     }
 
     public void setItemSize (String itemSize)

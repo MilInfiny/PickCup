@@ -1,6 +1,8 @@
 package com.example.infiny.pickup.Adapters;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +11,7 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.infiny.pickup.Activity.MenuActivity;
 import com.example.infiny.pickup.Helpers.CafeLIstingHelpers;
@@ -30,7 +33,7 @@ public class NormalMenuAdapter extends RecyclerView.Adapter<NormalMenuAdapter.My
     ArrayList<ItemData> tittles;
     OnItemClickListener onItemClickListener;
     String category;
-
+    int quantity=1;
     public NormalMenuAdapter(Context context, ArrayList<ItemData> tittles,OnItemClickListener onItemClickListener,String category) {
         this.context = context;
         this.tittles = tittles;
@@ -58,11 +61,10 @@ public class NormalMenuAdapter extends RecyclerView.Adapter<NormalMenuAdapter.My
                 holder.relativeLayout.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        MenuActivity.order.setVisibility(View.VISIBLE);
-                        MenuActivity.orderPrice.setText("£ "+f1.getItemPrice());
-                        onItemClickListener.voidOnAddCart(f1);
 
-                    }
+                        holder.openDiolog(f1);
+
+                }
                 });
             } else {
                 holder.small.setText("£ "+f1.getItemSmallPrice());
@@ -71,8 +73,7 @@ public class NormalMenuAdapter extends RecyclerView.Adapter<NormalMenuAdapter.My
                 holder.small.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        MenuActivity.order.setVisibility(View.VISIBLE);
-                        MenuActivity.orderPrice.setText("£ "+f1.getItemSmallPrice());
+                        holder.openDiolog(f1,f1.getItemSmallPrice());
                         f1.setSize("small");
                         f1.setItemPrice(f1.getItemSmallPrice());
                         onItemClickListener.voidOnAddCart(f1);
@@ -82,8 +83,7 @@ public class NormalMenuAdapter extends RecyclerView.Adapter<NormalMenuAdapter.My
                 holder.labellarge.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        MenuActivity.order.setVisibility(View.VISIBLE);
-                        MenuActivity.orderPrice.setText("£ "+f1.getItemLargePrice());
+                        holder.openDiolog(f1,f1.getItemLargePrice());
                         f1.setSize("large");
                         f1.setItemPrice(f1.getItemLargePrice());
                         onItemClickListener.voidOnAddCart(f1);
@@ -92,8 +92,7 @@ public class NormalMenuAdapter extends RecyclerView.Adapter<NormalMenuAdapter.My
                 holder.labelmedium.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        MenuActivity.order.setVisibility(View.VISIBLE);
-                        MenuActivity.orderPrice.setText("£ "+f1.getItemMediumPrice());
+                        holder.openDiolog(f1,f1.getItemMediumPrice());
                         f1.setSize("medium");
                         f1.setItemPrice(f1.getItemMediumPrice());
                         onItemClickListener.voidOnAddCart(f1);
@@ -102,8 +101,7 @@ public class NormalMenuAdapter extends RecyclerView.Adapter<NormalMenuAdapter.My
                 holder.labelsmall.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        MenuActivity.order.setVisibility(View.VISIBLE);
-                        MenuActivity.orderPrice.setText("£ "+f1.getItemSmallPrice());
+                        holder.openDiolog(f1,f1.getItemSmallPrice());
                         f1.setSize("small");
                         f1.setItemPrice(f1.getItemSmallPrice());
                         onItemClickListener.voidOnAddCart(f1);
@@ -113,8 +111,7 @@ public class NormalMenuAdapter extends RecyclerView.Adapter<NormalMenuAdapter.My
                holder.large.setOnClickListener(new View.OnClickListener() {
                    @Override
                    public void onClick(View v) {
-                       MenuActivity.order.setVisibility(View.VISIBLE);
-                       MenuActivity.orderPrice.setText("£ "+f1.getItemLargePrice());
+                       holder.openDiolog(f1,f1.getItemLargePrice());
                        f1.setSize("large");
                        f1.setItemPrice(f1.getItemLargePrice());
                        onItemClickListener.voidOnAddCart(f1);
@@ -123,10 +120,8 @@ public class NormalMenuAdapter extends RecyclerView.Adapter<NormalMenuAdapter.My
                 holder.medium.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        MenuActivity.order.setVisibility(View.VISIBLE);
-                        MenuActivity.orderPrice.setText("£ "+f1.getItemMediumPrice());
+                        holder.openDiolog(f1,f1.getItemMediumPrice());
                         f1.setSize("medium");
-
                         f1.setItemPrice(f1.getItemMediumPrice());
                         onItemClickListener.voidOnAddCart(f1);
 
@@ -135,8 +130,7 @@ public class NormalMenuAdapter extends RecyclerView.Adapter<NormalMenuAdapter.My
                 holder.small.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        MenuActivity.order.setVisibility(View.VISIBLE);
-                        MenuActivity.orderPrice.setText("£ "+f1.getItemSmallPrice());
+                        holder.openDiolog(f1,f1.getItemSmallPrice());
                         f1.setSize("small");
                         f1.setItemPrice(f1.getItemSmallPrice());
                         onItemClickListener.voidOnAddCart(f1);
@@ -146,8 +140,7 @@ public class NormalMenuAdapter extends RecyclerView.Adapter<NormalMenuAdapter.My
                 holder.iv_Small.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        MenuActivity.order.setVisibility(View.VISIBLE);
-                        MenuActivity.orderPrice.setText("£ "+f1.getItemSmallPrice());
+                        holder.openDiolog(f1,f1.getItemSmallPrice());
                         f1.setSize("small");
                         f1.setItemPrice(f1.getItemSmallPrice());
                         onItemClickListener.voidOnAddCart(f1);
@@ -158,8 +151,7 @@ public class NormalMenuAdapter extends RecyclerView.Adapter<NormalMenuAdapter.My
                 holder.iv_medium.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        MenuActivity.order.setVisibility(View.VISIBLE);
-                        MenuActivity.orderPrice.setText("£ "+f1.getItemMediumPrice());
+                        holder.openDiolog(f1,f1.getItemMediumPrice());
                         f1.setSize("medium");
                         f1.setItemPrice(f1.getItemMediumPrice());
                         onItemClickListener.voidOnAddCart(f1);
@@ -170,8 +162,7 @@ public class NormalMenuAdapter extends RecyclerView.Adapter<NormalMenuAdapter.My
                 holder.iv_Large.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        MenuActivity.order.setVisibility(View.VISIBLE);
-                        MenuActivity.orderPrice.setText("£ "+f1.getItemLargePrice());
+                        holder.openDiolog(f1,f1.getItemLargePrice());
                         f1.setSize("large");
                         f1.setItemPrice(f1.getItemLargePrice());
                         onItemClickListener.voidOnAddCart(f1);
@@ -226,6 +217,163 @@ public class NormalMenuAdapter extends RecyclerView.Adapter<NormalMenuAdapter.My
             iv_medium=(ImageView) itemView.findViewById(R.id.iv_mediumsize);
             iv_Large=(ImageView) itemView.findViewById(R.id.iv_largesize);
         }
+        public void openDiolog(final ItemData f1)
+        {
+
+            LayoutInflater inflater = LayoutInflater.from(context);
+            View alertLayout = inflater.inflate(R.layout.quantity, null);
+            final ImageView increment=(ImageView) alertLayout.findViewById(R.id.increment);
+            final ImageView decrement=(ImageView)alertLayout.findViewById(R.id.decrement);
+            final TextView  display=(TextView)alertLayout.findViewById(R.id.display);
+            AlertDialog.Builder alert = new AlertDialog.Builder(context);
+            alert.setTitle("Quantity");
+            // this is set the view from XML inside AlertDialog
+            alert.setView(alertLayout);
+            // disallow cancel of AlertDialog on click of back button and outside touch
+            if(quantity ==1)
+            {
+                decrement.setImageResource(R.drawable.ic_remove_circle_grey_400_24dp);
+            }
+            else{
+                decrement.setImageResource(R.drawable.ic_remove_circle_black_24dp);
+            }
+
+            decrement.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(quantity == 1)
+                    {
+
+                    }
+                    else  if(quantity ==2){
+                        decrement.setImageResource(R.drawable.ic_remove_circle_grey_400_24dp);
+                        quantity--;
+                        display.setText(String.valueOf(quantity));
+                    }
+                    else{
+                        quantity--;
+                        display.setText(String.valueOf(quantity));
+                    }
+
+                }
+            });
+            increment.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    quantity++;
+                    decrement.setImageResource(R.drawable.ic_remove_circle_black_24dp);
+                    display.setText(String.valueOf(quantity));
+
+                }
+            });
+
+            display.setText(String.valueOf(quantity));
+            alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    quantity=1;
+                }
+            });
+
+            alert.setPositiveButton("ok", new DialogInterface.OnClickListener() {
+
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    MenuActivity.order.setVisibility(View.VISIBLE);
+                    int total=Integer.parseInt(f1.getItemPrice())*quantity;
+                    f1.setItemQuantity(String.valueOf(quantity));
+                    f1.setItemTotalamount(String.valueOf(total));
+                    MenuActivity.orderPrice.setText("£ "+String.valueOf(total));
+                    onItemClickListener.voidOnAddCart(f1);
+
+                }
+            });
+            AlertDialog dialog = alert.create();
+            dialog.show();
+
+
+
+        }
+        public void openDiolog(final ItemData f1, final String amount)
+        {
+
+            LayoutInflater inflater = LayoutInflater.from(context);
+            View alertLayout = inflater.inflate(R.layout.quantity, null);
+            final ImageView increment=(ImageView) alertLayout.findViewById(R.id.increment);
+            final ImageView decrement=(ImageView)alertLayout.findViewById(R.id.decrement);
+            final TextView  display=(TextView)alertLayout.findViewById(R.id.display);
+            AlertDialog.Builder alert = new AlertDialog.Builder(context);
+            alert.setTitle("Quantity");
+            // this is set the view from XML inside AlertDialog
+            alert.setView(alertLayout);
+            // disallow cancel of AlertDialog on click of back button and outside touch
+            if(quantity ==1)
+            {
+                decrement.setImageResource(R.drawable.ic_remove_circle_grey_400_24dp);
+            }
+            else{
+                decrement.setImageResource(R.drawable.ic_remove_circle_black_24dp);
+            }
+
+            decrement.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(quantity == 1)
+                    {
+
+                    }
+                    else  if(quantity ==2){
+                        decrement.setImageResource(R.drawable.ic_remove_circle_grey_400_24dp);
+                        quantity--;
+                        display.setText(String.valueOf(quantity));
+                    }
+                    else{
+                        quantity--;
+                        display.setText(String.valueOf(quantity));
+                    }
+
+                }
+            });
+            increment.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    quantity++;
+                    decrement.setImageResource(R.drawable.ic_remove_circle_black_24dp);
+                    display.setText(String.valueOf(quantity));
+
+                }
+            });
+
+            display.setText(String.valueOf(quantity));
+            alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    quantity=1;
+                }
+            });
+
+            alert.setPositiveButton("ok", new DialogInterface.OnClickListener() {
+
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    MenuActivity.order.setVisibility(View.VISIBLE);
+                    int total=Integer.parseInt(amount)*quantity;
+                    f1.setItemQuantity(String.valueOf(quantity));
+                    f1.setItemTotalamount(String.valueOf(total));
+                    MenuActivity.orderPrice.setText("£ "+String.valueOf(total));
+                    onItemClickListener.voidOnAddCart(f1);
+
+                }
+            });
+            AlertDialog dialog = alert.create();
+            dialog.show();
+
+
+
+        }
+
 
 
 

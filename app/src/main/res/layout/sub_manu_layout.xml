@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:numberpicker="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:paddingTop="8dp"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content">
     <TextView
         android:id="@+id/tw_itemname"
@@ -29,5 +33,81 @@
         android:layout_marginTop="39dp"
         android:layout_marginLeft="10dp"
         />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="X"
+        android:layout_marginStart="50dp"
+        android:textColor="@color/colorPrimary"
+        android:layout_alignBottom="@+id/singleprice"
+        android:layout_toLeftOf="@+id/singleprice"/>
+    <TextView
+        android:id="@+id/singleprice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="£ 43"
+        android:layout_marginEnd="17dp"
+        android:textSize="20dp"
+      android:layout_toLeftOf="@+id/number_picker"
+        android:textColor="@color/colorPrimary"/>
+    <LinearLayout
+        android:id="@+id/number_picker"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_alignParentEnd="true"
+        android:orientation="horizontal"
+        android:background="@android:color/white">
+
+        <ImageView
+            android:id="@+id/decrement"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:gravity="center|center_vertical|center_horizontal"
+            android:padding="0dp"
+            android:src="@drawable/ic_remove_circle_black_24dp"
+            android:text="-"
+            android:textColor="@color/white"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="30dp"
+            android:background="@drawable/border_hollow_white"
+            android:layout_height="30dp"
+            android:text="1"
+            android:layout_marginLeft="3dp"
+            android:layout_marginRight="3dp"
+            android:textColor="@android:color/black"
+            android:inputType="number"
+            android:id="@+id/display"
+            android:gravity="center"
+            />
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:padding="0dp"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:src="@drawable/ic_add_circle_black_24dp"
+            android:id="@+id/increment"
+            android:text="+"/>
+    </LinearLayout>
+    <TextView
+        android:id="@+id/totalprice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=" 43"
+        android:textSize="17dp"
+
+        android:textColor="@color/colorPrimary"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/number_picker"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/tw_small"
+        android:layout_marginTop="8dp"
+        android:background="@color/colorLightGray"/>
+
 
 </RelativeLayout>

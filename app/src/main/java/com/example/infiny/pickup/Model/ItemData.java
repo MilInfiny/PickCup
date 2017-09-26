@@ -39,6 +39,16 @@ public class ItemData implements Parcelable {
     private String itemLargePrice;
 
     private String itemPrice;
+    private  String itemQuantity;
+    private  String itemTotalamount;
+
+    public String getItemTotalamount() {
+        return itemTotalamount;
+    }
+
+    public void setItemTotalamount(String itemTotalamount) {
+        this.itemTotalamount = itemTotalamount;
+    }
 
     private String itemSmallPrice;
 
@@ -49,6 +59,14 @@ public class ItemData implements Parcelable {
         itemLargePrice = in.readString();
         itemPrice = in.readString();
         itemSmallPrice = in.readString();
+    }
+
+    public String getItemQuantity() {
+        return itemQuantity;
+    }
+
+    public void setItemQuantity(String itemQuantity) {
+        this.itemQuantity = itemQuantity;
     }
 
     public static final Creator<ItemData> CREATOR = new Creator<ItemData>() {
