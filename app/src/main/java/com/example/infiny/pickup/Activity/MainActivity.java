@@ -34,6 +34,7 @@ import com.example.infiny.pickup.Model.CafeListingData;
 import com.example.infiny.pickup.Model.Cafes;
 import com.example.infiny.pickup.Model.ItemData;
 import com.example.infiny.pickup.Model.LoginData;
+import com.example.infiny.pickup.Model.Ordered;
 import com.example.infiny.pickup.R;
 
 import java.util.ArrayList;
@@ -135,6 +136,16 @@ TextView username,email;
 
                                 @Override
                                 public void voidOnAddCart(ItemData itemData) {
+
+                                }
+
+                                @Override
+                                public void totalPrice(String total) {
+
+                                }
+
+                                @Override
+                                public void ordereddata(Ordered[] ordered) {
 
                                 }
 

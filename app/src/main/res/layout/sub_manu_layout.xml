@@ -6,9 +6,19 @@
     android:paddingTop="8dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
+    <ProgressBar
+        android:id="@+id/progressBar_cyclic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:minHeight="50dp"
+        android:minWidth="50dp"
+        android:visibility="gone"
+        android:indeterminate="true"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
     <TextView
         android:id="@+id/tw_itemname"
-        android:layout_width="wrap_content"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:textSize="17dp"
         android:text="Latte"
@@ -36,7 +46,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="X"
+        android:text="X "
         android:layout_marginStart="50dp"
         android:textColor="@color/colorPrimary"
         android:layout_alignBottom="@+id/singleprice"
@@ -46,8 +56,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="£ 43"
+        android:gravity="right"
         android:layout_marginEnd="17dp"
-        android:textSize="20dp"
+        android:textSize="17dp"
       android:layout_toLeftOf="@+id/number_picker"
         android:textColor="@color/colorPrimary"/>
     <LinearLayout
@@ -105,8 +116,8 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_below="@+id/tw_small"
-        android:layout_marginTop="8dp"
+        android:layout_below="@+id/iv_itemimage"
+        android:layout_marginTop="10dp"
         android:background="@color/colorLightGray"/>
 
 

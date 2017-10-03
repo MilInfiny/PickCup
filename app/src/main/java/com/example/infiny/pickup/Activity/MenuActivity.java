@@ -1,11 +1,8 @@
 package com.example.infiny.pickup.Activity;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -26,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.infiny.pickup.Adapters.MenuNormalAdapter;
+import com.example.infiny.pickup.Adapters.NormalMenuAdapter;
 import com.example.infiny.pickup.Helpers.RetroFitClient;
 import com.example.infiny.pickup.Helpers.SessionManager;
 import com.example.infiny.pickup.Interfaces.ApiIntegration;
@@ -35,6 +33,7 @@ import com.example.infiny.pickup.Model.Cafes;
 import com.example.infiny.pickup.Model.Data;
 import com.example.infiny.pickup.Model.ItemData;
 import com.example.infiny.pickup.Model.MenuListData;
+import com.example.infiny.pickup.Model.Ordered;
 import com.example.infiny.pickup.R;
 import com.squareup.picasso.Picasso;
 
@@ -90,11 +89,15 @@ public class MenuActivity extends AppCompatActivity implements OnItemClickListen
     SessionManager sessionManager;
     MenuListData menuItemData;
     AddToCartData addToCartData;
-   ItemData itemData;
+    ItemData itemData;
     public static TextView btOrder;
     OnItemClickListener onItemClickListener;
 
     public static TextView orderPrice;
+    @BindView(R.id.cartimage)
+    ImageView cartimage;
+    public static String cart_count_String;
+ public static   TextView cartCount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,147 +112,30 @@ public class MenuActivity extends AppCompatActivity implements OnItemClickListen
         final Intent intent = getIntent();
         context = this;
 
-        onItemClickListener=this;
+        onItemClickListener = this;
         sessionManager = new SessionManager(context);
         sharedPreferences = getSharedPreferences(sessionManager.PREF_NAME, 0);
         tittle.setText(intent.getStringExtra("tittle"));
+        cartCount=(TextView)findViewById(R.id.cart_count);
         sid = intent.getStringExtra("sid");
         Picasso.with(context)
                 .load(intent.getStringExtra("image"))
                 .placeholder(R.drawable.cofeecup)
                 .into(tittleimage);
-        order=(RelativeLayout) findViewById(R.id.order);
-        btOrder=(TextView)findViewById(R.id.bt_order);
-        orderPrice=(TextView)findViewById(R.id.order_price);
+        order = (RelativeLayout) findViewById(R.id.order);
+        btOrder = (TextView) findViewById(R.id.bt_order);
+        orderPrice = (TextView) findViewById(R.id.order_price);
 
         order.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
+                Intent intent1 = new Intent(context, OrderActivity.class);
+                startActivity(intent1);
+                finish();
 
-            progressBarCyclic.setVisibility(View.VISIBLE);
-            getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-            retroFitClient = new RetroFitClient(context).getBlankRetrofit();
-            Call<AddToCartData> call = retroFitClient
-                    .create(ApiIntegration.class)
-                    .getAddtocart(sharedPreferences.getString("token", null),
-                            itemData.get_id(),
-                            itemData.getSize(),
-                            itemData.getItemName(),
-                            itemData.getItemPrice(),
-                            itemData.getItemQuantity(),
-                            sid);
-            call.enqueue(new Callback<AddToCartData>() {
-
-                @Override
-                public void onResponse(Call<AddToCartData> call, Response<AddToCartData> response) {
-                    if (response != null) {
-                        addToCartData = response.body();
-                        if (addToCartData != null) {
-                            if (addToCartData.getError().equals("true") && addToCartData.getTitle().equals("multiple shopDetail")) {
-                                progressBarCyclic.setVisibility(View.GONE);
-                                AlertDialog.Builder builder;
-                                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                                    builder = new AlertDialog.Builder(context, android.R.style.Theme_Material_Dialog_Alert);
-                                } else {
-                                    builder = new AlertDialog.Builder(context);
-                                }
-                                builder.setTitle("Delete Cart")
-                                        .setMessage("Are you sure you want to delete previous cart?")
-                                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                progressBarCyclic.setVisibility(View.VISIBLE);
-                                                getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-                                                        WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                                                retroFitClient = new RetroFitClient(context).getBlankRetrofit();
-                                                Call<AddToCartData> call = retroFitClient
-                                                        .create(ApiIntegration.class)
-                                                        .getDeleteCart(sharedPreferences.getString("token", null),
-                                                                itemData.get_id(),
-                                                                itemData.getSize(),
-                                                                itemData.getItemName(),
-                                                                itemData.getItemPrice(),
-                                                                sid);
-                                                call.enqueue(new Callback<AddToCartData>() {
-
-                                                    @Override
-                                                    public void onResponse(Call<AddToCartData> call, Response<AddToCartData> response) {
-                                                        if (response != null) {
-                                                            addToCartData = response.body();
-                                                            if (addToCartData != null) {
-                                                                if (addToCartData.getError().equals("true")) {
-                                                                    progressBarCyclic.setVisibility(View.GONE);
-                                                                    AlertDialog.Builder builder;
-                                                                    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                                                                } else {
-                                                                    progressBarCyclic.setVisibility(View.GONE);
-                                                                    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                                                                    Intent intent1 = new Intent(MenuActivity.this, OrderActivity.class);
-                                                                    startActivity(intent1);
-                                                                }
-                                                            }
-                                                            else {
-                                                                if (response.code() == 404 || response.code() == 500) {
-                                                                    progressBarCyclic.setVisibility(View.GONE);
-                                                                    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                                                                    Toast.makeText(context, R.string.server_not_responding, Toast.LENGTH_SHORT).show();
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-
-                                                    @Override
-                                                    public void onFailure(Call<AddToCartData> call, Throwable t) {
-                                                        progressBarCyclic.setVisibility(View.GONE);
-                                                        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                                                        Toast.makeText(context, R.string.server_not_responding, Toast.LENGTH_SHORT).show();
-
-                                                    }
-                                                });
-
-
-                                                }
-                                        })
-                                        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                // do nothing
-                                            }
-                                        })
-                                        .setIcon(android.R.drawable.ic_dialog_alert)
-                                        .show();
-                            }
-
-                            else {
-                                progressBarCyclic.setVisibility(View.GONE);
-                                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                                Intent intent1=new Intent(MenuActivity.this,OrderActivity.class);
-                                startActivity(intent1);
-
-                            }
-
-                        } else {
-                            if (response.code() == 404 || response.code() == 500) {
-                                progressBarCyclic.setVisibility(View.GONE);
-                                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                                Toast.makeText(context, R.string.server_not_responding, Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<AddToCartData> call, Throwable t) {
-                    progressBarCyclic.setVisibility(View.GONE);
-                    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                    Toast.makeText(context, R.string.server_not_responding, Toast.LENGTH_SHORT).show();
-                }
-            });
-
-
-        }
+            }
         });
-        Log.d("sdas",sharedPreferences.getString("token", null));
+        Log.d("sdas", sharedPreferences.getString("token", null));
 
         progressBarCyclic.setVisibility(View.VISIBLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
@@ -273,8 +159,21 @@ public class MenuActivity extends AppCompatActivity implements OnItemClickListen
                         } else {
                             progressBarCyclic.setVisibility(View.GONE);
                             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
+                            NormalMenuAdapter.total=Float.valueOf(menuItemData.getTotalPrice());
+
+                            if(menuItemData.getTotalCount().equals("0") && menuItemData.getTotalPrice().equals("0"))
+                            {
+                                cart_count_String=menuItemData.getTotalCount();
+                                order.setVisibility(View.GONE);
+                            }
+                            else {
+                                cartCount.setText(menuItemData.getTotalCount());
+                                cart_count_String=menuItemData.getTotalCount();
+                                orderPrice.setText(getCorrectValue(String.format("%.2f", Float.valueOf(menuItemData.getTotalPrice()))));
+                            }
                             ArrayList<Data> datas = new ArrayList<>(Arrays.asList(menuItemData.getData()));
-                            menuNormalAdapter = new MenuNormalAdapter(context, datas,onItemClickListener);
+                            menuNormalAdapter = new MenuNormalAdapter(context, datas, onItemClickListener, sid);
                             RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
                             recycleView.setLayoutManager(mLayoutManager);
                             recycleView.setAdapter(menuNormalAdapter);
@@ -303,6 +202,14 @@ public class MenuActivity extends AppCompatActivity implements OnItemClickListen
 
 
     }
+    public String getCorrectValue(String price) {
+        String[] priceSpl = price.split("\\.");
+        if (priceSpl.length > 1)
+            if (priceSpl[1].equals("00") || priceSpl[1].equals("0")) {
+                price = priceSpl[0];
+            }
+        return price;
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -325,7 +232,19 @@ public class MenuActivity extends AppCompatActivity implements OnItemClickListen
 
     @Override
     public void voidOnAddCart(ItemData itemData) {
-        this.itemData=itemData;
+        this.itemData = itemData;
 
     }
+
+    @Override
+    public void totalPrice(String total) {
+
+    }
+
+    @Override
+    public void ordereddata(Ordered[] ordered) {
+
+    }
+
+
 }

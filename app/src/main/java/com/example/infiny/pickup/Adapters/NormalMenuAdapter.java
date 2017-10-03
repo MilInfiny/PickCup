@@ -1,28 +1,42 @@
 package com.example.infiny.pickup.Adapters;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.infiny.pickup.Activity.MenuActivity;
+import com.example.infiny.pickup.Activity.OrderActivity;
 import com.example.infiny.pickup.Helpers.CafeLIstingHelpers;
 
 import com.example.infiny.pickup.Helpers.MenuItemData;
 import com.example.infiny.pickup.Helpers.RetroFitClient;
+import com.example.infiny.pickup.Helpers.SessionManager;
+import com.example.infiny.pickup.Interfaces.ApiIntegration;
 import com.example.infiny.pickup.Interfaces.OnItemClickListener;
+import com.example.infiny.pickup.Model.AddToCartData;
 import com.example.infiny.pickup.Model.ItemData;
 import com.example.infiny.pickup.R;
 
 import java.util.ArrayList;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 /**
  * Created by infiny on 9/7/17.
@@ -34,11 +48,20 @@ public class NormalMenuAdapter extends RecyclerView.Adapter<NormalMenuAdapter.My
     OnItemClickListener onItemClickListener;
     String category;
     int quantity=1;
-    public NormalMenuAdapter(Context context, ArrayList<ItemData> tittles,OnItemClickListener onItemClickListener,String category) {
+    Retrofit retroFitClient;
+    AddToCartData addToCartData;
+    public static Float total=0.0f;
+    String sid;
+    SharedPreferences sharedPreferences;
+    SessionManager sessionManager;
+    public NormalMenuAdapter(Context context, ArrayList<ItemData> tittles,OnItemClickListener onItemClickListener,String category,String sid) {
         this.context = context;
         this.tittles = tittles;
         this.onItemClickListener=onItemClickListener;
         this.category=category;
+        this.sid=sid;
+        sessionManager=new SessionManager(context);
+        sharedPreferences = context.getSharedPreferences(sessionManager.PREF_NAME, 0);
 
     }
 
@@ -49,11 +72,13 @@ public class NormalMenuAdapter extends RecyclerView.Adapter<NormalMenuAdapter.My
         return new NormalMenuAdapter.MyViewHolder(itemView);
     }
 
+
     @Override
     public void onBindViewHolder(final MyViewHolder holder, int position) {
+
         final ItemData f1=tittles.get(position);
         holder.menuname.setText(f1.getItemName());
-        holder.price.setText("£ "+f1.getItemPrice());
+        holder.price.setText("£ "+holder.getCorrectValue(String.format("%.2f",Float.valueOf(f1.getItemPrice()))));
             f1.setCategoty(category);
             String k = f1.getItemSmallPrice();
             if (k == null || k == "") {
@@ -67,9 +92,34 @@ public class NormalMenuAdapter extends RecyclerView.Adapter<NormalMenuAdapter.My
                 }
                 });
             } else {
-                holder.small.setText("£ "+f1.getItemSmallPrice());
-                holder.large.setText("£ "+f1.getItemLargePrice());
-                holder.medium.setText("£ "+f1.getItemMediumPrice());
+                if(f1.getItemSmallPrice()=="")
+                {
+                    holder.labelsmall.setVisibility(View.INVISIBLE);
+                    holder.small.setVisibility(View.INVISIBLE);
+                    holder.iv_Small.setVisibility(View.INVISIBLE);
+                }
+                else {
+                    holder.small.setText("£ " + holder.getCorrectValue(String.format("%.2f", Float.valueOf(f1.getItemSmallPrice()))));
+                }
+                if(f1.getItemMediumPrice()=="")
+                {
+                    holder.labelmedium.setVisibility(View.INVISIBLE);
+                    holder.medium.setVisibility(View.INVISIBLE);
+                    holder.iv_medium.setVisibility(View.INVISIBLE);
+                }
+                else {
+                    holder.medium.setText("£ " + holder.getCorrectValue(String.format("%.2f", Float.valueOf(f1.getItemMediumPrice()))));
+                }
+                if(f1.getItemLargePrice()=="")
+                {
+                    holder.labellarge.setVisibility(View.INVISIBLE);
+                    holder.large.setVisibility(View.INVISIBLE);
+                    holder.iv_Large.setVisibility(View.INVISIBLE);
+                }
+                else {
+                    holder.large.setText("£ " + holder.getCorrectValue(String.format("%.2f", Float.valueOf(f1.getItemLargePrice()))));
+                }
+
                 holder.small.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -200,6 +250,7 @@ public class NormalMenuAdapter extends RecyclerView.Adapter<NormalMenuAdapter.My
         TextView small,medium,large,labelsmall,labelmedium,labellarge;
         RelativeLayout relativeLayout,sublayout;
         ImageView view2,iv_Small,iv_medium,iv_Large;
+        ProgressBar progressBarCyclic;
         public MyViewHolder(View itemView) {
             super(itemView);
             menuname=(TextView)itemView.findViewById(R.id.tw_manuname);
@@ -216,8 +267,9 @@ public class NormalMenuAdapter extends RecyclerView.Adapter<NormalMenuAdapter.My
             iv_Small=(ImageView) itemView.findViewById(R.id.iv_smallsize);
             iv_medium=(ImageView) itemView.findViewById(R.id.iv_mediumsize);
             iv_Large=(ImageView) itemView.findViewById(R.id.iv_largesize);
+            progressBarCyclic=(ProgressBar)itemView.findViewById(R.id.progressBar_cyclic);
         }
-        public void openDiolog(final ItemData f1)
+        public void openDiolog(final ItemData itemData)
         {
 
             LayoutInflater inflater = LayoutInflater.from(context);
@@ -280,12 +332,149 @@ public class NormalMenuAdapter extends RecyclerView.Adapter<NormalMenuAdapter.My
 
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    MenuActivity.order.setVisibility(View.VISIBLE);
-                    int total=Integer.parseInt(f1.getItemPrice())*quantity;
-                    f1.setItemQuantity(String.valueOf(quantity));
-                    f1.setItemTotalamount(String.valueOf(total));
-                    MenuActivity.orderPrice.setText("£ "+String.valueOf(total));
-                    onItemClickListener.voidOnAddCart(f1);
+
+                    total=total + Float.valueOf(itemData.getItemPrice())*quantity;
+
+                    itemData.setItemTotalamount(String.valueOf(total));
+                    retroFitClient = new RetroFitClient(context).getBlankRetrofit();
+                    Call<AddToCartData> call = retroFitClient
+                            .create(ApiIntegration.class)
+                            .getAddtocart(sharedPreferences.getString("token", null),
+                                    itemData.get_id(),
+                                    itemData.getSize(),
+                                    itemData.getItemName(),
+                                    itemData.getItemPrice(),
+                                    String.valueOf(quantity),
+                                    category,
+                                    sid);
+                    call.enqueue(new Callback<AddToCartData>() {
+
+                        @Override
+                        public void onResponse(Call<AddToCartData> call, Response<AddToCartData> response) {
+                            if (response != null) {
+                                addToCartData = response.body();
+                                if (addToCartData != null) {
+                                    if (addToCartData.getError().equals("true") && addToCartData.getTitle().equals("multiple shopDetail")) {
+                                        progressBarCyclic.setVisibility(View.GONE);
+                                        AlertDialog.Builder builder;
+                                        ((Activity) context).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                                            builder = new AlertDialog.Builder(context, android.R.style.Theme_Material_Dialog_Alert);
+                                        } else {
+                                            builder = new AlertDialog.Builder(context);
+                                        }
+                                        builder.setTitle("Delete Cart")
+                                                .setMessage("Some items from another cafe already exist in your cart. Adding this item will remove those items, are you sure you want to proceed?")
+                                                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                                    public void onClick(DialogInterface dialog, int which) {
+                                                        progressBarCyclic.setVisibility(View.VISIBLE);
+                                                        ((Activity)context).getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                                                                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                                        retroFitClient = new RetroFitClient(context).getBlankRetrofit();
+                                                        Call<AddToCartData> call = retroFitClient
+                                                                .create(ApiIntegration.class)
+                                                                .getDeleteCart(sharedPreferences.getString("token", null),
+                                                                        itemData.get_id(),
+                                                                        itemData.getSize(),
+                                                                        itemData.getItemName(),
+                                                                        itemData.getItemPrice(),
+                                                                        String.valueOf(quantity),
+                                                                        sid);
+                                                        call.enqueue(new Callback<AddToCartData>() {
+
+                                                            @Override
+                                                            public void onResponse(Call<AddToCartData> call, Response<AddToCartData> response) {
+                                                                if (response != null) {
+                                                                    quantity=1;
+                                                                    addToCartData = response.body();
+                                                                    if (addToCartData != null) {
+                                                                        if (addToCartData.getError().equals("true")) {
+                                                                            progressBarCyclic.setVisibility(View.GONE);
+                                                                            AlertDialog.Builder builder;
+                                                                            ((Activity) context).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                                                        } else {
+
+                                                                            progressBarCyclic.setVisibility(View.GONE);
+                                                                            ((Activity) context).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                                                            MenuActivity.order.setVisibility(View.VISIBLE);
+                                                                            total=Float.valueOf(itemData.getItemPrice())*quantity;
+                                                                            MenuActivity.cart_count_String=String.valueOf(quantity);                                                                            total=total + Float.valueOf(itemData.getItemPrice())*quantity;
+                                                                            itemData.setItemQuantity(String.valueOf(quantity));
+                                                                            itemData.setItemTotalamount(String.valueOf(total));
+                                                                            MenuActivity.orderPrice.setText("£ "+getCorrectValue(String.format("%.2f", total)));
+                                                                            MenuActivity.cartCount.setText(MenuActivity.cart_count_String);
+
+                                                                        }
+                                                                    }
+                                                                    else {
+                                                                        if (response.code() == 404 || response.code() == 500) {
+                                                                            progressBarCyclic.setVisibility(View.GONE);
+                                                                            ((Activity) context).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                                                            Toast.makeText(context, R.string.server_not_responding, Toast.LENGTH_SHORT).show();
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+
+                                                            @Override
+                                                            public void onFailure(Call<AddToCartData> call, Throwable t) {
+                                                                progressBarCyclic.setVisibility(View.GONE);
+                                                                ((Activity) context).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                                                Toast.makeText(context, R.string.server_not_responding, Toast.LENGTH_SHORT).show();
+
+                                                            }
+                                                        });
+
+
+                                                    }
+                                                })
+                                                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                                                    public void onClick(DialogInterface dialog, int which) {
+                                                        // do nothing
+                                                    }
+                                                })
+                                                .setIcon(android.R.drawable.ic_dialog_alert)
+                                                .show();
+                                    }
+                                    else if(addToCartData.getError().equals("true"))
+                                    {
+                                        progressBarCyclic.setVisibility(View.GONE);
+                                        ((Activity) context).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                        MenuActivity.order.setVisibility(View.VISIBLE);
+                                        MenuActivity.orderPrice.setText("£ "+String.valueOf(total));
+
+                                    }
+
+                                    else {
+                                        progressBarCyclic.setVisibility(View.GONE);
+                                        ((Activity) context).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                        MenuActivity.order.setVisibility(View.VISIBLE);
+                                        int count=Integer.parseInt(MenuActivity.cart_count_String)+1;
+                                        MenuActivity.cartCount.setText(String.valueOf(count));
+                                        MenuActivity.orderPrice.setText("£ "+String.valueOf(total));
+
+                                    }
+
+                                } else {
+                                    if (response.code() == 404 || response.code() == 500) {
+                                        progressBarCyclic.setVisibility(View.GONE);
+                                        ((Activity) context).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                        Toast.makeText(context, R.string.server_not_responding, Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<AddToCartData> call, Throwable t) {
+                            progressBarCyclic.setVisibility(View.GONE);
+                            ((Activity) context).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                            Toast.makeText(context, R.string.server_not_responding, Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
+
+
 
                 }
             });
@@ -295,7 +484,7 @@ public class NormalMenuAdapter extends RecyclerView.Adapter<NormalMenuAdapter.My
 
 
         }
-        public void openDiolog(final ItemData f1, final String amount)
+        public void openDiolog(final ItemData itemData, final String amount)
         {
 
             LayoutInflater inflater = LayoutInflater.from(context);
@@ -358,13 +547,146 @@ public class NormalMenuAdapter extends RecyclerView.Adapter<NormalMenuAdapter.My
 
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    MenuActivity.order.setVisibility(View.VISIBLE);
-                    int total=Integer.parseInt(amount)*quantity;
-                    f1.setItemQuantity(String.valueOf(quantity));
-                    f1.setItemTotalamount(String.valueOf(total));
-                    MenuActivity.orderPrice.setText("£ "+String.valueOf(total));
-                    onItemClickListener.voidOnAddCart(f1);
 
+                    total=total + Float.valueOf(itemData.getItemPrice())*quantity;
+                    itemData.setItemQuantity(String.valueOf(quantity));
+                    itemData.setItemTotalamount(String.valueOf(total));
+                    retroFitClient = new RetroFitClient(context).getBlankRetrofit();
+                    Call<AddToCartData> call = retroFitClient
+                            .create(ApiIntegration.class)
+                            .getAddtocart(sharedPreferences.getString("token", null),
+                                    itemData.get_id(),
+                                    itemData.getSize(),
+                                    itemData.getItemName(),
+                                    itemData.getItemPrice(),
+                                    String.valueOf(quantity),
+                                    category,
+                                    sid);
+                    call.enqueue(new Callback<AddToCartData>() {
+
+                        @Override
+                        public void onResponse(Call<AddToCartData> call, Response<AddToCartData> response) {
+                            if (response != null) {
+                                addToCartData = response.body();
+                                if (addToCartData != null) {
+                                    if (addToCartData.getError().equals("true") && addToCartData.getTitle().equals("multiple shopDetail")) {
+                                        progressBarCyclic.setVisibility(View.GONE);
+                                        AlertDialog.Builder builder;
+                                        ((Activity) context).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                                            builder = new AlertDialog.Builder(context, android.R.style.Theme_Material_Dialog_Alert);
+                                        } else {
+                                            builder = new AlertDialog.Builder(context);
+                                        }
+                                        builder.setTitle("Delete Cart")
+                                                .setMessage("Some items from another cafe already exist in your cart. Adding this item will remove those items, are you sure you want to proceed?")
+                                                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                                    public void onClick(DialogInterface dialog, int which) {
+                                                        progressBarCyclic.setVisibility(View.VISIBLE);
+                                                        ((Activity)context).getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                                                                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                                        retroFitClient = new RetroFitClient(context).getBlankRetrofit();
+                                                        Call<AddToCartData> call = retroFitClient
+                                                                .create(ApiIntegration.class)
+                                                                .getDeleteCart(sharedPreferences.getString("token", null),
+                                                                        itemData.get_id(),
+                                                                        itemData.getSize(),
+                                                                        itemData.getItemName(),
+                                                                        itemData.getItemPrice(),
+                                                                        String.valueOf(quantity),
+                                                                        sid);
+                                                        call.enqueue(new Callback<AddToCartData>() {
+
+                                                            @Override
+                                                            public void onResponse(Call<AddToCartData> call, Response<AddToCartData> response) {
+                                                                if (response != null) {
+                                                                    quantity=1;
+                                                                    addToCartData = response.body();
+                                                                    if (addToCartData != null) {
+                                                                        if (addToCartData.getError().equals("true")) {
+                                                                            progressBarCyclic.setVisibility(View.GONE);
+                                                                            AlertDialog.Builder builder;
+                                                                            ((Activity) context).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                                                        } else {
+
+                                                                            progressBarCyclic.setVisibility(View.GONE);
+                                                                            ((Activity) context).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                                                            MenuActivity.order.setVisibility(View.VISIBLE);
+                                                                            total=Float.valueOf(itemData.getItemPrice())*quantity;
+                                                                            MenuActivity.cart_count_String=String.valueOf(quantity);                                                                            total=total + Float.valueOf(itemData.getItemPrice())*quantity;
+                                                                            itemData.setItemQuantity(String.valueOf(quantity));
+                                                                            itemData.setItemTotalamount(String.valueOf(total));
+                                                                            MenuActivity.orderPrice.setText("£ "+getCorrectValue(String.format("%.2f", total)));
+                                                                            MenuActivity.cartCount.setText(MenuActivity.cart_count_String);
+
+                                                                        }
+                                                                    }
+                                                                    else {
+                                                                        if (response.code() == 404 || response.code() == 500) {
+                                                                            progressBarCyclic.setVisibility(View.GONE);
+                                                                            ((Activity) context).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                                                            Toast.makeText(context, R.string.server_not_responding, Toast.LENGTH_SHORT).show();
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+
+                                                            @Override
+                                                            public void onFailure(Call<AddToCartData> call, Throwable t) {
+                                                                progressBarCyclic.setVisibility(View.GONE);
+                                                                ((Activity) context).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                                                Toast.makeText(context, R.string.server_not_responding, Toast.LENGTH_SHORT).show();
+
+                                                            }
+                                                        });
+
+
+                                                    }
+                                                })
+                                                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                                                    public void onClick(DialogInterface dialog, int which) {
+                                                        // do nothing
+                                                    }
+                                                })
+                                                .setIcon(android.R.drawable.ic_dialog_alert)
+                                                .show();
+                                    }
+                                    else if(addToCartData.getError().equals("true"))
+                                    {
+                                        progressBarCyclic.setVisibility(View.GONE);
+                                        ((Activity) context).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                        MenuActivity.order.setVisibility(View.VISIBLE);
+                                        MenuActivity.orderPrice.setText("£ "+String.valueOf(total));
+
+                                    }
+
+                                    else {
+                                        progressBarCyclic.setVisibility(View.GONE);
+                                        ((Activity) context).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                        MenuActivity.order.setVisibility(View.VISIBLE);
+                                        int count=Integer.parseInt(MenuActivity.cart_count_String)+1;
+                                        MenuActivity.cartCount.setText(String.valueOf(count));
+                                        MenuActivity.orderPrice.setText("£ "+String.valueOf(total));
+
+                                    }
+
+                                } else {
+                                    if (response.code() == 404 || response.code() == 500) {
+                                        progressBarCyclic.setVisibility(View.GONE);
+                                        ((Activity) context).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                        Toast.makeText(context, R.string.server_not_responding, Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<AddToCartData> call, Throwable t) {
+                            progressBarCyclic.setVisibility(View.GONE);
+                            ((Activity) context).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                            Toast.makeText(context, R.string.server_not_responding, Toast.LENGTH_SHORT).show();
+                        }
+                    });
                 }
             });
             AlertDialog dialog = alert.create();
@@ -372,6 +694,14 @@ public class NormalMenuAdapter extends RecyclerView.Adapter<NormalMenuAdapter.My
 
 
 
+        }
+        public String getCorrectValue(String price) {
+            String[] priceSpl = price.split("\\.");
+            if (priceSpl.length > 1)
+                if (priceSpl[1].equals("00") || priceSpl[1].equals("0")) {
+                    price = priceSpl[0];
+                }
+            return price;
         }
 
 

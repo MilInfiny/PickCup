@@ -142,7 +142,6 @@
         android:layout_alignParentBottom="true"
         android:paddingLeft="15dp"
         android:paddingRight="15dp"
-        android:visibility="gone"
         android:background="@color/colorPrimaryopacity"
         >
         <TextView
@@ -155,6 +154,20 @@
             android:textColor="@color/white"
             android:padding="10dp"
             android:textSize="20dp"/>
+        <ImageView
+            android:id="@+id/cartimage"
+            android:layout_width="30dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_add_shopping_cart_black_48dp"
+            android:layout_toRightOf="@+id/bt_order"/>
+        <TextView
+            android:id="@+id/cart_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="5"
+            android:textSize="20dp"
+            android:layout_toRightOf="@+id/cartimage"
+            android:textColor="@color/white"/>
         <TextView
             android:id="@+id/order_price"
             android:layout_width="wrap_content"

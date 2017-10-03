@@ -15,6 +15,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 /**
  * Created by infiny on 9/4/17.
@@ -37,23 +38,7 @@ public class RetroFitClient {
     }
 
 
-    OkHttpClient okHttpClient = new OkHttpClient().newBuilder().addInterceptor(new Interceptor() {
-        @Override
-        public Response intercept(Chain chain) throws IOException {
-            Request originalRequest = chain.request();
-            Request.Builder builder;
-            if (isAuthorization) {
-                builder = originalRequest.newBuilder().header("Authorization",
-                        Credentials.basic(email, password));
-            } else {
-                builder = originalRequest.newBuilder().header("token",
-                        token);
-            }
 
-            Request newRequest = builder.build();
-            return chain.proceed(newRequest);
-        }
-    }).build();
 
 
 
@@ -68,6 +53,7 @@ public class RetroFitClient {
                 .addNetworkInterceptor(REWRITE_RESPONSE_INTERCEPTOR)
       //          .addInterceptor(OFFLINE_INTERCEPTOR)
                 .cache(cache)
+
                 .build();
 
         retrofit = new Retrofit.Builder()
@@ -79,25 +65,42 @@ public class RetroFitClient {
         return retrofit;
 
     }
+    public Retrofit getRetrofitWithJsonHeader() {
+
+        File httpCacheDirectory = new File(mContext.getCacheDir(), "responses");
+        int cacheSize = 10 * 1024 * 1024; // 10 MiB
+        Cache cache = new Cache(httpCacheDirectory, cacheSize);
+
+        OkHttpClient okHttpClient = new OkHttpClient().newBuilder().addInterceptor(new Interceptor() {
+
+            @Override
+            public Response intercept(Chain chain) throws IOException {
+                Request originalRequest = chain.request();
+                Request.Builder builder;
+
+                builder = originalRequest.newBuilder().header("Content-Type",
+                        "application/json");
+                originalRequest=builder.build();
+
+                return chain.proceed(originalRequest);
+            }
+        }).build();
+        retrofit = new Retrofit.Builder()
+                .baseUrl("http://dev2.infiny.in:3000/api/")
+                .client(okHttpClient)
+                .build();
+
+        return retrofit;
+
+    }
+
+
 
     public Retrofit getRetrofit() {
         return retrofit;
     }
 
-    public RetroFitClient(RetrofitClientBuilder builder) {
 
-        this.isAuthorization = builder.isAuthorization;
-        this.email = builder.email;
-        this.password = builder.password;
-        this.token = builder.token;
-
-        retrofit = new Retrofit.Builder()
-                .baseUrl("http://dev2.infiny.in:3090")
-                .client(okHttpClient)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-    }
 
 
     private static final Interceptor REWRITE_RESPONSE_INTERCEPTOR = new Interceptor() {
@@ -161,9 +164,7 @@ public class RetroFitClient {
             return this;
         }
 
-        public RetroFitClient build() {
-            return new RetroFitClient(this);
-        }
+
 
     }
 }

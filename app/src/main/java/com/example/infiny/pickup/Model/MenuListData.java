@@ -12,6 +12,25 @@ public class MenuListData {
     private Cafes cafes;
 
     private Data[] data;
+   private String totalCount;
+    private String totalPrice;
+
+
+    public String getTotalCount() {
+        return totalCount;
+    }
+
+    public void setTotalCount(String totalCount) {
+        this.totalCount = totalCount;
+    }
+
+    public String getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(String totalPrice) {
+        this.totalPrice = totalPrice;
+    }
 
     public String getTitle ()
     {

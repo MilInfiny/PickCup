@@ -2,6 +2,7 @@ package com.example.infiny.pickup.Adapters;
 
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import com.example.infiny.pickup.Activity.OrderActivity;
 import com.example.infiny.pickup.R;
 import com.thoughtbot.expandablerecyclerview.ExpandableRecyclerViewAdapter;
 import com.thoughtbot.expandablerecyclerview.models.ExpandableGroup;
@@ -21,6 +23,7 @@ import android.widget.Toast;
 
 import com.thoughtbot.expandablerecyclerview.viewholders.GroupViewHolder;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 
@@ -109,17 +112,32 @@ public class TimeviewAdapter extends ExpandableRecyclerViewAdapter<TimeviewAdapt
                     mTimePicker = new TimePickerDialog(context,new TimePickerDialog.OnTimeSetListener() {
                         @Override
                         public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
+                            String timeSet = "";
+                            if (selectedHour > 12) {
+                                selectedHour -= 12;
+                                timeSet = "PM";
+                            } else if (selectedHour == 0) {
+                                selectedHour += 12;
+                                timeSet = "AM";
+                            } else if (selectedHour == 12){
+                                timeSet = "PM";
+                            }else{
+                                timeSet = "AM";
+                            }
+
                             if(selectedMinute<10)
                             {
-                                timebutton.setText(selectedHour + ":0" + selectedMinute);
+                                timebutton.setText(selectedHour + ":0" + selectedMinute+" "+timeSet);
                             }
                             else {
-                                timebutton.setText(selectedHour + ":" + selectedMinute);
+                                timebutton.setText(selectedHour + ":" + selectedMinute+" "+timeSet);
 
                             }
                         }
                     }, hour, minute, true);//Yes 24 hour time
                     mTimePicker.setTitle("Select Time");
+                    SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                     OrderActivity.dateString=sdf.format(mcurrentTime.getTime());
                     mTimePicker.show();
 
                 }

@@ -3,6 +3,17 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     >
+    <ProgressBar
+        android:id="@+id/progressBar_cyclic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:minHeight="50dp"
+        android:minWidth="50dp"
+        android:visibility="gone"
+        android:indeterminateTint="@color/colorPrimary"
+        android:indeterminate="true"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
     <RelativeLayout
         android:id="@+id/relativeLayout"
         android:layout_width="match_parent"
@@ -50,6 +61,8 @@
             android:layout_height="35dp"
             android:src="@drawable/graycup1"
             android:id="@+id/iv_smallsize"
+            android:layout_marginStart="18dp"
+            android:layout_alignParentLeft="true"
             android:layout_above="@+id/tw_small"
             android:layout_alignStart="@+id/tw_small" />
         <ImageView
@@ -59,7 +72,6 @@
             android:layout_centerHorizontal="true"
             android:id="@+id/iv_mediumsize"
             android:layout_alignParentTop="true"
-            android:layout_toEndOf="@+id/tw_small"
             android:layout_marginLeft="50dp" />
         <ImageView
             android:layout_width="70dp"
@@ -67,7 +79,8 @@
             android:src="@drawable/graycup1"
             android:layout_centerHorizontal="true"
             android:id="@+id/iv_largesize"
-            android:layout_toRightOf="@+id/iv_mediumsize"
+
+          android:layout_alignParentRight="true"
             android:layout_marginLeft="40dp"
             android:layout_above="@+id/tw_large"
             />

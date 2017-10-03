@@ -28,10 +28,12 @@ public class MenuNormalAdapter extends RecyclerView.Adapter<MenuNormalAdapter.My
     Context context;
     ArrayList<Data> datas;
     OnItemClickListener onItemClickListener;
-    public MenuNormalAdapter(Context context, ArrayList<Data> datas,OnItemClickListener onItemClickListener) {
+    String sid;
+    public MenuNormalAdapter(Context context, ArrayList<Data> datas,OnItemClickListener onItemClickListener,String sid) {
         this.context = context;
         this.datas = datas;
         this.onItemClickListener=onItemClickListener;
+        this.sid=sid;
     }
 
 
@@ -50,7 +52,7 @@ public class MenuNormalAdapter extends RecyclerView.Adapter<MenuNormalAdapter.My
       ItemData [] itemdata=menuListData.getItemData();
         String category=menuListData.getItemCategory();
         ArrayList<ItemData> itemDatas=new ArrayList<>(Arrays.asList(itemdata));
-        NormalMenuAdapter normalMenuAdapter=new NormalMenuAdapter(context,itemDatas,onItemClickListener, category);
+        NormalMenuAdapter normalMenuAdapter=new NormalMenuAdapter(context,itemDatas,onItemClickListener, category,sid);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(context.getApplicationContext());
         holder.recyclerView.setLayoutManager(mLayoutManager);
         holder.recyclerView.setAdapter(normalMenuAdapter);
@@ -72,5 +74,6 @@ public class MenuNormalAdapter extends RecyclerView.Adapter<MenuNormalAdapter.My
             menutype=(TextView)itemView.findViewById(R.id.tw_tittle);
 
         }
+
     }
 }

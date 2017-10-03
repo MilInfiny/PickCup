@@ -3,19 +3,31 @@ package com.example.infiny.pickup.Interfaces;
 import com.example.infiny.pickup.Helpers.MenuItemData;
 import com.example.infiny.pickup.Model.AddToCartData;
 import com.example.infiny.pickup.Model.CafeListingData;
+import com.example.infiny.pickup.Model.CreateOrderData;
+import com.example.infiny.pickup.Model.FooRequest;
 import com.example.infiny.pickup.Model.ForgotPasswordData;
 import com.example.infiny.pickup.Model.FpResetPasswordData;
 import com.example.infiny.pickup.Model.LoginData;
 import com.example.infiny.pickup.Model.MenuListData;
 import com.example.infiny.pickup.Model.OrderData;
 import com.example.infiny.pickup.Model.OrderListData;
+import com.example.infiny.pickup.Model.Ordered;
 import com.example.infiny.pickup.Model.SignUpData;
 import com.example.infiny.pickup.Model.VerifyFpOtp;
+import com.google.gson.JsonObject;
+
+import org.json.JSONObject;
+
+import java.util.HashMap;
 
 import retrofit2.Call;
 import retrofit2.Retrofit;
+import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
+import retrofit2.http.Header;
+import retrofit2.http.HeaderMap;
+import retrofit2.http.Headers;
 import retrofit2.http.POST;
 
 /**
@@ -71,6 +83,7 @@ public interface ApiIntegration {
                                      @Field("itemName") String  itemName,
                                      @Field("itemPrice") String  itemPrice,
                                      @Field("itemQuantity") String  itemQuantity,
+                                     @Field("itemCat") String  itemCat,
                                      @Field("shopDetail") String  shopDetail);
     @FormUrlEncoded
     @POST("addItemToCartwithOkclick")
@@ -79,5 +92,15 @@ public interface ApiIntegration {
                                      @Field("itemSize") String  itemSize,
                                      @Field("itemName") String  itemName,
                                      @Field("itemPrice") String  itemPrice,
+                                     @Field("itemQuantity") String  itemQuantity,
                                      @Field("shopDetail") String  shopDetail);
+    @FormUrlEncoded
+    @POST("deleteItemFromCart")
+    Call<AddToCartData> getDeleteCartItem(@Field("userToken") String  token,
+                                      @Field("itemId") String  itemId,
+                                       @Field("itemSize") String  itemSize,
+                                      @Field("shopDetail") String  shopDetail);
+
+  @POST("createOrder")
+    Call<CreateOrderData> getCreateOrder(@Header("Content-Type") String token, @Body JSONObject body);
 }
