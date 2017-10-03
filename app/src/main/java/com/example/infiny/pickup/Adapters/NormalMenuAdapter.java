@@ -94,27 +94,27 @@ public class NormalMenuAdapter extends RecyclerView.Adapter<NormalMenuAdapter.My
             } else {
                 if(f1.getItemSmallPrice()=="")
                 {
-                    holder.labelsmall.setVisibility(View.INVISIBLE);
-                    holder.small.setVisibility(View.INVISIBLE);
-                    holder.iv_Small.setVisibility(View.INVISIBLE);
+                    holder.labelsmall.setVisibility(View.GONE);
+                    holder.small.setVisibility(View.GONE);
+                    holder.iv_Small.setVisibility(View.GONE);
                 }
                 else {
                     holder.small.setText("£ " + holder.getCorrectValue(String.format("%.2f", Float.valueOf(f1.getItemSmallPrice()))));
                 }
                 if(f1.getItemMediumPrice()=="")
                 {
-                    holder.labelmedium.setVisibility(View.INVISIBLE);
-                    holder.medium.setVisibility(View.INVISIBLE);
-                    holder.iv_medium.setVisibility(View.INVISIBLE);
+                    holder.labelmedium.setVisibility(View.GONE);
+                    holder.medium.setVisibility(View.GONE);
+                    holder.iv_medium.setVisibility(View.GONE);
                 }
                 else {
                     holder.medium.setText("£ " + holder.getCorrectValue(String.format("%.2f", Float.valueOf(f1.getItemMediumPrice()))));
                 }
                 if(f1.getItemLargePrice()=="")
                 {
-                    holder.labellarge.setVisibility(View.INVISIBLE);
-                    holder.large.setVisibility(View.INVISIBLE);
-                    holder.iv_Large.setVisibility(View.INVISIBLE);
+                    holder.labellarge.setVisibility(View.GONE);
+                    holder.large.setVisibility(View.GONE);
+                    holder.iv_Large.setVisibility(View.GONE);
                 }
                 else {
                     holder.large.setText("£ " + holder.getCorrectValue(String.format("%.2f", Float.valueOf(f1.getItemLargePrice()))));

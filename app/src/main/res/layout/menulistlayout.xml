@@ -53,36 +53,34 @@
     <RelativeLayout
         android:id="@+id/sublayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
         android:visibility="gone"
+        android:layout_height="match_parent"
+
         android:layout_below="@+id/relativeLayout">
         <ImageView
             android:layout_width="50dp"
             android:layout_height="35dp"
             android:src="@drawable/graycup1"
+            android:layout_marginTop="10dp"
+
             android:id="@+id/iv_smallsize"
             android:layout_marginStart="18dp"
-            android:layout_alignParentLeft="true"
-            android:layout_above="@+id/tw_small"
-            android:layout_alignStart="@+id/tw_small" />
+           />
         <ImageView
             android:layout_width="60dp"
             android:layout_height="40dp"
             android:src="@drawable/graycup1"
-            android:layout_centerHorizontal="true"
+         android:layout_toRightOf="@+id/iv_smallsize"
             android:id="@+id/iv_mediumsize"
-            android:layout_alignParentTop="true"
+    android:layout_marginTop="5dp"
             android:layout_marginLeft="50dp" />
         <ImageView
             android:layout_width="70dp"
             android:layout_height="50dp"
             android:src="@drawable/graycup1"
-            android:layout_centerHorizontal="true"
             android:id="@+id/iv_largesize"
-
-          android:layout_alignParentRight="true"
-            android:layout_marginLeft="40dp"
-            android:layout_above="@+id/tw_large"
+            android:layout_toRightOf="@+id/iv_mediumsize"
+            android:layout_marginLeft="50dp"
             />
         <TextView
             android:layout_width="wrap_content"
@@ -91,9 +89,8 @@
             android:id="@+id/tw_small"
             android:textSize="15dp"
             android:layout_marginStart="18dp"
-            android:layout_alignBaseline="@+id/tw_medium"
-            android:layout_alignBottom="@+id/tw_medium"
-            android:layout_alignParentStart="true" />
+            android:layout_below="@+id/iv_smallsize"
+           />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -109,9 +106,10 @@
             android:text="Large"
             android:id="@+id/tw_large"
             android:textSize="15dp"
-            android:layout_below="@+id/iv_mediumsize"
+            android:layout_marginStart="10dp"
+            android:layout_below="@+id/iv_largesize"
             android:layout_alignStart="@+id/iv_largesize"
-            android:layout_marginStart="13dp" />
+            />
         <TextView
             android:id="@+id/tw_smallprice"
             android:layout_width="wrap_content"
