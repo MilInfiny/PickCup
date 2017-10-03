@@ -102,5 +102,5 @@ public interface ApiIntegration {
                                       @Field("shopDetail") String  shopDetail);
 
   @POST("createOrder")
-    Call<CreateOrderData> getCreateOrder(@Header("Content-Type") String token, @Body JSONObject body);
+    Call<CreateOrderData> getCreateOrder(@Header("Content-Type") String token, @Body FooRequest body);
 }

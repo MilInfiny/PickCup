@@ -91,7 +91,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.MyViewHolder
                 @Override
                 public void totalPrice(String total) {
                     holder.totalprice.setText(holder.getCorrectValue(String.format("%.2f", Float.valueOf(total))));
-
+                    onItemClickListener.totalPrice(total);
                 }
 
                 @Override

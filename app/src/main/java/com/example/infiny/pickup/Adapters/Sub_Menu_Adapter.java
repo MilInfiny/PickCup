@@ -126,18 +126,23 @@ public class Sub_Menu_Adapter extends RecyclerView.Adapter<Sub_Menu_Adapter.MyVi
 
                                                     } else {
                                                         holder.progressBar_cyclic.setVisibility(View.GONE);
-                                                        totalprize = totalprize - Float.valueOf(s.getItemPrice()) * Integer.parseInt(s.getItemQuantity());
                                                         ordereds.remove(s);
-                                                        notifyDataSetChanged();
+
+
                                                         if(ordereds.size()==0)
                                                         {
                                                             totalprize=0f;
                                                             onItemClickListener.totalPrice(String.valueOf(totalprize));
                                                         }
                                                         else {
+                                                            totalprize=0f;
+                                                            totalprize = totalprize - Float.valueOf(s.getItemPrice()) * Integer.parseInt(s.getItemQuantity());
+                                                            Float total=Float.valueOf(s.getItemPrice())*Integer.parseInt(s.getItemQuantity());
+                                                            totalprize = totalprize + total;
                                                             onItemClickListener.totalPrice(String.valueOf(totalprize));
                                                             holder.totalprice.setText("£" + " " + holder.getCorrectValue(String.format("%.2f", Float.valueOf(s.getItemPrice()) * Integer.parseInt(s.getItemQuantity()))));
                                                         }
+                                                        notifyDataSetChanged();
 
                                                     }
                                                 }

@@ -441,7 +441,8 @@ public class NormalMenuAdapter extends RecyclerView.Adapter<NormalMenuAdapter.My
                                         progressBarCyclic.setVisibility(View.GONE);
                                         ((Activity) context).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                                         MenuActivity.order.setVisibility(View.VISIBLE);
-                                        MenuActivity.orderPrice.setText("£ "+String.valueOf(total));
+                                        MenuActivity.orderPrice.setText("£ "+getCorrectValue(String.format("%.2f", total)));
+
 
                                     }
 
@@ -451,7 +452,8 @@ public class NormalMenuAdapter extends RecyclerView.Adapter<NormalMenuAdapter.My
                                         MenuActivity.order.setVisibility(View.VISIBLE);
                                         int count=Integer.parseInt(MenuActivity.cart_count_String)+1;
                                         MenuActivity.cartCount.setText(String.valueOf(count));
-                                        MenuActivity.orderPrice.setText("£ "+String.valueOf(total));
+                                        MenuActivity.orderPrice.setText("£ "+getCorrectValue(String.format("%.2f", total)));
+
 
                                     }
 
@@ -656,7 +658,7 @@ public class NormalMenuAdapter extends RecyclerView.Adapter<NormalMenuAdapter.My
                                         progressBarCyclic.setVisibility(View.GONE);
                                         ((Activity) context).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                                         MenuActivity.order.setVisibility(View.VISIBLE);
-                                        MenuActivity.orderPrice.setText("£ "+String.valueOf(total));
+                                        MenuActivity.orderPrice.setText("£ "+getCorrectValue(String.format("%.2f", total)));
 
                                     }
 
@@ -666,7 +668,7 @@ public class NormalMenuAdapter extends RecyclerView.Adapter<NormalMenuAdapter.My
                                         MenuActivity.order.setVisibility(View.VISIBLE);
                                         int count=Integer.parseInt(MenuActivity.cart_count_String)+1;
                                         MenuActivity.cartCount.setText(String.valueOf(count));
-                                        MenuActivity.orderPrice.setText("£ "+String.valueOf(total));
+                                        MenuActivity.orderPrice.setText("£ "+getCorrectValue(String.format("%.2f", total)));
 
                                     }
 

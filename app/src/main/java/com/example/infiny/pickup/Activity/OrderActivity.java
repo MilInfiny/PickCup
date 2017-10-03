@@ -196,7 +196,7 @@ SharedPreferences sharedPreferences;
                 fooRequest=new FooRequest();
                 fooRequest.setUserToken(sharedPreferences.getString("token",null));
                fooRequest.setParcel(parcel);
-                 fooRequest.setOrder(ordered);
+                fooRequest.setOrder(ordered);
                 fooRequest.setNote(note);
                 fooRequest.setTimeForPickcup(dateString);
                 fooRequest.setShopDetail( orderListData.getData().getShopDetail().get_id());
@@ -211,7 +211,7 @@ SharedPreferences sharedPreferences;
 
                 Call<CreateOrderData> call = retroFitClient
                         .create(ApiIntegration.class)
-                        .getCreateOrder("application/json",s);
+                        .getCreateOrder("application/json",fooRequest);
                 call.enqueue(new Callback<CreateOrderData>() {
 
                     @Override
