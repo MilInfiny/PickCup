@@ -1,7 +1,7 @@
 package com.example.infiny.pickup.Adapters;
 
 import android.app.Activity;
-import android.app.AlertDialog;
+import android.support.v7.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -277,10 +278,13 @@ public class NormalMenuAdapter extends RecyclerView.Adapter<NormalMenuAdapter.My
             final ImageView increment=(ImageView) alertLayout.findViewById(R.id.increment);
             final ImageView decrement=(ImageView)alertLayout.findViewById(R.id.decrement);
             final TextView  display=(TextView)alertLayout.findViewById(R.id.display);
+            Button btCancel=(Button)alertLayout.findViewById(R.id.btnCancel);
+            Button btOk=(Button)alertLayout.findViewById(R.id.btnOk);
             AlertDialog.Builder alert = new AlertDialog.Builder(context);
-            alert.setTitle("Quantity");
+            final AlertDialog alertDialog=alert.create();
+            alertDialog.setTitle("Quantity");
             // this is set the view from XML inside AlertDialog
-            alert.setView(alertLayout);
+            alertDialog.setView(alertLayout);
             // disallow cancel of AlertDialog on click of back button and outside touch
             if(quantity ==1)
             {
@@ -318,21 +322,10 @@ public class NormalMenuAdapter extends RecyclerView.Adapter<NormalMenuAdapter.My
 
                 }
             });
-
-            display.setText(String.valueOf(quantity));
-            alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-
+            btOk.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    quantity=1;
-                }
-            });
-
-            alert.setPositiveButton("ok", new DialogInterface.OnClickListener() {
-
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-
+                public void onClick(View v) {
+                    alertDialog.dismiss();
                     total=total + Float.valueOf(itemData.getItemPrice())*quantity;
 
                     itemData.setItemTotalamount(String.valueOf(total));
@@ -476,12 +469,19 @@ public class NormalMenuAdapter extends RecyclerView.Adapter<NormalMenuAdapter.My
                     });
 
 
-
-
                 }
             });
-            AlertDialog dialog = alert.create();
-            dialog.show();
+            btCancel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    alertDialog.dismiss();
+                    quantity=1;
+                }
+            });
+
+
+
+            alertDialog.show();
 
 
 
@@ -494,10 +494,13 @@ public class NormalMenuAdapter extends RecyclerView.Adapter<NormalMenuAdapter.My
             final ImageView increment=(ImageView) alertLayout.findViewById(R.id.increment);
             final ImageView decrement=(ImageView)alertLayout.findViewById(R.id.decrement);
             final TextView  display=(TextView)alertLayout.findViewById(R.id.display);
+            Button btCancel=(Button)alertLayout.findViewById(R.id.btnCancel);
+            Button btOk=(Button)alertLayout.findViewById(R.id.btnOk);
             AlertDialog.Builder alert = new AlertDialog.Builder(context);
-            alert.setTitle("Quantity");
+            final AlertDialog alertDialog=alert.create();
+            alertDialog.setTitle("Quantity");
             // this is set the view from XML inside AlertDialog
-            alert.setView(alertLayout);
+            alertDialog.setView(alertLayout);
             // disallow cancel of AlertDialog on click of back button and outside touch
             if(quantity ==1)
             {
@@ -537,19 +540,17 @@ public class NormalMenuAdapter extends RecyclerView.Adapter<NormalMenuAdapter.My
             });
 
             display.setText(String.valueOf(quantity));
-            alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-
+            btCancel.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(DialogInterface dialog, int which) {
+                public void onClick(View v) {
+                    alertDialog.dismiss();
                     quantity=1;
                 }
             });
-
-            alert.setPositiveButton("ok", new DialogInterface.OnClickListener() {
-
+            btOk.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(DialogInterface dialog, int which) {
-
+                public void onClick(View v) {
+                    alertDialog.dismiss();
                     total=total + Float.valueOf(itemData.getItemPrice())*quantity;
                     itemData.setItemQuantity(String.valueOf(quantity));
                     itemData.setItemTotalamount(String.valueOf(total));
@@ -572,6 +573,7 @@ public class NormalMenuAdapter extends RecyclerView.Adapter<NormalMenuAdapter.My
                                 addToCartData = response.body();
                                 if (addToCartData != null) {
                                     if (addToCartData.getError().equals("true") && addToCartData.getTitle().equals("multiple shopDetail")) {
+
                                         progressBarCyclic.setVisibility(View.GONE);
                                         AlertDialog.Builder builder;
                                         ((Activity) context).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
@@ -606,6 +608,7 @@ public class NormalMenuAdapter extends RecyclerView.Adapter<NormalMenuAdapter.My
                                                                     addToCartData = response.body();
                                                                     if (addToCartData != null) {
                                                                         if (addToCartData.getError().equals("true")) {
+
                                                                             progressBarCyclic.setVisibility(View.GONE);
                                                                             AlertDialog.Builder builder;
                                                                             ((Activity) context).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
@@ -689,10 +692,10 @@ public class NormalMenuAdapter extends RecyclerView.Adapter<NormalMenuAdapter.My
                             Toast.makeText(context, R.string.server_not_responding, Toast.LENGTH_SHORT).show();
                         }
                     });
+
                 }
             });
-            AlertDialog dialog = alert.create();
-            dialog.show();
+            alertDialog.show();
 
 
 

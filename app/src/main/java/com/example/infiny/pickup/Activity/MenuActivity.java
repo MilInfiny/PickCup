@@ -130,6 +130,7 @@ public class MenuActivity extends AppCompatActivity implements OnItemClickListen
             @Override
             public void onClick(View v) {
                 Intent intent1 = new Intent(context, OrderActivity.class);
+                intent1.putExtra("sid",sid);
                 startActivity(intent1);
                 finish();
 
@@ -170,7 +171,7 @@ public class MenuActivity extends AppCompatActivity implements OnItemClickListen
                             else {
                                 cartCount.setText(menuItemData.getTotalCount());
                                 cart_count_String=menuItemData.getTotalCount();
-                                orderPrice.setText(getCorrectValue(String.format("%.2f", Float.valueOf(menuItemData.getTotalPrice()))));
+                                orderPrice.setText("£ "+getCorrectValue(String.format("%.2f", Float.valueOf(menuItemData.getTotalPrice()))));
                             }
                             ArrayList<Data> datas = new ArrayList<>(Arrays.asList(menuItemData.getData()));
                             menuNormalAdapter = new MenuNormalAdapter(context, datas, onItemClickListener, sid);

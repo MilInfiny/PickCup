@@ -16,6 +16,17 @@ public class Ordered
     private String itemQuantity;
     private String itemId;
 
+
+    public int getImage() {
+        return image;
+    }
+
+    public void setImage(int image) {
+        this.image = image;
+    }
+
+    private int image;
+
     public String getItemQuantity() {
         return itemQuantity;
     }

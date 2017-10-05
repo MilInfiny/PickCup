@@ -1,5 +1,7 @@
+/*
 package com.example.infiny.pickup.Adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -33,9 +35,11 @@ import java.util.List;
 
 import static android.view.animation.Animation.RELATIVE_TO_SELF;
 
+*/
 /**
  * Created by infiny on 9/8/17.
- */
+ *//*
+
 
 public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.MyViewHolder> {
     Context context;
@@ -76,7 +80,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.MyViewHolder
             ArrayList<Ordered> ordereds = new ArrayList<Ordered>(Arrays.asList(orderData.getOrdered()));
             Ordered [] ordered = orderData.getOrdered();
             onItemClickListener.ordereddata(ordered);
-            subMenuAdapter=new Sub_Menu_Adapter(context,ordereds,image,new OnItemClickListener(){
+            subMenuAdapter=new Sub_Menu_Adapter(context,ordereds,new OnItemClickListener(){
 
                 @Override
                 public void OnItemClickListener(Cafes item) {
@@ -101,7 +105,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.MyViewHolder
                 }
 
 
-            },orderData.getShopDetail().get_id());
+            },orderData.getShopDetail().get_id(),);
             holder.recyclerView.setLayoutManager(mLayoutManager);
             holder.recyclerView.setAdapter(subMenuAdapter);
 
@@ -133,7 +137,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.MyViewHolder
 
                 ArrayList<Ordered> ordereds = new ArrayList<Ordered>(Arrays.asList(orderData.getOrdered()));
 
-                 subMenuAdapter=new Sub_Menu_Adapter(context,ordereds,image,new OnItemClickListener(){
+                 subMenuAdapter=new Sub_Menu_Adapter(context,ordereds,new OnItemClickListener(){
 
                     @Override
                     public void OnItemClickListener(Cafes item) {
@@ -161,8 +165,10 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.MyViewHolder
                  },orderData.getShopDetail().get_id());
                 holder.recyclerView.setLayoutManager(mLayoutManager);
                 holder.recyclerView.setAdapter(subMenuAdapter);
-                mLayoutManager.scrollToPosition(getItemCount());
+                mLayoutManager.scrollToPosition(0);
                 holder.recyclerView.setNestedScrollingEnabled(false);
+
+
 
             }
         });
@@ -175,7 +181,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.MyViewHolder
                 RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(context.getApplicationContext());
                 ArrayList<Ordered> ordereds = new ArrayList<Ordered>(Arrays.asList(orderData.getOrdered()));
 
-                 subMenuAdapter=new Sub_Menu_Adapter(context,ordereds,image,new OnItemClickListener(){
+                 subMenuAdapter=new Sub_Menu_Adapter(context,ordereds,new OnItemClickListener(){
 
                     @Override
                     public void OnItemClickListener(Cafes item) {
@@ -190,7 +196,6 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.MyViewHolder
                     @Override
                     public void totalPrice(String total) {
                         holder.totalprice.setText(holder.getCorrectValue(String.format("%.2f", Float.valueOf(total))));
-                        onItemClickListener.totalPrice(total);
                     }
 
                      @Override
@@ -203,6 +208,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.MyViewHolder
                 holder.recyclerView.setLayoutManager(mLayoutManager);
                 holder.recyclerView.setAdapter(subMenuAdapter);
                 holder.recyclerView.setNestedScrollingEnabled(false);
+
             }
         });
 
@@ -246,3 +252,4 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.MyViewHolder
 
     }
 }
+*/

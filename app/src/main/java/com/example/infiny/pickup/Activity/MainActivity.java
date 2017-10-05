@@ -36,6 +36,7 @@ import com.example.infiny.pickup.Model.ItemData;
 import com.example.infiny.pickup.Model.LoginData;
 import com.example.infiny.pickup.Model.Ordered;
 import com.example.infiny.pickup.R;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -76,6 +77,7 @@ public class MainActivity extends AppCompatActivity
     Context context;
     Retrofit retroFitClient;
 TextView username,email;
+    ImageView profileView;
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,14 +92,7 @@ TextView username,email;
         sessionManager=new SessionManager(context);
         sharedPreferences=getSharedPreferences(sessionManager.PREF_NAME,0);
         navView.setNavigationItemSelectedListener(this);
-        imageView = (ImageView) navView.getHeaderView(0).findViewById(R.id.imageView);
-        imageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
-                startActivity(intent);
-            }
-        });
+
 
         progressBarCyclic.setVisibility(View.VISIBLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
@@ -197,6 +192,19 @@ TextView username,email;
         navigationView.setNavigationItemSelectedListener(this);
         username = (TextView) navigationView.getHeaderView(0).findViewById(R.id.username);
         email = (TextView) navigationView.getHeaderView(0).findViewById(R.id.email);
+        profileView=(ImageView)navigationView.getHeaderView(0).findViewById(R.id.profileView);
+        Picasso.with(context)
+                .load(sharedPreferences.getString(sessionManager.image, null))
+                .placeholder(R.drawable.ic_person_black_48dp)
+                .into(profileView);
+        profileView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
+                startActivity(intent);
+            }
+        });
+
         username.setText(sharedPreferences.getString("name",null)+" "+sharedPreferences.getString("surname",null));
         email.setText(sharedPreferences.getString("email",null));
     }

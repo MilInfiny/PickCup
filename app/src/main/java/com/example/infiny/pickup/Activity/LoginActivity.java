@@ -2,6 +2,7 @@ package com.example.infiny.pickup.Activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -63,6 +64,7 @@ public class LoginActivity extends AppCompatActivity {
     Retrofit retroFitClient;
     LoginData loginData;
     SessionManager sessionManager;
+    SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +73,7 @@ public class LoginActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         context=this;
         sessionManager=new SessionManager(this);
+        sharedPreferences = getSharedPreferences("Messaging", Context.MODE_PRIVATE);
         btSignup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -98,7 +101,8 @@ public class LoginActivity extends AppCompatActivity {
                     Call<LoginData> call = retroFitClient
                             .create(ApiIntegration.class)
                             .getsignin(etEmail.getText().toString(),
-                                    password.getText().toString());
+                                    password.getText().toString(),
+                                    sharedPreferences.getString("FcmId",null));
                     call.enqueue(new Callback<LoginData>() {
 
                         @Override
@@ -112,7 +116,7 @@ public class LoginActivity extends AppCompatActivity {
                                         Toast.makeText(context,loginData.getTitle(), Toast.LENGTH_SHORT).show();
                                     } else {
                                         Toast.makeText(context, R.string.login_success, Toast.LENGTH_SHORT).show();
-                                        sessionManager.createLoginSession(loginData.getUser().getFirstname(),loginData.getUser().getEmail(),loginData.getUser().getLastname(),loginData.getToken());
+                                        sessionManager.createLoginSession(loginData.getUser().getFirstname(),loginData.getUser().getEmail(),loginData.getUser().getLastname(),loginData.getToken(),loginData.getUser().getDob(),loginData.getUser().getAddress().getPostalCode(),loginData.getUser().getAddress().getCity(),loginData.getUser().getAddress().getAddress(),loginData.getUser().getImageUrl());
                                         progressBarCyclic.setVisibility(View.GONE);
                                         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);

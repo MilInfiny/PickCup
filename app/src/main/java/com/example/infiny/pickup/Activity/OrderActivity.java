@@ -2,7 +2,6 @@ package com.example.infiny.pickup.Activity;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -16,15 +15,17 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.infiny.pickup.Adapters.OrderAdapter;
+import com.example.infiny.pickup.Adapters.Sub_Menu_Adapter;
 import com.example.infiny.pickup.Adapters.TimeviewAdapter;
 import com.example.infiny.pickup.Helpers.MenuItem;
+import com.example.infiny.pickup.Helpers.Orders;
 import com.example.infiny.pickup.Helpers.RetroFitClient;
 import com.example.infiny.pickup.Helpers.SessionManager;
 import com.example.infiny.pickup.Interfaces.ApiIntegration;
@@ -33,21 +34,17 @@ import com.example.infiny.pickup.Model.Cafes;
 import com.example.infiny.pickup.Model.CreateOrderData;
 import com.example.infiny.pickup.Model.FooRequest;
 import com.example.infiny.pickup.Model.ItemData;
-import com.example.infiny.pickup.Model.LoginData;
 import com.example.infiny.pickup.Model.OrderData;
 import com.example.infiny.pickup.Model.OrderListData;
 import com.example.infiny.pickup.Model.Ordered;
 import com.example.infiny.pickup.R;
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.shawnlin.numberpicker.NumberPicker;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -58,6 +55,32 @@ import retrofit2.Retrofit;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class OrderActivity extends AppCompatActivity implements OnItemClickListener {
+
+
+    TimeviewAdapter timeviewAdapter;
+    ArrayList<OrderData> orderDatas;
+    Context context;
+    AlertDialog.Builder builder;
+    OrderListData orderListData;
+    Retrofit retroFitClient;
+    SessionManager sessionManager;
+    SharedPreferences sharedPreferences;
+    CreateOrderData createOrderData;
+    public static String dateString, parcel = "false", note;
+    String total;
+    ;
+    OnItemClickListener onItemClickListener;
+    FooRequest fooRequest;
+
+
+    OrderData orderData;
+    int image;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+    @BindView(R.id.appbar)
+    AppBarLayout appbar;
+    @BindView(R.id.progressBar_cyclic)
+    ProgressBar progressBarCyclic;
     @BindView(R.id.logo)
     ImageView logo;
     @BindView(R.id.tittleimage)
@@ -74,46 +97,56 @@ public class OrderActivity extends AppCompatActivity implements OnItemClickListe
     ImageView rating3;
     @BindView(R.id.toplayout)
     RelativeLayout toplayout;
-    @BindView(R.id.card_view)
-    CardView cardView;
-    @BindView(R.id.orderrecycleview)
-    RecyclerView orderrecycleview;
-
-
-    OrderAdapter orderAdapter;
-    TimeviewAdapter timeviewAdapter;
-    @BindView(R.id.timerecycleview)
-    RecyclerView timerecycleview;
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
-    @BindView(R.id.appbar)
-    AppBarLayout appbar;
-    @BindView(R.id.card_view1)
-    CardView cardView1;
-    @BindView(R.id.rel_time)
-    RelativeLayout relTime;
     @BindView(R.id.tw_order)
     TextView twOrder;
+    @BindView(R.id.arrow)
+    ImageView arrow;
+    @BindView(R.id.relativeLayout)
+    RelativeLayout mainLayout;
+    @BindView(R.id.view)
+    View view;
+    @BindView(R.id.recycleView)
+    RecyclerView recycleView;
+    @BindView(R.id.et_notehint)
+    TextView etNotehint;
+    @BindView(R.id.et_note)
+    EditText etNote;
+    @BindView(R.id.bt_sitin)
+    TextView btSitin;
+    @BindView(R.id.bt_pickcup)
+    TextView btPickcup;
+    @BindView(R.id.buttonview)
+    RelativeLayout buttonview;
+    @BindView(R.id.bottomview)
+    View bottomview;
+    @BindView(R.id.totalprice)
+    TextView totalprice;
+    @BindView(R.id.totalview)
+    RelativeLayout totalview;
+    @BindView(R.id.sub_layout)
+    RelativeLayout subLayout;
+    @BindView(R.id.card_view1)
+    CardView cardView1;
+    @BindView(R.id.timerecycleview)
+    RecyclerView timerecycleview;
+    @BindView(R.id.rel_time)
+    RelativeLayout relTime;
+    @BindView(R.id.card_view)
+    CardView cardView;
+    @BindView(R.id.tw_pay)
+    TextView twPay;
     @BindView(R.id.list_item_genre_arrow)
     ImageView listItemGenreArrow;
     @BindView(R.id.paylayout)
     RelativeLayout paylayout;
     @BindView(R.id.card_pay)
     CardView cardPay;
-    @BindView(R.id.progressBar_cyclic)
-    ProgressBar progressBarCyclic;
-  Context context;
-    AlertDialog.Builder builder;
-    OrderListData orderListData;
-    Retrofit retroFitClient;
-    SessionManager sessionManager;
-SharedPreferences sharedPreferences;
-    CreateOrderData createOrderData;
-    public static String dateString, parcel="false",note;
-    String total;
-  Ordered[] ordered;;
-    OnItemClickListener onItemClickListener;
-    FooRequest fooRequest;
+    Sub_Menu_Adapter subMenuAdapter;
+     Ordered [] ordered;
+    ArrayList<Ordered> ordereds;
+    Ordered orderedObject;
+    String sid;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -122,21 +155,28 @@ SharedPreferences sharedPreferences;
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         appbar.setOutlineProvider(null);
-        context=this;
-        onItemClickListener=this;
-         sessionManager=new SessionManager(this);
-        sharedPreferences=getSharedPreferences(sessionManager.PREF_NAME,0);
+        context = this;
+        onItemClickListener = this;
+        sessionManager = new SessionManager(this);
+        sharedPreferences = getSharedPreferences(sessionManager.PREF_NAME, 0);
         getSupportActionBar().setTitle("");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         final LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         LinearLayoutManager layoutManager1 = new LinearLayoutManager(this);
+        ordereds=new ArrayList<>();
+        Intent intent=getIntent();
+        sid=intent.getStringExtra("sid");
+        subMenuAdapter=new Sub_Menu_Adapter(context,ordereds,onItemClickListener,sid);
+        recycleView.setLayoutManager(layoutManager);
+        recycleView.setAdapter(subMenuAdapter);
+       recycleView.setNestedScrollingEnabled(false);
         progressBarCyclic.setVisibility(View.VISIBLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
                 WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
         retroFitClient = new RetroFitClient(context).getBlankRetrofit();
         Call<OrderListData> call = retroFitClient
                 .create(ApiIntegration.class)
-                .getOrderListing(sharedPreferences.getString("token",null));
+                .getOrderListing(sharedPreferences.getString("token", null));
         call.enqueue(new Callback<OrderListData>() {
 
             @Override
@@ -156,15 +196,40 @@ SharedPreferences sharedPreferences;
                             tittle.setText(orderListData.getData().getShopDetail().getCafe_name());
                             progressBarCyclic.setVisibility(View.GONE);
                             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                            ArrayList<OrderData> orderDatas = new ArrayList<>(Arrays.asList(orderListData.getData()));
-                            orderAdapter = new OrderAdapter(context,orderDatas,onItemClickListener);
-                            orderrecycleview.setLayoutManager(layoutManager);
-                            orderrecycleview.setAdapter(orderAdapter);
-                            orderrecycleview.setNestedScrollingEnabled(false);
+
+                            orderDatas = new ArrayList<>(Arrays.asList(orderListData.getData()));
+                            for (int i = 0; i < orderDatas.size(); i++) {
+                                orderData = orderDatas.get(i);
+
+                                Sub_Menu_Adapter.totalprize=0f;
+                                image = R.drawable.graycup1;
+                                ordered =orderData.getOrdered();
+                                for(int j=0;j<ordered.length;j++)
+                                {
+                                    orderedObject=ordered[j];
+                                    orderedObject.setImage(image);
+                                    ordereds.add(orderedObject);
+
+                                }
+
+
+
+                                mainLayout.setVisibility(View.VISIBLE);
+                              note=etNote.getText().toString().trim();
+                                if(subLayout.getVisibility()==View.VISIBLE) {
+                                    subLayout.setVisibility(View.GONE);
+                                    arrow.setRotation(360);
+                                }
+                                else {
+                                    subLayout.setVisibility(View.VISIBLE);
+                                    arrow.setRotation(180);
+                                }
+                            }
+
 
                         }
 
-                    }else {
+                    } else {
                         if (response.code() == 404 || response.code() == 500) {
                             progressBarCyclic.setVisibility(View.GONE);
                             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
@@ -193,25 +258,25 @@ SharedPreferences sharedPreferences;
                 getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
                         WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                 retroFitClient = new RetroFitClient(context).getBlankRetrofit();
-                fooRequest=new FooRequest();
-                fooRequest.setUserToken(sharedPreferences.getString("token",null));
-               fooRequest.setParcel(parcel);
+                fooRequest = new FooRequest();
+                fooRequest.setUserToken(sharedPreferences.getString("token", null));
+                fooRequest.setParcel(parcel);
                 fooRequest.setOrder(ordered);
                 fooRequest.setNote(note);
                 fooRequest.setTimeForPickcup(dateString);
-                fooRequest.setShopDetail( orderListData.getData().getShopDetail().get_id());
+                fooRequest.setShopDetail(orderListData.getData().getShopDetail().get_id());
                 fooRequest.setTotalPrice(total);
-                Gson gson=new Gson();
-                JSONObject s=null;
+                Gson gson = new Gson();
+                JSONObject s = null;
                 try {
-                 s  =new JSONObject(gson.toJson(fooRequest));
+                    s = new JSONObject(gson.toJson(fooRequest));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
 
                 Call<CreateOrderData> call = retroFitClient
                         .create(ApiIntegration.class)
-                        .getCreateOrder("application/json",fooRequest);
+                        .getCreateOrder("application/json", fooRequest);
                 call.enqueue(new Callback<CreateOrderData>() {
 
                     @Override
@@ -224,12 +289,12 @@ SharedPreferences sharedPreferences;
                                     getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
                                 } else {
-                                  Intent intent=new Intent(context,MainActivity.class);
+                                    Intent intent = new Intent(context, MainActivity.class);
                                     startActivity(intent);
 
                                 }
 
-                            }else {
+                            } else {
                                 if (response.code() == 404 || response.code() == 500) {
                                     progressBarCyclic.setVisibility(View.GONE);
                                     getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
@@ -251,13 +316,77 @@ SharedPreferences sharedPreferences;
                 });
             }
         });
+        btPickcup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                image=R.drawable.cuptake;
+                Sub_Menu_Adapter.totalprize=0f;
+                ordered =orderData.getOrdered();
+                for(int j=0;j<ordered.length;j++)
+                {
+                    orderedObject=ordered[j];
+                    orderedObject.setImage(image);
+
+
+                }
+                subMenuAdapter.notifyDataSetChanged();
+                if (subMenuAdapter.getItemCount() > 1) {
+                    recycleView.getLayoutManager().smoothScrollToPosition(recycleView, null, 0);
+                }
+
+            }
+        });
+        btSitin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                image = R.drawable.graycup1;
+                Sub_Menu_Adapter.totalprize=0f;
+                ordered =orderData.getOrdered();
+                for(int j=0;j<ordered.length;j++)
+                {
+                    orderedObject=ordered[j];
+                    orderedObject.setImage(image);
+
+                }
+                subMenuAdapter.notifyDataSetChanged();
+                if (subMenuAdapter.getItemCount() > 1) {
+                    recycleView.getLayoutManager().smoothScrollToPosition(recycleView, null, 0);
+                }
+
+            }
+        });
+        mainLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(subLayout.getVisibility()==View.VISIBLE) {
+                    subLayout.setVisibility(View.GONE);
+                    arrow.setRotation(360);
+                }
+
+                else{
+                   subLayout.setVisibility(View.VISIBLE);
+                    arrow.setRotation(180);
+
+                }
+            }
+        });
 
     }
+    public String getCorrectValue(String price) {
+        String[] priceSpl = price.split("\\.");
+        if (priceSpl.length > 1)
+            if (priceSpl[1].equals("00") || priceSpl[1].equals("0")) {
+                price = priceSpl[0];
+            }
+        return price;
+    }
+
+
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK ) {
-            Intent intent= new Intent(OrderActivity.this,MenuActivity.class);
-            intent.putExtra("sid",orderListData.getData().getShopDetail().get_id());
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            Intent intent=new Intent(OrderActivity.this,MenuActivity.class);
+            intent.putExtra("sid",sid);
             startActivity(intent);
             finish();
         }
@@ -268,8 +397,8 @@ SharedPreferences sharedPreferences;
     public boolean onOptionsItemSelected(android.view.MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                Intent intent= new Intent(OrderActivity.this,MenuActivity.class);
-                intent.putExtra("sid",orderListData.getData().getShopDetail().get_id());
+                Intent intent=new Intent(OrderActivity.this,MenuActivity.class);
+                intent.putExtra("sid",sid);
                 startActivity(intent);
                 finish();
         }
@@ -294,12 +423,12 @@ SharedPreferences sharedPreferences;
 
     @Override
     public void totalPrice(String total) {
-     this.total=total;
+        totalprice.setText(getCorrectValue(String.format("%.2f", Float.valueOf(total))));
     }
 
     @Override
     public void ordereddata(Ordered[] ordered) {
-        this.ordered=ordered;
+        this.ordered = ordered;
     }
 
 

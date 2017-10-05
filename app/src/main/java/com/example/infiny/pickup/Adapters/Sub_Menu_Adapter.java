@@ -1,5 +1,6 @@
 package com.example.infiny.pickup.Adapters;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -48,16 +49,15 @@ public class Sub_Menu_Adapter extends RecyclerView.Adapter<Sub_Menu_Adapter.MyVi
     Retrofit retroFitClient;
     SharedPreferences sharedPreferences;
     SessionManager sessionManager;
-    Float totalprize=0.0f;
+   public static Float totalprize=0.0f;
     OnItemClickListener onItemClickListener;
     String sid;
     AddToCartData addToCartData;
 
 
-    public Sub_Menu_Adapter(Context context, ArrayList<Ordered> ordereds,int pickcupimage,OnItemClickListener onItemClickListener,String sid ) {
+    public Sub_Menu_Adapter(Context context, ArrayList<Ordered> ordereds,OnItemClickListener onItemClickListener,String sid ) {
         this.context = context;
         this.ordereds = ordereds;
-        this.pickcupimage=pickcupimage;
         this.onItemClickListener=onItemClickListener;
         this.sid=sid;
 
@@ -75,14 +75,14 @@ public class Sub_Menu_Adapter extends RecyclerView.Adapter<Sub_Menu_Adapter.MyVi
         final Ordered s=ordereds.get(position);
         holder.tw_itemName.setText(s.getItemName());
         holder.tw_size.setText(s.getItemSize());
-        holder.itemimg.setImageResource(pickcupimage);
+        holder.itemimg.setImageResource(s.getImage());
         sessionManager=new SessionManager(context);
         sharedPreferences = context.getSharedPreferences(sessionManager.PREF_NAME, 0);
         holder.singleprice.setText("£" +" "+holder.getCorrectValue(String.format("%.2f",Float.valueOf(s.getItemPrice()))));
         holder.totalprice.setText("£" +" "+ holder.getCorrectValue(String.format("%.2f",Float.valueOf(s.getItemPrice())*Integer.parseInt(s.getItemQuantity()))));
 
-        totalprize=totalprize + Float.valueOf(s.getItemPrice())*Float.valueOf(s.getItemQuantity());
-        onItemClickListener.totalPrice(String.valueOf(totalprize));
+       totalprize=totalprize + Float.valueOf(s.getItemPrice())*Float.valueOf(s.getItemQuantity());
+       onItemClickListener.totalPrice(String.valueOf(totalprize));
         holder.display.setText(String.valueOf(s.getItemQuantity()));
 
 
@@ -99,6 +99,11 @@ public class Sub_Menu_Adapter extends RecyclerView.Adapter<Sub_Menu_Adapter.MyVi
                     } else {
                         builder = new AlertDialog.Builder(context);
                     }
+                    String s1=sharedPreferences.getString("token", null);
+                    String s2= s.getItemId();
+                    String s3=s.getItemSize();
+                    String s4=sid;
+
                     builder.setTitle("Delete")
                             .setMessage("Delete Item?")
                             .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
@@ -110,7 +115,6 @@ public class Sub_Menu_Adapter extends RecyclerView.Adapter<Sub_Menu_Adapter.MyVi
                                             .getDeleteCartItem(sharedPreferences.getString("token", null),
                                                     s.getItemId(),
                                                     s.getItemSize(),
-
                                                     sid
                                             );
                                     call.enqueue(new Callback<AddToCartData>() {
@@ -144,6 +148,7 @@ public class Sub_Menu_Adapter extends RecyclerView.Adapter<Sub_Menu_Adapter.MyVi
                                                         }
                                                         notifyDataSetChanged();
 
+
                                                     }
                                                 }
                                                 else {
@@ -174,7 +179,7 @@ public class Sub_Menu_Adapter extends RecyclerView.Adapter<Sub_Menu_Adapter.MyVi
 
                 }
                 else {
-                    totalprize = totalprize - Float.valueOf(s.getItemPrice()) * Integer.parseInt(s.getItemQuantity());
+                  totalprize = totalprize - Float.valueOf(s.getItemPrice()) * Integer.parseInt(s.getItemQuantity());
                     s.setItemQuantity(String.valueOf(Integer.parseInt(s.getItemQuantity()) - 1));
                     Float total = Float.valueOf(s.getItemPrice()) * Integer.parseInt(s.getItemQuantity());
                     holder.totalprice.setText("£" +" "+holder.getCorrectValue(String.format("%.2f", total)));

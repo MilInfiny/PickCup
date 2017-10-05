@@ -3,6 +3,7 @@ package com.example.infiny.pickup.Activity;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TextInputLayout;
@@ -94,6 +95,7 @@ public class SignupActivity extends AppCompatActivity {
     SignUpData signUpData;
     Calendar myCalendar;
     SessionManager sessionManager;
+    SharedPreferences  sharedPreferences;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -106,6 +108,7 @@ public class SignupActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         context = this;
         sessionManager = new SessionManager(context);
+        sharedPreferences=getSharedPreferences("Messaging",Context.MODE_PRIVATE);
         tiePassword.setTransformationMethod(new PasswordTransformationMethod());
         tieConfipassword.setTransformationMethod(new PasswordTransformationMethod());
          myCalendar = Calendar.getInstance();
@@ -149,7 +152,8 @@ public class SignupActivity extends AppCompatActivity {
                                     etDob.getEditText().getText().toString(),
                                     etPostcode.getEditText().getText().toString(),
                                     etAdd.getEditText().getText().toString(),
-                                    etCity.getEditText().getText().toString());
+                                    etCity.getEditText().getText().toString(),
+                                    sharedPreferences.getString("FcmId",null));
                     call.enqueue(new Callback<SignUpData>() {
                         @Override
                         public void onResponse(Call<SignUpData> call, Response<SignUpData> response) {
@@ -162,7 +166,7 @@ public class SignupActivity extends AppCompatActivity {
                                         Toast.makeText(context, signUpData.getMessage(), Toast.LENGTH_SHORT).show();
                                     } else {
                                         Toast.makeText(context, R.string.login_success, Toast.LENGTH_SHORT).show();
-                                        sessionManager.createLoginSession(signUpData.getUser().getFirstname(),signUpData.getUser().getEmail(),signUpData.getUser().getLastname(),signUpData.getToken());
+                                        sessionManager.createLoginSession(signUpData.getUser().getFirstname(),signUpData.getUser().getEmail(),signUpData.getUser().getLastname(),signUpData.getToken(),signUpData.getUser().getDob(),signUpData.getUser().getAddress().getPostalCode(),signUpData.getUser().getAddress().getCity(),signUpData.getUser().getAddress().getAddress(),signUpData.getUser().getImageUrl());
                                         progressBarCyclic.setVisibility(View.GONE);
                                         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                                         Intent intent = new Intent(context, MainActivity.class);

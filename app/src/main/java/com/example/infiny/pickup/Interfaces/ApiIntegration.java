@@ -4,6 +4,7 @@ import com.example.infiny.pickup.Helpers.MenuItemData;
 import com.example.infiny.pickup.Model.AddToCartData;
 import com.example.infiny.pickup.Model.CafeListingData;
 import com.example.infiny.pickup.Model.CreateOrderData;
+import com.example.infiny.pickup.Model.EditProfileData;
 import com.example.infiny.pickup.Model.FooRequest;
 import com.example.infiny.pickup.Model.ForgotPasswordData;
 import com.example.infiny.pickup.Model.FpResetPasswordData;
@@ -20,6 +21,7 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.http.Body;
@@ -28,7 +30,9 @@ import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.Header;
 import retrofit2.http.HeaderMap;
 import retrofit2.http.Headers;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
 
 /**
  * Created by infiny on 9/18/17.
@@ -44,11 +48,14 @@ public interface ApiIntegration {
                             @Field("dob") String  dob,
                             @Field("postalcode") String  postalcode,
                             @Field("address") String  address,
-                            @Field("city") String  City);
+                            @Field("city") String  City,
+                            @Field("deviceToken") String  deviceToken
+                               );
     @FormUrlEncoded
     @POST("signin")
     Call<LoginData> getsignin(@Field("email") String  email,
-                               @Field("password") String  password);
+                               @Field("password") String  password,
+                              @Field("deviceToken") String  deviceToken);
     @FormUrlEncoded
     @POST("cafelisting")
     Call<CafeListingData> getcafelisting(@Field("userToken") String  token,
@@ -103,4 +110,18 @@ public interface ApiIntegration {
 
   @POST("createOrder")
     Call<CreateOrderData> getCreateOrder(@Header("Content-Type") String token, @Body FooRequest body);
+
+    @Multipart
+    @POST("editprofile")
+    Call<EditProfileData> editProfile (@Header("userToken") String token,
+                                       @Part("files\"; filename=\"pp.png\" ") RequestBody file,
+                                       @Part("userToken") RequestBody token1,
+                                       @Part("email") RequestBody email,
+                                       @Part("firstname") RequestBody name,
+                                       @Part("lastname") RequestBody surname,
+                                       @Part("dob") RequestBody dob,
+                                       @Part("address") RequestBody address,
+                                       @Part("city") RequestBody city,
+                                       @Part("postalcode") RequestBody postcode);
 }
+

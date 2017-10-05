@@ -1,16 +1,26 @@
 package com.example.infiny.pickup.Model;
 
+import android.graphics.Bitmap;
+
 /**
  * Created by infiny on 9/19/17.
  */
 
 public class User
 {
+    private String resetPasswordToken;
+
     private String _id;
 
     private Address address;
 
+    private String imageUrl;
+
     private String email;
+
+    private String[] deviceToken;
+
+    private String resetPasswordExpires;
 
     private String dob;
 
@@ -20,9 +30,17 @@ public class User
 
     private String firstname;
 
-    private String contact;
-
     private String password;
+
+    public String getResetPasswordToken ()
+    {
+        return resetPasswordToken;
+    }
+
+    public void setResetPasswordToken (String resetPasswordToken)
+    {
+        this.resetPasswordToken = resetPasswordToken;
+    }
 
     public String get_id ()
     {
@@ -44,6 +62,16 @@ public class User
         this.address = address;
     }
 
+    public String getImageUrl ()
+    {
+        return imageUrl;
+    }
+
+    public void setImageUrl (String imageUrl)
+    {
+        this.imageUrl = imageUrl;
+    }
+
     public String getEmail ()
     {
         return email;
@@ -52,6 +80,26 @@ public class User
     public void setEmail (String email)
     {
         this.email = email;
+    }
+
+    public String[] getDeviceToken ()
+    {
+        return deviceToken;
+    }
+
+    public void setDeviceToken (String[] deviceToken)
+    {
+        this.deviceToken = deviceToken;
+    }
+
+    public String getResetPasswordExpires ()
+    {
+        return resetPasswordExpires;
+    }
+
+    public void setResetPasswordExpires (String resetPasswordExpires)
+    {
+        this.resetPasswordExpires = resetPasswordExpires;
     }
 
     public String getDob ()
@@ -94,16 +142,6 @@ public class User
         this.firstname = firstname;
     }
 
-    public String getContact ()
-    {
-        return contact;
-    }
-
-    public void setContact (String contact)
-    {
-        this.contact = contact;
-    }
-
     public String getPassword ()
     {
         return password;
@@ -117,6 +155,6 @@ public class User
     @Override
     public String toString()
     {
-        return "ClassPojo [_id = "+_id+", address = "+address+", email = "+email+", dob = "+dob+", __v = "+__v+", lastname = "+lastname+", firstname = "+firstname+", contact = "+contact+", password = "+password+"]";
+        return "ClassPojo [resetPasswordToken = "+resetPasswordToken+", _id = "+_id+", address = "+address+", imageUrl = "+imageUrl+", email = "+email+", deviceToken = "+deviceToken+", resetPasswordExpires = "+resetPasswordExpires+", dob = "+dob+", __v = "+__v+", lastname = "+lastname+", firstname = "+firstname+", password = "+password+"]";
     }
 }

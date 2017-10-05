@@ -29,6 +29,11 @@ public class SessionManager {
     public static final String email = "email";
     public static final String surname = "surname";
     public static final String token = "token";
+    public static final String dob = "dob";
+    public static final String postalcode = "postalcode";
+    public static final String city = "city";
+    public  static  final String address="address";
+    public  static  final String image="image";
 
 
     // Shared pref mode
@@ -44,7 +49,7 @@ public class SessionManager {
         pref = context.getSharedPreferences(PREF_NAME, PRIVATE_MODE);
         editor = pref.edit();
     }
-    public void createLoginSession(String name, String email,  String surname,String token) {
+    public void createLoginSession(String name, String email,  String surname,String token,String dob,String Postalcode,String city,String address,String image) {
 
         editor.putBoolean(IS_LOGIN, true);
 
@@ -53,6 +58,11 @@ public class SessionManager {
         editor.putString(this.email, email);
         editor.putString(this.surname, surname);
         editor.putString(this.token, token);
+        editor.putString(this.dob, dob);
+        editor.putString(this.postalcode, postalcode);
+        editor.putString(this.city, city);
+        editor.putString(this.address,address);
+        editor.putString(this.image,image);
 
 
         editor.commit();
