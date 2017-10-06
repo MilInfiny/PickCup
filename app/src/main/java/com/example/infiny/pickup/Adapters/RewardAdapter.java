@@ -17,7 +17,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.infiny.pickup.Helpers.CafeLIstingHelpers;
+import com.example.infiny.pickup.Model.Data;
+import com.example.infiny.pickup.Model.DataRewards;
 import com.example.infiny.pickup.R;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -27,9 +30,9 @@ import java.util.ArrayList;
 
 public class RewardAdapter extends RecyclerView.Adapter<RewardAdapter.MyViewHolder> {
     Context context;
-    ArrayList<CafeLIstingHelpers> partyName;
+    ArrayList<DataRewards> partyName;
 
-    public RewardAdapter(Context context, ArrayList<CafeLIstingHelpers> partyName) {
+    public RewardAdapter(Context context, ArrayList<DataRewards> partyName) {
         this.context = context;
         this.partyName = partyName;
     }
@@ -44,38 +47,44 @@ public class RewardAdapter extends RecyclerView.Adapter<RewardAdapter.MyViewHold
     @Override
     public void onBindViewHolder(final MyViewHolder holder, int position) {
 
-        CafeLIstingHelpers f1=partyName.get(position);
-        holder.partyName.setText(f1.getPartyname());
-        holder.imageView.setImageResource(f1.getImage());
-        if(f1.getStatus()=="1")
+        DataRewards f1=partyName.get(position);
+        holder.partyName.setText(f1.getShopDetail().getCafe_name());
+        Picasso.with(context)
+                .invalidate(f1.getShopDetail().getImageurl());
+        Picasso.with(context)
+                .load(f1.getShopDetail().getImageurl())
+                .placeholder(R.drawable.ic_person_black_48dp)
+                .into(holder.imageView);
+        if(Integer.parseInt(f1.getQuantity()) == 1)
         {
          holder.r1.setVisibility(View.VISIBLE);
         }
-        if(f1.getStatus()=="2")
+        if(Integer.parseInt(f1.getQuantity()) == 2)
         {
             holder.r1.setVisibility(View.VISIBLE);
             holder.r2.setVisibility(View.VISIBLE);
         }
-        if(f1.getStatus()=="3")
+        if(Integer.parseInt(f1.getQuantity()) == 3)
         {
             holder.r1.setVisibility(View.VISIBLE);
             holder.r2.setVisibility(View.VISIBLE);
             holder.r3.setVisibility(View.VISIBLE);
         }
-        if(f1.getStatus()=="4")
+        if(Integer.parseInt(f1.getQuantity()) == 4)
         {
             holder.r1.setVisibility(View.VISIBLE);
             holder.r2.setVisibility(View.VISIBLE);
             holder.r3.setVisibility(View.VISIBLE);
             holder.r4.setVisibility(View.VISIBLE);
         }
-        if(f1.getStatus()=="5")
+        if(Integer.parseInt(f1.getQuantity()) >= 5)
         {
             holder.r1.setVisibility(View.VISIBLE);
             holder.r2.setVisibility(View.VISIBLE);
             holder.r3.setVisibility(View.VISIBLE);
             holder.r4.setVisibility(View.VISIBLE);
             holder.r5.setVisibility(View.VISIBLE);
+
         }
 
 

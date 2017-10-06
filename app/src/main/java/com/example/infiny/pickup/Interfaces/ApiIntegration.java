@@ -13,6 +13,7 @@ import com.example.infiny.pickup.Model.MenuListData;
 import com.example.infiny.pickup.Model.OrderData;
 import com.example.infiny.pickup.Model.OrderListData;
 import com.example.infiny.pickup.Model.Ordered;
+import com.example.infiny.pickup.Model.RewardData;
 import com.example.infiny.pickup.Model.SignUpData;
 import com.example.infiny.pickup.Model.VerifyFpOtp;
 import com.google.gson.JsonObject;
@@ -81,6 +82,10 @@ public interface ApiIntegration {
     @FormUrlEncoded
     @POST("cartListing")
     Call<OrderListData> getOrderListing(@Field("userToken") String  token);
+
+    @FormUrlEncoded
+    @POST("getRewards")
+    Call<RewardData> getRewardsListing(@Field("userToken") String  token);
 
     @FormUrlEncoded
     @POST("addItemToCart")

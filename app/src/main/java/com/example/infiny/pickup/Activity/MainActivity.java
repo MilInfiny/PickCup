@@ -15,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -92,6 +93,7 @@ TextView username,email;
         sessionManager=new SessionManager(context);
         sharedPreferences=getSharedPreferences(sessionManager.PREF_NAME,0);
         navView.setNavigationItemSelectedListener(this);
+        Log.e("userToken",sharedPreferences.getString("token",null));
 
 
         progressBarCyclic.setVisibility(View.VISIBLE);
@@ -243,21 +245,21 @@ TextView username,email;
         } else if (id == R.id.nav_reward) {
             Intent intent = new Intent(MainActivity.this, RewardActivity.class);
             startActivity(intent);
+            finish();
 
         } else if (id == R.id.nav_cart) {
             Intent intent = new Intent(MainActivity.this, OrderActivity.class);
             startActivity(intent);
-
+            finish();
 
         } else if (id == R.id.nav_order) {
             Intent intent = new Intent(MainActivity.this, order_history.class);
             startActivity(intent);
-
-
+            finish();
         } else if (id == R.id.nav_profile) {
             Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
             startActivity(intent);
-
+            finish();
 
         } else if (id == R.id.nav_logout) {
             sessionManager.clear();
@@ -268,10 +270,12 @@ TextView username,email;
         } else if (id == R.id.nav_card) {
             Intent intent = new Intent(MainActivity.this, Card_Activity.class);
             startActivity(intent);
+            finish();
 
         } else if (id == R.id.nav_notification) {
             Intent intent = new Intent(MainActivity.this, NotificationActivity.class);
             startActivity(intent);
+            finish();
 
         }
 

@@ -1,10 +1,12 @@
 package com.example.infiny.pickup.Activity;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -18,6 +20,7 @@ import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
@@ -109,7 +112,7 @@ public class ProfileActivity extends AppCompatActivity {
     SessionManager sessionManager;
     Retrofit retroFitClient;
     EditProfileData editProfileData;
-
+     String imageurl;
     public static final int MEDIA_TYPE_IMAGE = 1;
     private static final int SELECT_PICTURE = 1;
     private static final int CAMERA_REQUEST = 1888;
@@ -133,6 +136,8 @@ public class ProfileActivity extends AppCompatActivity {
         context = this;
         sessionManager = new SessionManager(context);
         sharedPreferences = getSharedPreferences(sessionManager.PREF_NAME, 0);
+        Picasso.with(context)
+                .invalidate(sharedPreferences.getString(sessionManager.image, null));
         Picasso.with(context)
                 .load(sharedPreferences.getString(sessionManager.image, null))
                 .placeholder(R.drawable.ic_person_black_48dp)
@@ -205,7 +210,7 @@ public class ProfileActivity extends AppCompatActivity {
                                     getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                                     Toast.makeText(context, "trueeeeeee", Toast.LENGTH_SHORT).show();
                                 } else {
-                                    Toast.makeText(context, R.string.login_success, Toast.LENGTH_SHORT).show();
+                                String url =editProfileData.getUser().getImageUrl();
                                     sessionManager.createLoginSession(editProfileData.getUser().getFirstname(),editProfileData.getUser().getEmail(),editProfileData.getUser().getLastname(),sharedPreferences.getString("token", null),editProfileData.getUser().getDob(),editProfileData.getUser().getAddress().getPostalCode(),editProfileData.getUser().getAddress().getCity(),editProfileData.getUser().getAddress().getAddress(),editProfileData.getUser().getImageUrl());
                                     progressBarCyclic.setVisibility(View.GONE);
                                     getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
@@ -340,7 +345,23 @@ public class ProfileActivity extends AppCompatActivity {
             if (requestCode == SELECT_PICTURE) {
                 try {
                     Uri contentURI = data.getData();
-                    file = new File(contentURI.getPath());
+                    final int takeFlags = data.getFlags()
+                            & (Intent.FLAG_GRANT_READ_URI_PERMISSION
+                            | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                    String id = contentURI.getLastPathSegment().split(":")[1];
+                    final String[] imageColumns = {MediaStore.Images.Media.DATA };
+                    final String imageOrderBy = null;
+                    Uri uri = getUri();
+                    String selectedImagePath = "path";
+                    Cursor imageCursor = managedQuery(uri, imageColumns,
+                            MediaStore.Images.Media._ID + "="+id, null, imageOrderBy);
+                    if (imageCursor.moveToFirst()) {
+                        selectedImagePath = imageCursor.getString(imageCursor.getColumnIndex(MediaStore.Images.Media.DATA));
+
+                    }
+                    Log.e("path",selectedImagePath );
+                    file=new File(selectedImagePath);
+                 /*   file=new File(getRealPathFromURI(contentURI,((Activity) context)));*/
                     profile.setImageBitmap(fromGallaryMultiple(contentURI));
 
                 } catch (NullPointerException e) {
@@ -375,5 +396,32 @@ public class ProfileActivity extends AppCompatActivity {
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
+
+
+    public String getRealPathFromURI(Uri contentURI, Activity context) {
+        String[] projection = { MediaStore.Images.Media.DATA };
+        @SuppressWarnings("deprecation")
+        Cursor cursor = context.managedQuery(contentURI, projection, null,
+                null, null);
+        if (cursor == null)
+            return null;
+        int column_index = cursor
+                .getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+        if (cursor.moveToFirst()) {
+            String s = cursor.getString(column_index);
+            // cursor.close();
+            return s;
+        }
+        // cursor.close();
+        return null;
+    }
+    private Uri getUri() {
+        String state = Environment.getExternalStorageState();
+        if(!state.equalsIgnoreCase(Environment.MEDIA_MOUNTED))
+            return MediaStore.Images.Media.INTERNAL_CONTENT_URI;
+
+        return MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+    }
+
 
 }
