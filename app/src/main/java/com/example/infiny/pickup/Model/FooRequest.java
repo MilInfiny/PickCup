@@ -18,6 +18,7 @@ public class FooRequest {
     private String timeForPickcup;
 
     private String note;
+    private String eligibleForRewards;
 
     private String totalPrice;
 
@@ -72,6 +73,14 @@ public class FooRequest {
     public String getNote ()
     {
         return note;
+    }
+
+    public String getEligibleForRewards() {
+        return eligibleForRewards;
+    }
+
+    public void setEligibleForRewards(String eligibleForRewards) {
+        this.eligibleForRewards = eligibleForRewards;
     }
 
     public void setNote (String note)

@@ -136,7 +136,7 @@ public class TimeviewAdapter extends ExpandableRecyclerViewAdapter<TimeviewAdapt
                         }
                     }, hour, minute, true);//Yes 24 hour time
                     mTimePicker.setTitle("Select Time");
-                    SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                    SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                      OrderActivity.dateString=sdf.format(mcurrentTime.getTime());
                     mTimePicker.show();
 

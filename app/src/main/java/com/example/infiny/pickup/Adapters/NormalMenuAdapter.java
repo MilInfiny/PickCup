@@ -92,6 +92,7 @@ public class NormalMenuAdapter extends RecyclerView.Adapter<NormalMenuAdapter.My
 
                 }
                 });
+                onItemClickListener.voidOnAddCart(f1);
             } else {
                 if(f1.getItemSmallPrice()=="")
                 {
@@ -338,6 +339,7 @@ public class NormalMenuAdapter extends RecyclerView.Adapter<NormalMenuAdapter.My
                                     itemData.getItemName(),
                                     itemData.getItemPrice(),
                                     String.valueOf(quantity),
+                                    itemData.getEligibleForRewards(),
                                     category,
                                     sid);
                     call.enqueue(new Callback<AddToCartData>() {
@@ -563,6 +565,7 @@ public class NormalMenuAdapter extends RecyclerView.Adapter<NormalMenuAdapter.My
                                     itemData.getItemName(),
                                     itemData.getItemPrice(),
                                     String.valueOf(quantity),
+                                    itemData.getEligibleForRewards(),
                                     category,
                                     sid);
                     call.enqueue(new Callback<AddToCartData>() {

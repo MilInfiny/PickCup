@@ -13,6 +13,7 @@ public class ItemData implements Parcelable {
     private String _id;
     private String size;
     String categoty;
+    private String eligibleForRewards;
 
     public String getCategoty() {
         return categoty;
@@ -59,6 +60,14 @@ public class ItemData implements Parcelable {
         itemLargePrice = in.readString();
         itemPrice = in.readString();
         itemSmallPrice = in.readString();
+    }
+
+    public String getEligibleForRewards() {
+        return eligibleForRewards;
+    }
+
+    public void setEligibleForRewards(String eligibleForRewards) {
+        this.eligibleForRewards = eligibleForRewards;
     }
 
     public String getItemQuantity() {

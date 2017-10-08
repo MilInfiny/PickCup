@@ -14,6 +14,8 @@ import android.widget.TextView;
 import com.example.infiny.pickup.Activity.OrderDetailsActivity;
 import com.example.infiny.pickup.Activity.order_history;
 import com.example.infiny.pickup.Helpers.Order_History_Helpers;
+import com.example.infiny.pickup.Model.DataOrderHistory;
+import com.example.infiny.pickup.Model.Order_History_Data;
 import com.example.infiny.pickup.R;
 
 import java.util.ArrayList;
@@ -24,11 +26,11 @@ import java.util.ArrayList;
 
 public class Order_History_Adapter  extends RecyclerView.Adapter<Order_History_Adapter.MyViewHolder>  {
     Context context;
-    ArrayList<Order_History_Helpers> partyName;
+    ArrayList<DataOrderHistory> partyName;
 
 
 
-    public Order_History_Adapter(Context  context, ArrayList<Order_History_Helpers> partyName) {
+    public Order_History_Adapter(Context  context, ArrayList<DataOrderHistory> partyName) {
         this.context = context;
         this.partyName = partyName;
     }
@@ -43,9 +45,9 @@ public class Order_History_Adapter  extends RecyclerView.Adapter<Order_History_A
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
 
-        Order_History_Helpers f1=partyName.get(position);
-        holder.partyName.setText(f1.getPartyname());
-        holder.imageView.setImageResource(f1.getImage());
+        DataOrderHistory f1=partyName.get(position);
+        holder.partyName.setText(f1.getShopDetail().getCafe_name());
+
         holder.relativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

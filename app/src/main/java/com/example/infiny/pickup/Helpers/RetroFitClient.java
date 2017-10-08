@@ -6,6 +6,7 @@ import com.example.infiny.pickup.Utils.CommonUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.Cache;
 import okhttp3.Credentials;
@@ -52,8 +53,9 @@ public class RetroFitClient {
         OkHttpClient httpClient = new OkHttpClient.Builder()
                 .addNetworkInterceptor(REWRITE_RESPONSE_INTERCEPTOR)
       //          .addInterceptor(OFFLINE_INTERCEPTOR)
+                .connectTimeout(100, TimeUnit.SECONDS)
+                .readTimeout(100,TimeUnit.SECONDS)
                 .cache(cache)
-
                 .build();
 
         retrofit = new Retrofit.Builder()

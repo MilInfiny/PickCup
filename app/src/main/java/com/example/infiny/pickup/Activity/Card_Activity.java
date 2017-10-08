@@ -1,11 +1,13 @@
 package com.example.infiny.pickup.Activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 
 import com.example.infiny.pickup.Adapters.CustomPagerAdapter;
@@ -26,6 +28,7 @@ public class Card_Activity extends AppCompatActivity {
     AppBarLayout appbar;
     @BindView(R.id.indicator)
     CirclePageIndicator indicator;
+    Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +38,7 @@ public class Card_Activity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         appbar.setOutlineProvider(null);
+        context=this;
         getSupportActionBar().setTitle("");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         CirclePageIndicator indicator = (CirclePageIndicator) findViewById(R.id.indicator);
@@ -47,12 +51,27 @@ public class Card_Activity extends AppCompatActivity {
 
     }
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            onBackpresss();
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(android.view.MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                super.onBackPressed();  // optional depending on your needs
+                onBackpresss();
+
         }
         return super.onOptionsItemSelected(item);
+    }
+    public void onBackpresss()
+    {
+        Intent intent=new Intent(context,MainActivity.class);
+        startActivity(intent);
+
     }
 
 

@@ -7,9 +7,8 @@ package com.example.infiny.pickup.Model;
 public class Ordered
 {
     private String itemCat;
-
+    private String eligibleForRewards;
     private String itemSize;
-
     private String _id;
     private  String  itemName;
     private String itemPrice;
@@ -26,6 +25,14 @@ public class Ordered
     }
 
     private int image;
+
+    public String getEligibleForRewards() {
+        return eligibleForRewards;
+    }
+
+    public void setEligibleForRewards(String eligibleForRewards) {
+        this.eligibleForRewards = eligibleForRewards;
+    }
 
     public String getItemQuantity() {
         return itemQuantity;

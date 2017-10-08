@@ -249,6 +249,7 @@ TextView username,email;
 
         } else if (id == R.id.nav_cart) {
             Intent intent = new Intent(MainActivity.this, OrderActivity.class);
+            intent.putExtra("fromMenu",false);
             startActivity(intent);
             finish();
 

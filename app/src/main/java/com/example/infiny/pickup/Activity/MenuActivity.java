@@ -131,6 +131,7 @@ public class MenuActivity extends AppCompatActivity implements OnItemClickListen
             public void onClick(View v) {
                 Intent intent1 = new Intent(context, OrderActivity.class);
                 intent1.putExtra("sid",sid);
+                intent1.putExtra("fromMenu",true);
                 startActivity(intent1);
                 finish();
 

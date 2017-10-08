@@ -12,6 +12,7 @@ import com.example.infiny.pickup.Model.LoginData;
 import com.example.infiny.pickup.Model.MenuListData;
 import com.example.infiny.pickup.Model.OrderData;
 import com.example.infiny.pickup.Model.OrderListData;
+import com.example.infiny.pickup.Model.Order_History_Data;
 import com.example.infiny.pickup.Model.Ordered;
 import com.example.infiny.pickup.Model.RewardData;
 import com.example.infiny.pickup.Model.SignUpData;
@@ -88,6 +89,10 @@ public interface ApiIntegration {
     Call<RewardData> getRewardsListing(@Field("userToken") String  token);
 
     @FormUrlEncoded
+    @POST("orderHistory")
+    Call<Order_History_Data> getOrder_History_Listing(@Field("userToken") String  token);
+
+    @FormUrlEncoded
     @POST("addItemToCart")
     Call<AddToCartData> getAddtocart(@Field("userToken") String  token,
                                      @Field("itemId") String  itemId,
@@ -96,6 +101,7 @@ public interface ApiIntegration {
                                      @Field("itemPrice") String  itemPrice,
                                      @Field("itemQuantity") String  itemQuantity,
                                      @Field("itemCat") String  itemCat,
+                                     @Field("eligibleForRewards") String  eligibleForRewards,
                                      @Field("shopDetail") String  shopDetail);
     @FormUrlEncoded
     @POST("addItemToCartwithOkclick")

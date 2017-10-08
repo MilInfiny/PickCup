@@ -146,6 +146,7 @@ public class OrderActivity extends AppCompatActivity implements OnItemClickListe
     ArrayList<Ordered> ordereds;
     Ordered orderedObject;
     String sid;
+    Boolean fromMenu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -166,6 +167,7 @@ public class OrderActivity extends AppCompatActivity implements OnItemClickListe
         ordereds=new ArrayList<>();
         Intent intent=getIntent();
         sid=intent.getStringExtra("sid");
+        fromMenu=intent.getBooleanExtra("fromMenu",false);
         subMenuAdapter=new Sub_Menu_Adapter(context,ordereds,onItemClickListener,sid);
         recycleView.setLayoutManager(layoutManager);
         recycleView.setAdapter(subMenuAdapter);
@@ -265,7 +267,7 @@ public class OrderActivity extends AppCompatActivity implements OnItemClickListe
                 fooRequest.setNote(note);
                 fooRequest.setTimeForPickcup(dateString);
                 fooRequest.setShopDetail(orderListData.getData().getShopDetail().get_id());
-                fooRequest.setTotalPrice(total);
+                fooRequest.setTotalPrice(totalprice.getText().toString());
                 Gson gson = new Gson();
                 JSONObject s = null;
                 try {
@@ -385,10 +387,7 @@ public class OrderActivity extends AppCompatActivity implements OnItemClickListe
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            Intent intent=new Intent(OrderActivity.this,MenuActivity.class);
-            intent.putExtra("sid",sid);
-            startActivity(intent);
-            finish();
+            onBackpresss();
         }
         return super.onKeyDown(keyCode, event);
     }
@@ -397,10 +396,8 @@ public class OrderActivity extends AppCompatActivity implements OnItemClickListe
     public boolean onOptionsItemSelected(android.view.MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                Intent intent=new Intent(OrderActivity.this,MenuActivity.class);
-                intent.putExtra("sid",sid);
-                startActivity(intent);
-                finish();
+                onBackpresss();
+
         }
         return super.onOptionsItemSelected(item);
     }
@@ -424,6 +421,22 @@ public class OrderActivity extends AppCompatActivity implements OnItemClickListe
     @Override
     public void totalPrice(String total) {
         totalprice.setText(getCorrectValue(String.format("%.2f", Float.valueOf(total))));
+    }
+   public void onBackpresss()
+    {
+        if(fromMenu)
+        {
+            Intent intent=new Intent(OrderActivity.this,MenuActivity.class);
+            intent.putExtra("sid",sid);
+            startActivity(intent);
+            finish();
+        }
+        else
+        {
+            Intent intent=new Intent(context,MainActivity.class);
+            startActivity(intent);
+        }
+
     }
 
     @Override
