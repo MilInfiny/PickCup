@@ -140,7 +140,6 @@
         android:layout_alignParentBottom="true"
         android:paddingLeft="15dp"
         android:paddingRight="15dp"
-        android:visibility="gone"
         android:background="@color/colorPrimaryopacity"
         >
         <TextView

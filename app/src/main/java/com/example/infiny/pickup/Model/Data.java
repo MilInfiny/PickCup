@@ -15,7 +15,9 @@ public class Data {
 
     private String shopDetail;
 
+
     private String _id;
+
 
     public String getUserDetail() {
         return userDetail;

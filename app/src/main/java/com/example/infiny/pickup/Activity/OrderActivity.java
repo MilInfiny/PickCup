@@ -293,6 +293,7 @@ public class OrderActivity extends AppCompatActivity implements OnItemClickListe
                                 } else {
                                     Intent intent = new Intent(context, MainActivity.class);
                                     startActivity(intent);
+                                    finish();
 
                                 }
 
@@ -322,6 +323,7 @@ public class OrderActivity extends AppCompatActivity implements OnItemClickListe
             @Override
             public void onClick(View v) {
                 image=R.drawable.cuptake;
+                parcel="true";
                 Sub_Menu_Adapter.totalprize=0f;
                 ordered =orderData.getOrdered();
                 for(int j=0;j<ordered.length;j++)

@@ -41,14 +41,12 @@
         <TextView
             android:id="@+id/tv_quantity"
             android:layout_width="wrap_content"
-
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
             android:paddingLeft="15dp"
             android:paddingRight="15dp"
             android:paddingTop="3dp"
             android:paddingBottom="3dp"
-
             android:textColor="@color/white"
             android:layout_alignBaseline="@+id/tv_multiply"
             android:layout_toRightOf="@+id/tv_multiply"

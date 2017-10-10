@@ -1,16 +1,10 @@
 package com.example.infiny.pickup.Model;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
-import java.io.Serializable;
-
 /**
- * Created by infiny on 10/6/17.
+ * Created by infiny on 10/9/17.
  */
 
-public class DataOrderHistory implements Serializable,Parcelable {
-    private static final long serialVersionUID = 1L;
+public class DataFindpartiOrder {
     private String userDetail;
 
     private String timeForPickcup;
@@ -38,34 +32,6 @@ public class DataOrderHistory implements Serializable,Parcelable {
     private String note;
 
     private String totalPrice;
-
-
-    protected DataOrderHistory(Parcel in) {
-        userDetail = in.readString();
-        timeForPickcup = in.readString();
-        __v = in.readString();
-        orderStatus = in.readString();
-        updatedAt = in.readString();
-        parcel = in.readString();
-        _id = in.readString();
-        createdAt = in.readString();
-        otp = in.readString();
-        orderId = in.readString();
-        note = in.readString();
-        totalPrice = in.readString();
-    }
-
-    public static final Creator<DataOrderHistory> CREATOR = new Creator<DataOrderHistory>() {
-        @Override
-        public DataOrderHistory createFromParcel(Parcel in) {
-            return new DataOrderHistory(in);
-        }
-
-        @Override
-        public DataOrderHistory[] newArray(int size) {
-            return new DataOrderHistory[size];
-        }
-    };
 
     public String getUserDetail ()
     {
@@ -137,13 +103,11 @@ public class DataOrderHistory implements Serializable,Parcelable {
         this.Ordered = Ordered;
     }
 
-    public ShopDetail getShopDetail ()
-    {
+    public ShopDetail getShopDetail() {
         return shopDetail;
     }
 
-    public void setShopDetail (ShopDetail shopDetail)
-    {
+    public void setShopDetail(ShopDetail shopDetail) {
         this.shopDetail = shopDetail;
     }
 
@@ -211,27 +175,5 @@ public class DataOrderHistory implements Serializable,Parcelable {
     public String toString()
     {
         return "ClassPojo [userDetail = "+userDetail+", timeForPickcup = "+timeForPickcup+", __v = "+__v+", orderStatus = "+orderStatus+", updatedAt = "+updatedAt+", parcel = "+parcel+", Ordered = "+Ordered+", shopDetail = "+shopDetail+", _id = "+_id+", createdAt = "+createdAt+", otp = "+otp+", orderId = "+orderId+", note = "+note+", totalPrice = "+totalPrice+"]";
-    }
-
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(userDetail);
-        dest.writeString(timeForPickcup);
-        dest.writeString(__v);
-        dest.writeString(orderStatus);
-        dest.writeString(updatedAt);
-        dest.writeString(parcel);
-        dest.writeString(_id);
-        dest.writeString(createdAt);
-        dest.writeString(otp);
-        dest.writeString(orderId);
-        dest.writeString(note);
-        dest.writeString(totalPrice);
     }
 }

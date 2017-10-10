@@ -1,10 +1,13 @@
 package com.example.infiny.pickup.Model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by infiny on 9/22/17.
  */
 
-public class Ordered
+public class Ordered implements Parcelable
 {
     private String itemCat;
     private String eligibleForRewards;
@@ -15,6 +18,30 @@ public class Ordered
     private String itemQuantity;
     private String itemId;
 
+
+    protected Ordered(Parcel in) {
+        itemCat = in.readString();
+        eligibleForRewards = in.readString();
+        itemSize = in.readString();
+        _id = in.readString();
+        itemName = in.readString();
+        itemPrice = in.readString();
+        itemQuantity = in.readString();
+        itemId = in.readString();
+        image = in.readInt();
+    }
+
+    public static final Creator<Ordered> CREATOR = new Creator<Ordered>() {
+        @Override
+        public Ordered createFromParcel(Parcel in) {
+            return new Ordered(in);
+        }
+
+        @Override
+        public Ordered[] newArray(int size) {
+            return new Ordered[size];
+        }
+    };
 
     public int getImage() {
         return image;
@@ -104,5 +131,23 @@ public class Ordered
     public String toString()
     {
         return "ClassPojo [itemCat = "+itemCat+", itemSize = "+itemSize+", _id = "+_id+", itemPrice = "+itemPrice+", itemId = "+itemId+"]";
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(itemCat);
+        dest.writeString(eligibleForRewards);
+        dest.writeString(itemSize);
+        dest.writeString(_id);
+        dest.writeString(itemName);
+        dest.writeString(itemPrice);
+        dest.writeString(itemQuantity);
+        dest.writeString(itemId);
+        dest.writeInt(image);
     }
 }

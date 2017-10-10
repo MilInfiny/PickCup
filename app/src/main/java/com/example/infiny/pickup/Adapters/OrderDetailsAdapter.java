@@ -8,6 +8,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.infiny.pickup.Helpers.MenuItemData;
+import com.example.infiny.pickup.Model.Data;
+import com.example.infiny.pickup.Model.DataFindpartiOrder;
+import com.example.infiny.pickup.Model.Ordered;
 import com.example.infiny.pickup.R;
 
 import java.util.ArrayList;
@@ -19,9 +22,9 @@ import java.util.ArrayList;
 public class OrderDetailsAdapter extends RecyclerView.Adapter<OrderDetailsAdapter.OrderDetailHolder>{
 
     Context mContext;
-    ArrayList<MenuItemData> menuItemDataArrayList;
+    ArrayList<Ordered> menuItemDataArrayList;
 
-    public OrderDetailsAdapter(Context mContext, ArrayList<MenuItemData> menuItemDataArrayList) {
+    public OrderDetailsAdapter(Context mContext,  ArrayList<Ordered> menuItemDataArrayList) {
         this.mContext=mContext;
         this.menuItemDataArrayList=menuItemDataArrayList;
     }
@@ -36,25 +39,18 @@ public class OrderDetailsAdapter extends RecyclerView.Adapter<OrderDetailsAdapte
 
     @Override
     public void onBindViewHolder(OrderDetailHolder holder, int position) {
+            Ordered data=menuItemDataArrayList.get(position);
+            holder.tv_item_name.setText(data.getItemName());
+            holder.tv_cost_per_item.setText("£ " +data.getItemPrice());
+            holder.tv_quantity.setText(data.getItemQuantity());
+            Float total=Float.valueOf(data.getItemPrice())* Float.valueOf(data.getItemQuantity());
+            holder.tv_price.setText("£ " +String.valueOf(total));
 
-        if (position==0){
-            holder.tv_price.setText("£ 16.00");
-        }else if(position==1){
-            holder.tv_item_name.setText("Latte (Small)");
-            holder.tv_cost_per_item.setText("£ 2.00");
-            holder.tv_quantity.setText("1");
-            holder.tv_price.setText("£ 2.00");
-        }else if (position==2){
-            holder.tv_item_name.setText("Brownie");
-            holder.tv_cost_per_item.setText("£ 3.00");
-            holder.tv_quantity.setText("3");
-            holder.tv_price.setText("£ 9.00");
-        }
     }
 
     @Override
     public int getItemCount() {
-        return 3;
+        return menuItemDataArrayList.size();
     }
 
     public class OrderDetailHolder extends RecyclerView.ViewHolder {
@@ -67,5 +63,13 @@ public class OrderDetailsAdapter extends RecyclerView.Adapter<OrderDetailsAdapte
             tv_quantity= (TextView) itemView.findViewById(R.id.tv_quantity);
             tv_price= (TextView) itemView.findViewById(R.id.tv_price);
         }
+    }
+    public String getCorrectValue(String price) {
+        String[] priceSpl = price.split("\\.");
+        if (priceSpl.length > 1)
+            if (priceSpl[1].equals("00") || priceSpl[1].equals("0")) {
+                price = priceSpl[0];
+            }
+        return price;
     }
 }

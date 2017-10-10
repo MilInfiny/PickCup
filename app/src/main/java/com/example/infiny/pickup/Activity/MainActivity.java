@@ -3,6 +3,7 @@ package com.example.infiny.pickup.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
@@ -195,10 +196,26 @@ TextView username,email;
         username = (TextView) navigationView.getHeaderView(0).findViewById(R.id.username);
         email = (TextView) navigationView.getHeaderView(0).findViewById(R.id.email);
         profileView=(ImageView)navigationView.getHeaderView(0).findViewById(R.id.profileView);
-        Picasso.with(context)
-                .load(sharedPreferences.getString(sessionManager.image, null))
-                .placeholder(R.drawable.ic_person_black_48dp)
-                .into(profileView);
+
+        if(isTablet(context))
+        {
+            Picasso.with(context)
+                    .invalidate(sharedPreferences.getString(sessionManager.image, null)+"_large.png");
+            Picasso.with(context)
+                    .load(sharedPreferences.getString(sessionManager.image, null)+"_large.png")
+                    .placeholder(R.drawable.ic_person_black_48dp)
+                    .into(profileView);
+
+        }
+        else
+        {
+            Picasso.with(context)
+                    .invalidate(sharedPreferences.getString(sessionManager.image, null)+"_small.png");
+            Picasso.with(context)
+                    .load(sharedPreferences.getString(sessionManager.image, null)+"_small.png")
+                    .placeholder(R.drawable.ic_person_black_48dp)
+                    .into(profileView);
+        };
         profileView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -263,8 +280,9 @@ TextView username,email;
             finish();
 
         } else if (id == R.id.nav_logout) {
-            sessionManager.clear();
+
             Intent intent=new Intent(MainActivity.this,LoginActivity.class);
+
             startActivity(intent);
             finish();
 
@@ -288,6 +306,11 @@ TextView username,email;
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
+    public boolean isTablet(Context context) {
+        boolean xlarge = ((context.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == 4);
+        boolean large = ((context.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_LARGE);
+        return (xlarge || large);
     }
 
 }

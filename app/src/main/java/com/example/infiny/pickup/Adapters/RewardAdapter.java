@@ -5,6 +5,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -31,6 +33,8 @@ import java.util.ArrayList;
 public class RewardAdapter extends RecyclerView.Adapter<RewardAdapter.MyViewHolder> {
     Context context;
     ArrayList<DataRewards> partyName;
+    ArrayList<Integer> quantities;
+    RewardsQuantityAdapter rewardsQuantityAdapter;
 
     public RewardAdapter(Context context, ArrayList<DataRewards> partyName) {
         this.context = context;
@@ -48,44 +52,24 @@ public class RewardAdapter extends RecyclerView.Adapter<RewardAdapter.MyViewHold
     public void onBindViewHolder(final MyViewHolder holder, int position) {
 
         DataRewards f1=partyName.get(position);
-        holder.partyName.setText(f1.getShopDetail().getCafe_name());
+        holder.partyName.setText(f1.getCafe_name());
         Picasso.with(context)
-                .invalidate(f1.getShopDetail().getImageurl());
+                .invalidate(f1.getImageurl());
         Picasso.with(context)
-                .load(f1.getShopDetail().getImageurl())
+                .load(f1.getImageurl())
                 .placeholder(R.drawable.ic_person_black_48dp)
                 .into(holder.imageView);
-        if(Integer.parseInt(f1.getQuantity()) == 1)
-        {
-         holder.r1.setVisibility(View.VISIBLE);
-        }
-        if(Integer.parseInt(f1.getQuantity()) == 2)
-        {
-            holder.r1.setVisibility(View.VISIBLE);
-            holder.r2.setVisibility(View.VISIBLE);
-        }
-        if(Integer.parseInt(f1.getQuantity()) == 3)
-        {
-            holder.r1.setVisibility(View.VISIBLE);
-            holder.r2.setVisibility(View.VISIBLE);
-            holder.r3.setVisibility(View.VISIBLE);
-        }
-        if(Integer.parseInt(f1.getQuantity()) == 4)
-        {
-            holder.r1.setVisibility(View.VISIBLE);
-            holder.r2.setVisibility(View.VISIBLE);
-            holder.r3.setVisibility(View.VISIBLE);
-            holder.r4.setVisibility(View.VISIBLE);
-        }
-        if(Integer.parseInt(f1.getQuantity()) >= 5)
-        {
-            holder.r1.setVisibility(View.VISIBLE);
-            holder.r2.setVisibility(View.VISIBLE);
-            holder.r3.setVisibility(View.VISIBLE);
-            holder.r4.setVisibility(View.VISIBLE);
-            holder.r5.setVisibility(View.VISIBLE);
+        holder.tv_rewardsdetail.setText(f1.getRewardCompleted()+"/"+f1.getQuantity());
+        int leftrewards=Integer.parseInt(f1.getQuantity())-Integer.parseInt(f1.getRewardCompleted());
+        holder.tv_info.setText("You are "+String.valueOf(leftrewards)+" order away from Reward");
 
-        }
+        int numberOfColumns=6;
+        rewardsQuantityAdapter=new RewardsQuantityAdapter(context,Integer.parseInt(f1.getQuantity()),f1.getRewardCompleted());
+        RecyclerView.LayoutManager mLayoutManager =  new GridLayoutManager(context, numberOfColumns);
+        holder.recyclerView.setLayoutManager(mLayoutManager);
+        holder.recyclerView.setAdapter(rewardsQuantityAdapter);
+        holder.recyclerView.setNestedScrollingEnabled(false);
+
 
 
     }
@@ -97,7 +81,7 @@ public class RewardAdapter extends RecyclerView.Adapter<RewardAdapter.MyViewHold
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         RelativeLayout relativeLayout;
-        TextView partyName;
+        TextView partyName,tv_rewardsdetail,tv_info;
         ImageView imageView,r1,r2,r3,r4,r5;
         RecyclerView recyclerView;
         public MyViewHolder(View itemView) {
@@ -105,12 +89,9 @@ public class RewardAdapter extends RecyclerView.Adapter<RewardAdapter.MyViewHold
             partyName=(TextView)itemView.findViewById(R.id.tittle);
             imageView=(ImageView)itemView.findViewById(R.id.tittleimage);
             relativeLayout=(RelativeLayout)itemView.findViewById(R.id.toplayout);
-            recyclerView=(RecyclerView)itemView.findViewById(R.id.recycleView);
-            r1=(ImageView)itemView.findViewById(R.id.rating1);
-            r2=(ImageView)itemView.findViewById(R.id.rating2);
-            r3=(ImageView)itemView.findViewById(R.id.rating3);
-            r4=(ImageView)itemView.findViewById(R.id.rating4);
-            r5=(ImageView)itemView.findViewById(R.id.rating5);
+            recyclerView=(RecyclerView)itemView.findViewById(R.id.quantityRecycleView);
+            tv_rewardsdetail=(TextView)itemView.findViewById(R.id.rewarddetails);
+            tv_info=(TextView)itemView.findViewById(R.id.tv_info);
         }
     }
 }

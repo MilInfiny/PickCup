@@ -5,28 +5,42 @@ package com.example.infiny.pickup.Model;
  */
 
 public class DataRewards {
-    private ShopDetail shopDetail;
+    private String cafe_name;
+
+    private String rewardCompleted;
 
     private String startdate;
 
-    private String _id;
+    private String cafe_id;
 
     private String rewardName;
 
-    private String __v;
-
     private String quantity;
+
+    private String imageurl;
 
     private String enddate;
 
-    public ShopDetail getShopDetail ()
+    private String cafeStatus;
+
+    public String getCafe_name ()
     {
-        return shopDetail;
+        return cafe_name;
     }
 
-    public void setShopDetail (ShopDetail shopDetail)
+    public void setCafe_name (String cafe_name)
     {
-        this.shopDetail = shopDetail;
+        this.cafe_name = cafe_name;
+    }
+
+    public String getRewardCompleted ()
+    {
+        return rewardCompleted;
+    }
+
+    public void setRewardCompleted (String rewardCompleted)
+    {
+        this.rewardCompleted = rewardCompleted;
     }
 
     public String getStartdate ()
@@ -39,14 +53,14 @@ public class DataRewards {
         this.startdate = startdate;
     }
 
-    public String get_id ()
+    public String getCafe_id ()
     {
-        return _id;
+        return cafe_id;
     }
 
-    public void set_id (String _id)
+    public void setCafe_id (String cafe_id)
     {
-        this._id = _id;
+        this.cafe_id = cafe_id;
     }
 
     public String getRewardName ()
@@ -59,16 +73,6 @@ public class DataRewards {
         this.rewardName = rewardName;
     }
 
-    public String get__v ()
-    {
-        return __v;
-    }
-
-    public void set__v (String __v)
-    {
-        this.__v = __v;
-    }
-
     public String getQuantity ()
     {
         return quantity;
@@ -77,6 +81,16 @@ public class DataRewards {
     public void setQuantity (String quantity)
     {
         this.quantity = quantity;
+    }
+
+    public String getImageurl ()
+    {
+        return imageurl;
+    }
+
+    public void setImageurl (String imageurl)
+    {
+        this.imageurl = imageurl;
     }
 
     public String getEnddate ()
@@ -89,9 +103,19 @@ public class DataRewards {
         this.enddate = enddate;
     }
 
+    public String getCafeStatus ()
+    {
+        return cafeStatus;
+    }
+
+    public void setCafeStatus (String cafeStatus)
+    {
+        this.cafeStatus = cafeStatus;
+    }
+
     @Override
     public String toString()
     {
-        return "ClassPojo [shopDetail = "+shopDetail+", startdate = "+startdate+", _id = "+_id+", rewardName = "+rewardName+", __v = "+__v+", quantity = "+quantity+", enddate = "+enddate+"]";
+        return "ClassPojo [cafe_name = "+cafe_name+", rewardCompleted = "+rewardCompleted+", startdate = "+startdate+", cafe_id = "+cafe_id+", rewardName = "+rewardName+", quantity = "+quantity+", imageurl = "+imageurl+", enddate = "+enddate+", cafeStatus = "+cafeStatus+"]";
     }
 }

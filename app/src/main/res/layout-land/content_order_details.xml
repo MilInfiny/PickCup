@@ -15,10 +15,14 @@
         android:scrollbars="none">
 
 
+
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/gray">
+
+
 
             <TextView
                 android:id="@+id/tv_order_details"
@@ -39,6 +43,16 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tv_order_details"
                 android:elevation="0dp">
+                <ProgressBar
+                    android:id="@+id/progressBar_cyclic"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:minHeight="50dp"
+                    android:minWidth="50dp"
+                    android:visibility="gone"
+                    android:indeterminate="true"
+                    android:layout_centerVertical="true"
+                    android:layout_centerHorizontal="true" />
 
                 <RelativeLayout
                     android:layout_width="wrap_content"
@@ -108,6 +122,7 @@
                             android:paddingTop="4dp"
                             android:textSize="14sp"/>
                         <TextView
+                            android:id="@+id/time"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_below="@+id/tv_CustomerNametv_CustomerName"

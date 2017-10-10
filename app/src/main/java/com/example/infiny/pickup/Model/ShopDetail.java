@@ -1,10 +1,13 @@
 package com.example.infiny.pickup.Model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by infiny on 9/22/17.
  */
 
-public class ShopDetail {
+public class ShopDetail  implements Parcelable{
     private String cafe_name;
 
     private String _id;
@@ -12,6 +15,25 @@ public class ShopDetail {
     private String status;
 
     private String imageurl;
+
+    protected ShopDetail(Parcel in) {
+        cafe_name = in.readString();
+        _id = in.readString();
+        status = in.readString();
+        imageurl = in.readString();
+    }
+
+    public static final Creator<ShopDetail> CREATOR = new Creator<ShopDetail>() {
+        @Override
+        public ShopDetail createFromParcel(Parcel in) {
+            return new ShopDetail(in);
+        }
+
+        @Override
+        public ShopDetail[] newArray(int size) {
+            return new ShopDetail[size];
+        }
+    };
 
     public String getCafe_name ()
     {
@@ -57,5 +79,18 @@ public class ShopDetail {
     public String toString()
     {
         return "ClassPojo [cafe_name = "+cafe_name+", _id = "+_id+", status = "+status+", imageurl = "+imageurl+"]";
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(cafe_name);
+        dest.writeString(_id);
+        dest.writeString(status);
+        dest.writeString(imageurl);
     }
 }

@@ -158,6 +158,7 @@ public class order_history extends AppCompatActivity {
     public void onBackpresss() {
         Intent intent = new Intent(context, MainActivity.class);
         startActivity(intent);
+        finish();
 
     }
 

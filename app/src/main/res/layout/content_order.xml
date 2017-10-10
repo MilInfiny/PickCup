@@ -188,6 +188,31 @@
 
                                         >
                                     </android.support.v7.widget.RecyclerView>
+                                    <RelativeLayout
+                                        android:id="@+id/claimlayout"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="20dp"
+                                        android:layout_below="@+id/recycleView">
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="Claim Reward"
+                                            android:layout_alignParentLeft="true"
+                                            android:textSize="18dp"
+                                            android:textColor="@color/colorPrimary"
+
+                                            />
+
+                                        <Switch
+                                            android:id="@+id/simpleSwitch"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_alignParentRight="true"
+                                            android:layout_marginEnd="17dp"
+                                            android:checked="true"/>
+
+                                    </RelativeLayout>
 
                                     <TextView
                                         android:id="@+id/et_notehint"
@@ -198,7 +223,7 @@
                                         android:textColor="@color/colorPrimary"
                                         android:layout_marginStart="25dp"
                                         android:layout_marginTop="20dp"
-                                        android:layout_below="@+id/recycleView"
+                                        android:layout_below="@+id/claimlayout"
                                         />
                                     <EditText
                                         android:id="@+id/et_note"
@@ -213,6 +238,7 @@
                                         android:inputType="textMultiLine"
                                         android:scrollHorizontally="false"
                                         />
+
                                     <RelativeLayout
                                         android:id="@+id/buttonview"
                                         android:layout_width="match_parent"

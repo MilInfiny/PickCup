@@ -10,7 +10,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.infiny.pickup.Helpers.CafeLIstingHelpers;
+import com.example.infiny.pickup.Model.DataNotification;
 import com.example.infiny.pickup.R;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -20,11 +22,11 @@ import java.util.ArrayList;
 
 public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapter.MyViewHolder> {
     Context context;
-    ArrayList<CafeLIstingHelpers> strings;
+    ArrayList<DataNotification> dataNotifications;
 
-    public NotificationAdapter(Context context, ArrayList<CafeLIstingHelpers> strings) {
+    public NotificationAdapter(Context context, ArrayList<DataNotification> dataNotifications) {
         this.context = context;
-        this.strings = strings;
+        this.dataNotifications = dataNotifications;
     }
 
     @Override
@@ -36,15 +38,19 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        CafeLIstingHelpers f1=strings.get(position);
-        holder.textView.setText(f1.getStatus());
-        holder.imageView.setImageResource(f1.getImage());
-        holder.posteddate.setText(f1.getRating());
+        DataNotification dataNotification=dataNotifications.get(position);
+        Picasso.with(context)
+                .invalidate(dataNotification.getShopDetail().getImageurl());
+        Picasso.with(context)
+                .load(dataNotification.getShopDetail().getImageurl())
+                .placeholder(R.drawable.ic_person_black_48dp)
+                .into(holder.imageView);
+      holder.textView.setText(dataNotification.getMessage());
     }
 
     @Override
     public int getItemCount() {
-        return strings.size();
+        return dataNotifications.size();
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {

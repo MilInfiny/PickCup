@@ -164,7 +164,7 @@ public class RewardActivity extends AppCompatActivity {
     {
         Intent intent=new Intent(context,MainActivity.class);
         startActivity(intent);
-
+         finish();
     }
 
 

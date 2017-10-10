@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -41,6 +42,7 @@ import com.example.infiny.pickup.Model.ExifUtils;
 import com.example.infiny.pickup.R;
 import com.squareup.picasso.Picasso;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -109,6 +111,7 @@ public class ProfileActivity extends AppCompatActivity {
     Intent intent;
     Uri imageUri;
     File file;
+    Boolean tablet;
     SharedPreferences sharedPreferences;
     SessionManager sessionManager;
     Retrofit retroFitClient;
@@ -135,14 +138,29 @@ public class ProfileActivity extends AppCompatActivity {
         etConfirmpassword.setVisibility(View.GONE);
         btsave.setText("Save");
         context = this;
+
         sessionManager = new SessionManager(context);
         sharedPreferences = getSharedPreferences(sessionManager.PREF_NAME, 0);
-        Picasso.with(context)
-                .invalidate(sharedPreferences.getString(sessionManager.image, null));
-        Picasso.with(context)
-                .load(sharedPreferences.getString(sessionManager.image, null))
-                .placeholder(R.drawable.ic_person_black_48dp)
-                .into(profile);
+        if(isTablet(context))
+        {
+            Picasso.with(context)
+                    .invalidate(sharedPreferences.getString(sessionManager.image, null)+"_large.png");
+            Picasso.with(context)
+                    .load(sharedPreferences.getString(sessionManager.image, null)+"_large.png")
+                    .placeholder(R.drawable.ic_person_black_48dp)
+                    .into(profile);
+
+        }
+        else
+        {
+            Picasso.with(context)
+                    .invalidate(sharedPreferences.getString(sessionManager.image, null)+"_small.png");
+            Picasso.with(context)
+                    .load(sharedPreferences.getString(sessionManager.image, null)+"_small.png")
+                    .placeholder(R.drawable.ic_person_black_48dp)
+                    .into(profile);
+        }
+
         etEmail.getEditText().setText(sharedPreferences.getString(sessionManager.email, null));
         etName.getEditText().setText(sharedPreferences.getString(sessionManager.name, null));
         etSurname.getEditText().setText(sharedPreferences.getString(sessionManager.surname,null));
@@ -209,7 +227,6 @@ public class ProfileActivity extends AppCompatActivity {
                                 if (editProfileData.getError().equals("true")) {
                                     progressBarCyclic.setVisibility(View.GONE);
                                     getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                                    Toast.makeText(context, "trueeeeeee", Toast.LENGTH_SHORT).show();
                                 } else {
                                 String url =editProfileData.getUser().getImageUrl();
                                     sessionManager.createLoginSession(editProfileData.getUser().getFirstname(),editProfileData.getUser().getEmail(),editProfileData.getUser().getLastname(),sharedPreferences.getString("token", null),editProfileData.getUser().getDob(),editProfileData.getUser().getAddress().getPostalCode(),editProfileData.getUser().getAddress().getCity(),editProfileData.getUser().getAddress().getAddress(),editProfileData.getUser().getImageUrl());
@@ -250,6 +267,11 @@ public class ProfileActivity extends AppCompatActivity {
         });
 
 
+    }
+    public boolean isTablet(Context context) {
+        boolean xlarge = ((context.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == 4);
+        boolean large = ((context.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_LARGE);
+        return (xlarge || large);
     }
 
     private void selectImage() {
@@ -372,18 +394,52 @@ public class ProfileActivity extends AppCompatActivity {
         if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
             try {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    file = new File(imageUri.getPath());
-                    profile.setImageBitmap(fromGallaryMultiple((imageUri)));
+
+                    fromGallaryNog(Uri.parse(mCurrentPhotoPath));
+                    final int takeFlags = data.getFlags()
+                            & (Intent.FLAG_GRANT_READ_URI_PERMISSION
+                            | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                    String id = imageUri.getLastPathSegment().split(":")[1];
+                    final String[] imageColumns = {MediaStore.Images.Media.DATA };
+                    final String imageOrderBy = null;
+                    Uri uri = getUri();
+                    String selectedImagePath = "path";
+                    Cursor imageCursor = managedQuery(uri, imageColumns,
+                            MediaStore.Images.Media._ID + "="+id, null, imageOrderBy);
+                    if (imageCursor.moveToFirst()) {
+                        selectedImagePath = imageCursor.getString(imageCursor.getColumnIndex(MediaStore.Images.Media.DATA));
+
+                    }
+                    Log.e("path",selectedImagePath );
+                    file=new File(selectedImagePath);
                 } else {
-                    file = new File(imageUri.getPath());
-                    profile.setImageBitmap(fromGallaryMultiple((imageUri)));
+                    file=new File(imageUri.getPath());
+                 profile.setImageBitmap(fromGallaryMultiple(imageUri));
                 }
             } catch (NullPointerException e) {
             }
         }
     }
 
-  
+    public byte[] fromGallaryNog(Uri data) {
+        Bitmap photo11 = null;
+        Uri filePath = data;
+        try {
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+            options.inSampleSize = 2;
+            photo11 = BitmapFactory.decodeStream(getContentResolver().openInputStream(filePath), null, options);
+            Bitmap scaled1 = ExifUtils.rotateBitmap(ExifUtils.getPath(context, filePath), photo11);
+            profile.setImageBitmap(scaled1);
+            ByteArrayOutputStream bao = new ByteArrayOutputStream();
+            scaled1.compress(Bitmap.CompressFormat.JPEG, 90, bao);
+            byte[] ba = bao.toByteArray();
+            return ba;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -437,6 +493,25 @@ public class ProfileActivity extends AppCompatActivity {
         Intent intent=new Intent(context,MainActivity.class);
         startActivity(intent);
 
+    }
+    public byte[] fromCamera() {
+        try {
+            Bitmap photo;
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+            options.inSampleSize = 2;
+            photo = BitmapFactory.decodeFile(imageUri.getPath(), options);
+//            Bitmap scaled = Bitmap.createScaledBitmap(photo, 350, 350, false);
+            Bitmap scaled1 = ExifUtils.rotateBitmap(ExifUtils.getPath(context, imageUri), photo);
+            profile.setImageBitmap(scaled1);
+            ByteArrayOutputStream bao = new ByteArrayOutputStream();
+            scaled1.compress(Bitmap.CompressFormat.JPEG, 70, bao);
+            byte[] ba = bao.toByteArray();
+
+            return ba;
+        } catch (NullPointerException e) {
+            return null;
+        }
     }
 
 

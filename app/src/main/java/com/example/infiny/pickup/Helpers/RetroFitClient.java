@@ -59,7 +59,7 @@ public class RetroFitClient {
                 .build();
 
         retrofit = new Retrofit.Builder()
-                .baseUrl("http://192.168.1.171:3000/api/")
+                .baseUrl("http://dev2.infiny.in:3000/api/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(httpClient)
                 .build();

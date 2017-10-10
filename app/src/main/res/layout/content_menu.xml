@@ -142,6 +142,7 @@
         android:layout_height="50dp"
         android:layout_alignParentBottom="true"
         android:paddingLeft="15dp"
+
         android:paddingRight="15dp"
         android:background="@color/colorPrimaryopacity"
         >

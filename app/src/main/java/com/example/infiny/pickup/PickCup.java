@@ -12,6 +12,7 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
  */
 
 public class PickCup extends MultiDexApplication {
+    private static PickCup mInstance;
 
     @Override
     public void onCreate() {
@@ -23,9 +24,8 @@ public class PickCup extends MultiDexApplication {
                 .build()
         );
     }
-    @Override
-    protected void attachBaseContext(Context base) {
-        super.attachBaseContext(CalligraphyContextWrapper.wrap(base));
-        MultiDex.install(this);
+    public static synchronized PickCup getInstance() {
+        return mInstance;
     }
+
 }

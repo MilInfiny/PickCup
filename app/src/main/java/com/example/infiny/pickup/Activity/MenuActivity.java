@@ -158,6 +158,7 @@ public class MenuActivity extends AppCompatActivity implements OnItemClickListen
                             progressBarCyclic.setVisibility(View.GONE);
                             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                             Toast.makeText(context, menuItemData.getTitle(), Toast.LENGTH_SHORT).show();
+                            order.setVisibility(View.GONE);
                         } else {
                             progressBarCyclic.setVisibility(View.GONE);
                             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
@@ -188,6 +189,7 @@ public class MenuActivity extends AppCompatActivity implements OnItemClickListen
                             progressBarCyclic.setVisibility(View.GONE);
                             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                             Toast.makeText(context, R.string.server_not_responding, Toast.LENGTH_SHORT).show();
+                            order.setVisibility(View.GONE);
                         }
                     }
                 }

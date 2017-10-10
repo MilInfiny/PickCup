@@ -5,11 +5,13 @@ import com.example.infiny.pickup.Model.AddToCartData;
 import com.example.infiny.pickup.Model.CafeListingData;
 import com.example.infiny.pickup.Model.CreateOrderData;
 import com.example.infiny.pickup.Model.EditProfileData;
+import com.example.infiny.pickup.Model.FindpartiOrder;
 import com.example.infiny.pickup.Model.FooRequest;
 import com.example.infiny.pickup.Model.ForgotPasswordData;
 import com.example.infiny.pickup.Model.FpResetPasswordData;
 import com.example.infiny.pickup.Model.LoginData;
 import com.example.infiny.pickup.Model.MenuListData;
+import com.example.infiny.pickup.Model.NotificationData;
 import com.example.infiny.pickup.Model.OrderData;
 import com.example.infiny.pickup.Model.OrderListData;
 import com.example.infiny.pickup.Model.Order_History_Data;
@@ -66,6 +68,9 @@ public interface ApiIntegration {
     @FormUrlEncoded
     @POST("forgotPassword")
     Call<ForgotPasswordData> getForgotPassword(@Field("email") String  email);
+    @FormUrlEncoded
+    @POST("findpartiOrder")
+    Call<FindpartiOrder> getsingalOrder(@Field("token") String  token,@Field("orderId") String  orderId);
 
     @FormUrlEncoded
     @POST("verifyresetPasswordToken")
@@ -83,6 +88,10 @@ public interface ApiIntegration {
     @FormUrlEncoded
     @POST("cartListing")
     Call<OrderListData> getOrderListing(@Field("userToken") String  token);
+
+    @FormUrlEncoded
+    @POST("ListNotification")
+    Call<NotificationData> getNotificationLIsting(@Field("userToken") String  token);
 
     @FormUrlEncoded
     @POST("getRewards")

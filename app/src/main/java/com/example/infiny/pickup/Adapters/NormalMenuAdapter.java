@@ -328,7 +328,7 @@ public class NormalMenuAdapter extends RecyclerView.Adapter<NormalMenuAdapter.My
                 public void onClick(View v) {
                     alertDialog.dismiss();
                     total=total + Float.valueOf(itemData.getItemPrice())*quantity;
-
+                    String eee=itemData.getEligibleForRewards();
                     itemData.setItemTotalamount(String.valueOf(total));
                     retroFitClient = new RetroFitClient(context).getBlankRetrofit();
                     Call<AddToCartData> call = retroFitClient
@@ -339,8 +339,8 @@ public class NormalMenuAdapter extends RecyclerView.Adapter<NormalMenuAdapter.My
                                     itemData.getItemName(),
                                     itemData.getItemPrice(),
                                     String.valueOf(quantity),
-                                    itemData.getEligibleForRewards(),
                                     category,
+                                    itemData.getEligibleForRewards(),
                                     sid);
                     call.enqueue(new Callback<AddToCartData>() {
 
@@ -565,8 +565,8 @@ public class NormalMenuAdapter extends RecyclerView.Adapter<NormalMenuAdapter.My
                                     itemData.getItemName(),
                                     itemData.getItemPrice(),
                                     String.valueOf(quantity),
-                                    itemData.getEligibleForRewards(),
                                     category,
+                                    itemData.getEligibleForRewards(),
                                     sid);
                     call.enqueue(new Callback<AddToCartData>() {
 
