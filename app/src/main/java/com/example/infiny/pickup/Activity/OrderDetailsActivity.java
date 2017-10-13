@@ -131,12 +131,7 @@ public class OrderDetailsActivity extends AppCompatActivity {
         Verifybutton.setTypeface(font);
         Intent intent = getIntent();
         DataOrderHistory f1 = (DataOrderHistory) intent.getSerializableExtra("myClass");
-        String cafeName = intent.getStringExtra("cafename");
        orderId = intent.getStringExtra("orderId");
-        String TotalPrice = intent.getStringExtra("TotalPrice");
-        String otp = intent.getStringExtra("otp");
-        String parcel = intent.getStringExtra("parcel");
-        String date = intent.getStringExtra("date");
 
 
 

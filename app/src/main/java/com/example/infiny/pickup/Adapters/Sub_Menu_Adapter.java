@@ -130,6 +130,7 @@ public class Sub_Menu_Adapter extends RecyclerView.Adapter<Sub_Menu_Adapter.MyVi
 
                                                     } else {
                                                         holder.progressBar_cyclic.setVisibility(View.GONE);
+                                                        MenuActivity.cart_count_String=String.valueOf(Integer.parseInt(MenuActivity.cart_count_String)-1);
                                                         ordereds.remove(s);
 
 

@@ -5,7 +5,7 @@ package com.example.infiny.pickup.Model;
  */
 
 public class SignUpData {
-    private String message;
+    private String title;
 
     private String error;
 
@@ -13,14 +13,12 @@ public class SignUpData {
 
     private User user;
 
-    public String getMessage ()
-    {
-        return message;
+    public String getTitle() {
+        return title;
     }
 
-    public void setMessage (String message)
-    {
-        this.message = message;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getError ()
@@ -56,6 +54,6 @@ public class SignUpData {
     @Override
     public String toString()
     {
-        return "ClassPojo [message = "+message+", error = "+error+", token = "+token+", user = "+user+"]";
+        return "ClassPojo [message = "+title+", error = "+error+", token = "+token+", user = "+user+"]";
     }
 }

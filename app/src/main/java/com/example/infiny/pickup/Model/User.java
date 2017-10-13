@@ -31,6 +31,7 @@ public class User
     private String firstname;
 
     private String password;
+     private  Boolean isLoggedIn;
 
     public String getResetPasswordToken ()
     {
@@ -100,6 +101,14 @@ public class User
     public void setResetPasswordExpires (String resetPasswordExpires)
     {
         this.resetPasswordExpires = resetPasswordExpires;
+    }
+
+    public Boolean getLoggedIn() {
+        return isLoggedIn;
+    }
+
+    public void setLoggedIn(Boolean loggedIn) {
+        isLoggedIn = loggedIn;
     }
 
     public String getDob ()

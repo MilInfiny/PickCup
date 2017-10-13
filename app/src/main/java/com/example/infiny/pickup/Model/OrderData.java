@@ -5,7 +5,7 @@ package com.example.infiny.pickup.Model;
  */
 
 public class OrderData {
-    private String userDetail;
+    private OrderUserDetail userDetail;
 
     private Ordered[] Ordered;
 
@@ -15,12 +15,12 @@ public class OrderData {
 
     private String __v;
 
-    public String getUserDetail ()
+    public OrderUserDetail getUserDetail ()
     {
         return userDetail;
     }
 
-    public void setUserDetail (String userDetail)
+    public void setUserDetail (OrderUserDetail userDetail)
     {
         this.userDetail = userDetail;
     }

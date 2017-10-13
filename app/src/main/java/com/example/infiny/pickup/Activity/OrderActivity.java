@@ -19,13 +19,14 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.infiny.pickup.Adapters.Sub_Menu_Adapter;
 import com.example.infiny.pickup.Adapters.TimeviewAdapter;
 import com.example.infiny.pickup.Helpers.MenuItem;
-import com.example.infiny.pickup.Helpers.Orders;
 import com.example.infiny.pickup.Helpers.RetroFitClient;
 import com.example.infiny.pickup.Helpers.SessionManager;
 import com.example.infiny.pickup.Interfaces.ApiIntegration;
@@ -142,11 +143,21 @@ public class OrderActivity extends AppCompatActivity implements OnItemClickListe
     @BindView(R.id.card_pay)
     CardView cardPay;
     Sub_Menu_Adapter subMenuAdapter;
-     Ordered [] ordered;
+    Ordered[] ordered;
     ArrayList<Ordered> ordereds;
     Ordered orderedObject;
     String sid;
     Boolean fromMenu;
+    @BindView(R.id.nodata)
+    TextView nodata;
+    @BindView(R.id.layoutyscrollview)
+    ScrollView layoutyscrollview;
+    @BindView(R.id.logo1)
+    ImageView logo1;
+    @BindView(R.id.simpleSwitch)
+    Switch simpleSwitch;
+    @BindView(R.id.claimlayout)
+    RelativeLayout claimlayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -164,14 +175,14 @@ public class OrderActivity extends AppCompatActivity implements OnItemClickListe
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         final LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         LinearLayoutManager layoutManager1 = new LinearLayoutManager(this);
-        ordereds=new ArrayList<>();
-        Intent intent=getIntent();
-        sid=intent.getStringExtra("sid");
-        fromMenu=intent.getBooleanExtra("fromMenu",false);
-        subMenuAdapter=new Sub_Menu_Adapter(context,ordereds,onItemClickListener,sid);
+        ordereds = new ArrayList<>();
+        Intent intent = getIntent();
+        sid = intent.getStringExtra("sid");
+        fromMenu = intent.getBooleanExtra("fromMenu", false);
+        subMenuAdapter = new Sub_Menu_Adapter(context, ordereds, onItemClickListener, sid);
         recycleView.setLayoutManager(layoutManager);
         recycleView.setAdapter(subMenuAdapter);
-       recycleView.setNestedScrollingEnabled(false);
+        recycleView.setNestedScrollingEnabled(false);
         progressBarCyclic.setVisibility(View.VISIBLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
                 WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
@@ -189,6 +200,9 @@ public class OrderActivity extends AppCompatActivity implements OnItemClickListe
                         if (orderListData.getError().equals("true")) {
                             progressBarCyclic.setVisibility(View.GONE);
                             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                            nodata.setVisibility(View.VISIBLE);
+                            layoutyscrollview.setVisibility(View.GONE);
+                            logo1.setVisibility(View.VISIBLE);
 
                         } else {
                             Picasso.with(context)
@@ -203,26 +217,23 @@ public class OrderActivity extends AppCompatActivity implements OnItemClickListe
                             for (int i = 0; i < orderDatas.size(); i++) {
                                 orderData = orderDatas.get(i);
 
-                                Sub_Menu_Adapter.totalprize=0f;
+                                Sub_Menu_Adapter.totalprize = 0f;
                                 image = R.drawable.graycup1;
-                                ordered =orderData.getOrdered();
-                                for(int j=0;j<ordered.length;j++)
-                                {
-                                    orderedObject=ordered[j];
+                                ordered = orderData.getOrdered();
+                                for (int j = 0; j < ordered.length; j++) {
+                                    orderedObject = ordered[j];
                                     orderedObject.setImage(image);
                                     ordereds.add(orderedObject);
 
                                 }
 
 
-
                                 mainLayout.setVisibility(View.VISIBLE);
-                              note=etNote.getText().toString().trim();
-                                if(subLayout.getVisibility()==View.VISIBLE) {
+                                note = etNote.getText().toString().trim();
+                                if (subLayout.getVisibility() == View.VISIBLE) {
                                     subLayout.setVisibility(View.GONE);
                                     arrow.setRotation(360);
-                                }
-                                else {
+                                } else {
                                     subLayout.setVisibility(View.VISIBLE);
                                     arrow.setRotation(180);
                                 }
@@ -244,6 +255,9 @@ public class OrderActivity extends AppCompatActivity implements OnItemClickListe
 
             @Override
             public void onFailure(Call<OrderListData> call, Throwable t) {
+                progressBarCyclic.setVisibility(View.GONE);
+                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                Toast.makeText(context, R.string.server_not_responding, Toast.LENGTH_SHORT).show();
 
             }
         });
@@ -259,6 +273,7 @@ public class OrderActivity extends AppCompatActivity implements OnItemClickListe
                 progressBarCyclic.setVisibility(View.VISIBLE);
                 getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
                         WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                Ordered[] ordereds1=ordered;
                 retroFitClient = new RetroFitClient(context).getBlankRetrofit();
                 fooRequest = new FooRequest();
                 fooRequest.setUserToken(sharedPreferences.getString("token", null));
@@ -267,7 +282,7 @@ public class OrderActivity extends AppCompatActivity implements OnItemClickListe
                 fooRequest.setNote(note);
                 fooRequest.setTimeForPickcup(dateString);
                 fooRequest.setShopDetail(orderListData.getData().getShopDetail().get_id());
-                fooRequest.setTotalPrice(totalprice.getText().toString());
+                fooRequest.setTotalPrice(total);
                 Gson gson = new Gson();
                 JSONObject s = null;
                 try {
@@ -322,13 +337,12 @@ public class OrderActivity extends AppCompatActivity implements OnItemClickListe
         btPickcup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                image=R.drawable.cuptake;
-                parcel="true";
-                Sub_Menu_Adapter.totalprize=0f;
-                ordered =orderData.getOrdered();
-                for(int j=0;j<ordered.length;j++)
-                {
-                    orderedObject=ordered[j];
+                image = R.drawable.cuptake;
+                parcel = "true";
+                Sub_Menu_Adapter.totalprize = 0f;
+                ordered = orderData.getOrdered();
+                for (int j = 0; j < ordered.length; j++) {
+                    orderedObject = ordered[j];
                     orderedObject.setImage(image);
 
 
@@ -344,11 +358,10 @@ public class OrderActivity extends AppCompatActivity implements OnItemClickListe
             @Override
             public void onClick(View v) {
                 image = R.drawable.graycup1;
-                Sub_Menu_Adapter.totalprize=0f;
-                ordered =orderData.getOrdered();
-                for(int j=0;j<ordered.length;j++)
-                {
-                    orderedObject=ordered[j];
+                Sub_Menu_Adapter.totalprize = 0f;
+                ordered = orderData.getOrdered();
+                for (int j = 0; j < ordered.length; j++) {
+                    orderedObject = ordered[j];
                     orderedObject.setImage(image);
 
                 }
@@ -362,13 +375,11 @@ public class OrderActivity extends AppCompatActivity implements OnItemClickListe
         mainLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(subLayout.getVisibility()==View.VISIBLE) {
+                if (subLayout.getVisibility() == View.VISIBLE) {
                     subLayout.setVisibility(View.GONE);
                     arrow.setRotation(360);
-                }
-
-                else{
-                   subLayout.setVisibility(View.VISIBLE);
+                } else {
+                    subLayout.setVisibility(View.VISIBLE);
                     arrow.setRotation(180);
 
                 }
@@ -376,6 +387,7 @@ public class OrderActivity extends AppCompatActivity implements OnItemClickListe
         });
 
     }
+
     public String getCorrectValue(String price) {
         String[] priceSpl = price.split("\\.");
         if (priceSpl.length > 1)
@@ -422,20 +434,18 @@ public class OrderActivity extends AppCompatActivity implements OnItemClickListe
 
     @Override
     public void totalPrice(String total) {
-        totalprice.setText(getCorrectValue(String.format("%.2f", Float.valueOf(total))));
+        this.total=total;
+        totalprice.setText("£ " + getCorrectValue(String.format("%.2f", Float.valueOf(total))));
     }
-   public void onBackpresss()
-    {
-        if(fromMenu)
-        {
-            Intent intent=new Intent(OrderActivity.this,MenuActivity.class);
-            intent.putExtra("sid",sid);
+
+    public void onBackpresss() {
+        if (fromMenu) {
+            Intent intent = new Intent(OrderActivity.this, MenuActivity.class);
+            intent.putExtra("sid", sid);
             startActivity(intent);
             finish();
-        }
-        else
-        {
-            Intent intent=new Intent(context,MainActivity.class);
+        } else {
+            Intent intent = new Intent(context, MainActivity.class);
             startActivity(intent);
         }
 

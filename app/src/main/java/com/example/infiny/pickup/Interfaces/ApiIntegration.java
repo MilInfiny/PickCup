@@ -64,7 +64,9 @@ public interface ApiIntegration {
     @POST("cafelisting")
     Call<CafeListingData> getcafelisting(@Field("userToken") String  token,
                                     @Field("lat") String  lat,
-                                         @Field("lng") String  lang);
+                                         @Field("lng") String  lang,
+                                         @Field("requestData") String  requestData,
+                                         @Field("skipData") String  skipData);
     @FormUrlEncoded
     @POST("forgotPassword")
     Call<ForgotPasswordData> getForgotPassword(@Field("email") String  email);
@@ -91,7 +93,9 @@ public interface ApiIntegration {
 
     @FormUrlEncoded
     @POST("ListNotification")
-    Call<NotificationData> getNotificationLIsting(@Field("userToken") String  token);
+    Call<NotificationData> getNotificationLIsting(@Field("userToken") String  token,
+                                                  @Field("requestData") String  requestData,
+                                                  @Field("skipData") String  skipData);
 
     @FormUrlEncoded
     @POST("getRewards")
@@ -99,7 +103,9 @@ public interface ApiIntegration {
 
     @FormUrlEncoded
     @POST("orderHistory")
-    Call<Order_History_Data> getOrder_History_Listing(@Field("userToken") String  token);
+    Call<Order_History_Data> getOrder_History_Listing(@Field("userToken") String  token,
+                                                     @Field("requestData") String  requestData,
+                                                      @Field("skipData") String  skipData);
 
     @FormUrlEncoded
     @POST("addItemToCart")
@@ -120,6 +126,8 @@ public interface ApiIntegration {
                                      @Field("itemName") String  itemName,
                                      @Field("itemPrice") String  itemPrice,
                                      @Field("itemQuantity") String  itemQuantity,
+                                      @Field("itemCat") String  itemCat,
+                                      @Field("eligibleForRewards") String  eligibleForRewards,
                                      @Field("shopDetail") String  shopDetail);
     @FormUrlEncoded
     @POST("deleteItemFromCart")

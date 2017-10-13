@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -59,18 +60,27 @@ public class RewardAdapter extends RecyclerView.Adapter<RewardAdapter.MyViewHold
                 .load(f1.getImageurl())
                 .placeholder(R.drawable.ic_person_black_48dp)
                 .into(holder.imageView);
-        holder.tv_rewardsdetail.setText(f1.getRewardCompleted()+"/"+f1.getQuantity());
-        int leftrewards=Integer.parseInt(f1.getQuantity())-Integer.parseInt(f1.getRewardCompleted());
-        holder.tv_info.setText("You are "+String.valueOf(leftrewards)+" order away from Reward");
-
-        int numberOfColumns=6;
-        rewardsQuantityAdapter=new RewardsQuantityAdapter(context,Integer.parseInt(f1.getQuantity()),f1.getRewardCompleted());
-        RecyclerView.LayoutManager mLayoutManager =  new GridLayoutManager(context, numberOfColumns);
-        holder.recyclerView.setLayoutManager(mLayoutManager);
-        holder.recyclerView.setAdapter(rewardsQuantityAdapter);
-        holder.recyclerView.setNestedScrollingEnabled(false);
 
 
+        if(Integer.parseInt(f1.getRewardCompleted())>=Integer.parseInt(f1.getQuantity()))
+        {
+            holder.claim.setVisibility(View.VISIBLE);
+            holder.recyclerView.setVisibility(View.GONE);
+            holder.tv_rewardsdetail.setText(f1.getQuantity()+"/"+f1.getQuantity());
+            holder.tv_info.setText("You are ready to cliam ");
+        }
+        else {
+            int leftrewards=Integer.parseInt(f1.getQuantity())-Integer.parseInt(f1.getRewardCompleted());
+            holder.tv_info.setText("You are "+String.valueOf(leftrewards)+" order away from Reward");
+            holder.tv_rewardsdetail.setText(f1.getRewardCompleted()+"/"+f1.getQuantity());
+            int numberOfColumns = 6;
+            rewardsQuantityAdapter = new RewardsQuantityAdapter(context, Integer.parseInt(f1.getQuantity()), f1.getRewardCompleted());
+            RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(context, numberOfColumns);
+            holder.recyclerView.setLayoutManager(mLayoutManager);
+            holder.recyclerView.setAdapter(rewardsQuantityAdapter);
+            holder.recyclerView.setNestedScrollingEnabled(false);
+
+        }
 
     }
 
@@ -84,6 +94,7 @@ public class RewardAdapter extends RecyclerView.Adapter<RewardAdapter.MyViewHold
         TextView partyName,tv_rewardsdetail,tv_info;
         ImageView imageView,r1,r2,r3,r4,r5;
         RecyclerView recyclerView;
+        Button claim;
         public MyViewHolder(View itemView) {
             super(itemView);
             partyName=(TextView)itemView.findViewById(R.id.tittle);
@@ -92,6 +103,7 @@ public class RewardAdapter extends RecyclerView.Adapter<RewardAdapter.MyViewHold
             recyclerView=(RecyclerView)itemView.findViewById(R.id.quantityRecycleView);
             tv_rewardsdetail=(TextView)itemView.findViewById(R.id.rewarddetails);
             tv_info=(TextView)itemView.findViewById(R.id.tv_info);
+            claim=(Button)itemView.findViewById(R.id.bt_claim);
         }
     }
 }

@@ -21,6 +21,7 @@ import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
@@ -49,6 +50,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -110,6 +113,7 @@ public class ProfileActivity extends AppCompatActivity {
     Context context;
     Intent intent;
     Uri imageUri;
+    private boolean status;
     File file;
     Boolean tablet;
     SharedPreferences sharedPreferences;
@@ -139,6 +143,7 @@ public class ProfileActivity extends AppCompatActivity {
         btsave.setText("Save");
         context = this;
 
+
         sessionManager = new SessionManager(context);
         sharedPreferences = getSharedPreferences(sessionManager.PREF_NAME, 0);
         if(isTablet(context))
@@ -160,7 +165,7 @@ public class ProfileActivity extends AppCompatActivity {
                     .placeholder(R.drawable.ic_person_black_48dp)
                     .into(profile);
         }
-
+    String lll=sharedPreferences.getString(sessionManager.postalcode, null);
         etEmail.getEditText().setText(sharedPreferences.getString(sessionManager.email, null));
         etName.getEditText().setText(sharedPreferences.getString(sessionManager.name, null));
         etSurname.getEditText().setText(sharedPreferences.getString(sessionManager.surname,null));
@@ -196,66 +201,68 @@ public class ProfileActivity extends AppCompatActivity {
         btsave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                RequestBody fbody = null;
-                if(file!=null) {
-                     fbody = RequestBody.create(MediaType.parse("image/*"), file);
-                }
-                RequestBody token = RequestBody.create(MediaType.parse("text/plain"), sharedPreferences.getString("token",null));
-                RequestBody email = RequestBody.create(MediaType.parse("text/plain"), etEmail.getEditText().getText().toString());
-                RequestBody name = RequestBody.create(MediaType.parse("text/plain"), etName.getEditText().getText().toString());
-                RequestBody surname = RequestBody.create(MediaType.parse("text/plain"), etSurname.getEditText().getText().toString());
-                RequestBody dob = RequestBody.create(MediaType.parse("text/plain"), etDob.getEditText().getText().toString());
-                RequestBody address = RequestBody.create(MediaType.parse("text/plain"), etAdd.getEditText().getText().toString());
-                RequestBody city = RequestBody.create(MediaType.parse("text/plain"), etCity.getEditText().getText().toString());
-                RequestBody postcode = RequestBody.create(MediaType.parse("text/plain"), etPostcode.getEditText().getText().toString());
-                progressBarCyclic.setVisibility(View.VISIBLE);
-                getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-                        WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                retroFitClient = new RetroFitClient(context).getBlankRetrofit();
+                if (submitForm()) {
+                    RequestBody fbody = null;
+                    if (file != null) {
+                        fbody = RequestBody.create(MediaType.parse("image/*"), file);
+                    }
+                    RequestBody token = RequestBody.create(MediaType.parse("text/plain"), sharedPreferences.getString("token", null));
+                    RequestBody email = RequestBody.create(MediaType.parse("text/plain"), etEmail.getEditText().getText().toString());
+                    RequestBody name = RequestBody.create(MediaType.parse("text/plain"), etName.getEditText().getText().toString());
+                    RequestBody surname = RequestBody.create(MediaType.parse("text/plain"), etSurname.getEditText().getText().toString());
+                    RequestBody dob = RequestBody.create(MediaType.parse("text/plain"), etDob.getEditText().getText().toString());
+                    RequestBody address = RequestBody.create(MediaType.parse("text/plain"), etAdd.getEditText().getText().toString());
+                    RequestBody city = RequestBody.create(MediaType.parse("text/plain"), etCity.getEditText().getText().toString());
+                    RequestBody postcode = RequestBody.create(MediaType.parse("text/plain"), etPostcode.getEditText().getText().toString());
+                    progressBarCyclic.setVisibility(View.VISIBLE);
+                    getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                    retroFitClient = new RetroFitClient(context).getBlankRetrofit();
 
-                Call<EditProfileData> call = retroFitClient
-                        .create(ApiIntegration.class)
-                        .editProfile(sharedPreferences.getString("token", null),
-                                     fbody,token,email,name,surname,dob,address,city,postcode);
-                call.enqueue(new Callback<EditProfileData>() {
+                    Call<EditProfileData> call = retroFitClient
+                            .create(ApiIntegration.class)
+                            .editProfile(sharedPreferences.getString("token", null),
+                                    fbody, token, email, name, surname, dob, address, city, postcode);
+                    call.enqueue(new Callback<EditProfileData>() {
 
-                    @Override
-                    public void onResponse(Call<EditProfileData> call, Response<EditProfileData> response) {
-                        if (response != null) {
-                            editProfileData = response.body();
-                            if (editProfileData != null) {
-                                if (editProfileData.getError().equals("true")) {
-                                    progressBarCyclic.setVisibility(View.GONE);
-                                    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                        @Override
+                        public void onResponse(Call<EditProfileData> call, Response<EditProfileData> response) {
+                            if (response != null) {
+                                editProfileData = response.body();
+                                if (editProfileData != null) {
+                                    if (editProfileData.getError().equals("true")) {
+                                        progressBarCyclic.setVisibility(View.GONE);
+                                        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                    } else {
+                                        String url = editProfileData.getUser().getImageUrl();
+                                        sessionManager.createLoginSession(editProfileData.getUser().getFirstname(), editProfileData.getUser().getEmail(), editProfileData.getUser().getLastname(), sharedPreferences.getString("token", null), editProfileData.getUser().getDob(), editProfileData.getUser().getAddress().getPostalCode(), editProfileData.getUser().getAddress().getCity(), editProfileData.getUser().getAddress().getAddress(), editProfileData.getUser().getImageUrl());
+                                        progressBarCyclic.setVisibility(View.GONE);
+                                        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                        Intent intent = new Intent(context, MainActivity.class);
+                                        startActivity(intent);
+                                        finish();
+                                    }
+
                                 } else {
-                                String url =editProfileData.getUser().getImageUrl();
-                                    sessionManager.createLoginSession(editProfileData.getUser().getFirstname(),editProfileData.getUser().getEmail(),editProfileData.getUser().getLastname(),sharedPreferences.getString("token", null),editProfileData.getUser().getDob(),editProfileData.getUser().getAddress().getPostalCode(),editProfileData.getUser().getAddress().getCity(),editProfileData.getUser().getAddress().getAddress(),editProfileData.getUser().getImageUrl());
-                                    progressBarCyclic.setVisibility(View.GONE);
-                                    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                                    Intent intent = new Intent(context, MainActivity.class);
-                                    startActivity(intent);
-                                    finish();
-                                }
-
-                            }else {
-                                if (response.code() == 404 || response.code() == 500) {
-                                    progressBarCyclic.setVisibility(View.GONE);
-                                    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                                    Toast.makeText(context, R.string.server_not_responding, Toast.LENGTH_SHORT).show();
+                                    if (response.code() == 404 || response.code() == 500) {
+                                        progressBarCyclic.setVisibility(View.GONE);
+                                        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                        Toast.makeText(context, R.string.server_not_responding, Toast.LENGTH_SHORT).show();
+                                    }
                                 }
                             }
                         }
-                    }
 
-                    @Override
-                    public void onFailure(Call<EditProfileData> call, Throwable t) {
-                        progressBarCyclic.setVisibility(View.GONE);
-                        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                        Toast.makeText(context,R.string.Something_went_wrong,Toast.LENGTH_SHORT);
+                        @Override
+                        public void onFailure(Call<EditProfileData> call, Throwable t) {
+                            progressBarCyclic.setVisibility(View.GONE);
+                            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                            Toast.makeText(context, R.string.Something_went_wrong, Toast.LENGTH_SHORT);
 
-                    }
-                });
+                        }
+                    });
 
+                }
             }
         });
         profile.setOnClickListener(new View.OnClickListener() {
@@ -419,6 +426,57 @@ public class ProfileActivity extends AppCompatActivity {
             } catch (NullPointerException e) {
             }
         }
+    }
+    public boolean isValidEmail(String email) {
+        String EMAIL_PATTERN = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
+                + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+
+        Pattern pattern = Pattern.compile(EMAIL_PATTERN);
+        Matcher matcher = pattern.matcher(email);
+        return matcher.matches();
+    }
+
+    public boolean submitForm() {
+        status = true;
+        if (!isValidEmail(etEmail.getEditText().getText().toString())) {
+            etEmail.getEditText().setError("Email is not valid ");
+            status = false;
+        }        if (TextUtils.isEmpty(etEmail.getEditText().getText().toString())) {
+            etEmail.getEditText().setError("Please enter email");
+            status = false;
+        }
+        if (TextUtils.isEmpty(etName.getEditText().getText().toString())) {
+            etName.getEditText().setError("Please enter name");
+            status = false;
+        }
+        if (TextUtils.isEmpty(etSurname.getEditText().getText().toString())) {
+            etSurname.getEditText().setError("Please enter surname");
+            status = false;
+        }
+        if (TextUtils.isEmpty(etDob.getEditText().getText().toString())) {
+            etDob.getEditText().setError("Please enter date of birth");
+            status = false;
+        }
+        if (TextUtils.isEmpty(etAdd.getEditText().getText().toString())) {
+            etAdd.getEditText().setError("Please enter address");
+            status = false;
+        }
+        if (TextUtils.isEmpty(etCity.getEditText().getText().toString())) {
+            etCity.getEditText().setError("Please enter city");
+            status = false;
+        }
+        if (TextUtils.isEmpty(etPostcode.getEditText().getText().toString())) {
+            etPostcode.getEditText().setError("Please enter postcode");
+            status = false;
+        }
+        if (!etPassword.getEditText().getText().toString().equals(etConfirmpassword.getEditText().getText().toString())) {
+            etPassword.getEditText().setError("password & confirm password should be same");
+            etConfirmpassword.getEditText().setError("password & confirm password should be same");
+            status = false;
+        }
+
+
+        return status;
     }
 
     public byte[] fromGallaryNog(Uri data) {

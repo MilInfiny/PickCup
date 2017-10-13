@@ -116,6 +116,7 @@ public class LoginActivity extends AppCompatActivity {
                                         Toast.makeText(context,loginData.getTitle(), Toast.LENGTH_SHORT).show();
                                     } else {
                                         Toast.makeText(context, R.string.login_success, Toast.LENGTH_SHORT).show();
+                                        String ll=loginData.getUser().getAddress().getPostalCode();
                                         sessionManager.createLoginSession(loginData.getUser().getFirstname(),loginData.getUser().getEmail(),loginData.getUser().getLastname(),loginData.getToken(),loginData.getUser().getDob(),loginData.getUser().getAddress().getPostalCode(),loginData.getUser().getAddress().getCity(),loginData.getUser().getAddress().getAddress(),loginData.getUser().getImageUrl());
                                         progressBarCyclic.setVisibility(View.GONE);
                                         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);

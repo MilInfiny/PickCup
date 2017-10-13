@@ -167,7 +167,7 @@ public class MenuActivity extends AppCompatActivity implements OnItemClickListen
 
                             if(menuItemData.getTotalCount().equals("0") && menuItemData.getTotalPrice().equals("0"))
                             {
-                                cart_count_String=menuItemData.getTotalCount();
+                                MenuActivity.cart_count_String="0";
                                 order.setVisibility(View.GONE);
                             }
                             else {

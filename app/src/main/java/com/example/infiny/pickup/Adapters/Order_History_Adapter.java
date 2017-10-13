@@ -22,6 +22,7 @@ import com.example.infiny.pickup.Model.DataOrderHistory;
 import com.example.infiny.pickup.Model.Order_History_Data;
 import com.example.infiny.pickup.Model.Ordered;
 import com.example.infiny.pickup.R;
+import com.squareup.picasso.Picasso;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -61,6 +62,12 @@ public class Order_History_Adapter  extends RecyclerView.Adapter<Order_History_A
     public void onBindViewHolder(MyViewHolder holder, int position) {
 
         final DataOrderHistory f1=partyName.get(position);
+        Picasso.with(context)
+                .invalidate(f1.getShopDetail().getImageurl());
+        Picasso.with(context)
+                .load(f1.getShopDetail().getImageurl())
+                .placeholder(R.drawable.ic_person_black_48dp)
+                .into(holder.imageView);
         holder.partyName.setText(f1.getShopDetail().getCafe_name());
         holder.tw_orderno.setText(f1.getOrderId());
         holder.tw_total.setText("£ "+f1.getTotalPrice());

@@ -365,6 +365,13 @@ public class NormalMenuAdapter extends RecyclerView.Adapter<NormalMenuAdapter.My
                                                         progressBarCyclic.setVisibility(View.VISIBLE);
                                                         ((Activity)context).getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
                                                                 WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
+                                                        String sd= itemData.get_id();
+                                                        String sd2=itemData.getSize();
+                                                        String sd21=itemData.getItemName();
+                                                        String sd1=itemData.getItemPrice();
+                                                        String sd22=String.valueOf(quantity);
+                                                        String sd3=sid;
                                                         retroFitClient = new RetroFitClient(context).getBlankRetrofit();
                                                         Call<AddToCartData> call = retroFitClient
                                                                 .create(ApiIntegration.class)
@@ -374,6 +381,8 @@ public class NormalMenuAdapter extends RecyclerView.Adapter<NormalMenuAdapter.My
                                                                         itemData.getItemName(),
                                                                         itemData.getItemPrice(),
                                                                         String.valueOf(quantity),
+                                                                        category,
+                                                                        itemData.getEligibleForRewards(),
                                                                         sid);
                                                         call.enqueue(new Callback<AddToCartData>() {
 
@@ -445,8 +454,9 @@ public class NormalMenuAdapter extends RecyclerView.Adapter<NormalMenuAdapter.My
                                         progressBarCyclic.setVisibility(View.GONE);
                                         ((Activity) context).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                                         MenuActivity.order.setVisibility(View.VISIBLE);
-                                        int count=Integer.parseInt(MenuActivity.cart_count_String)+1;
-                                        MenuActivity.cartCount.setText(String.valueOf(count));
+                                        MenuActivity.cart_count_String=String.valueOf(Integer.parseInt(MenuActivity.cart_count_String)+1);
+
+                                        MenuActivity.cartCount.setText(MenuActivity.cart_count_String);
                                         MenuActivity.orderPrice.setText("£ "+getCorrectValue(String.format("%.2f", total)));
 
 
@@ -601,6 +611,8 @@ public class NormalMenuAdapter extends RecyclerView.Adapter<NormalMenuAdapter.My
                                                                         itemData.getItemName(),
                                                                         itemData.getItemPrice(),
                                                                         String.valueOf(quantity),
+                                                                        category,
+                                                                        itemData.getEligibleForRewards(),
                                                                         sid);
                                                         call.enqueue(new Callback<AddToCartData>() {
 
@@ -621,7 +633,8 @@ public class NormalMenuAdapter extends RecyclerView.Adapter<NormalMenuAdapter.My
                                                                             ((Activity) context).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                                                                             MenuActivity.order.setVisibility(View.VISIBLE);
                                                                             total=Float.valueOf(itemData.getItemPrice())*quantity;
-                                                                            MenuActivity.cart_count_String=String.valueOf(quantity);                                                                            total=total + Float.valueOf(itemData.getItemPrice())*quantity;
+                                                                            MenuActivity.cart_count_String=String.valueOf(quantity);
+                                                                            total=total + Float.valueOf(itemData.getItemPrice())*quantity;
                                                                             itemData.setItemQuantity(String.valueOf(quantity));
                                                                             itemData.setItemTotalamount(String.valueOf(total));
                                                                             MenuActivity.orderPrice.setText("£ "+getCorrectValue(String.format("%.2f", total)));
@@ -672,8 +685,8 @@ public class NormalMenuAdapter extends RecyclerView.Adapter<NormalMenuAdapter.My
                                         progressBarCyclic.setVisibility(View.GONE);
                                         ((Activity) context).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                                         MenuActivity.order.setVisibility(View.VISIBLE);
-                                        int count=Integer.parseInt(MenuActivity.cart_count_String)+1;
-                                        MenuActivity.cartCount.setText(String.valueOf(count));
+                                        MenuActivity.cart_count_String=String.valueOf(Integer.parseInt(MenuActivity.cart_count_String)+1);
+                                        MenuActivity.cartCount.setText(MenuActivity.cart_count_String);
                                         MenuActivity.orderPrice.setText("£ "+getCorrectValue(String.format("%.2f", total)));
 
                                     }

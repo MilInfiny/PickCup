@@ -32,6 +32,8 @@ import com.github.rahatarmanahmed.cpv.CircularProgressView;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -163,9 +165,8 @@ public class SignupActivity extends AppCompatActivity {
                                     if (signUpData.getError().equals("true")) {
                                         progressBarCyclic.setVisibility(View.GONE);
                                         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                                        Toast.makeText(context, signUpData.getMessage(), Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(context, signUpData.getTitle(), Toast.LENGTH_SHORT).show();
                                     } else {
-                                        Toast.makeText(context, R.string.login_success, Toast.LENGTH_SHORT).show();
                                         sessionManager.createLoginSession(signUpData.getUser().getFirstname(),signUpData.getUser().getEmail(),signUpData.getUser().getLastname(),signUpData.getToken(),signUpData.getUser().getDob(),signUpData.getUser().getAddress().getPostalCode(),signUpData.getUser().getAddress().getCity(),signUpData.getUser().getAddress().getAddress(),signUpData.getUser().getImageUrl());
                                         progressBarCyclic.setVisibility(View.GONE);
                                         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
@@ -206,12 +207,22 @@ public class SignupActivity extends AppCompatActivity {
 
         etDob.getEditText().setText(sdf.format(myCalendar.getTime()));
     }
+    public boolean isValidEmail(String email) {
+        String EMAIL_PATTERN = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
+                + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+
+        Pattern pattern = Pattern.compile(EMAIL_PATTERN);
+        Matcher matcher = pattern.matcher(email);
+        return matcher.matches();
+    }
 
 
     public boolean submitForm() {
         status = true;
-        Log.d("password", etPassword.getEditText().getText().toString());
-        Log.d("samepasword", String.valueOf(!etPassword.getEditText().getText().equals(etConfirmpassword.getEditText().getText())));
+        if (!isValidEmail(etEmail.getEditText().getText().toString())) {
+            etEmail.getEditText().setError("Email is not valid ");
+            status = false;
+        }
         if (TextUtils.isEmpty(etEmail.getEditText().getText().toString())) {
             etEmail.getEditText().setError("Please enter email");
             status = false;

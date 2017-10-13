@@ -59,7 +59,7 @@ public class SessionManager {
         editor.putString(this.surname, surname);
         editor.putString(this.token, token);
         editor.putString(this.dob, dob);
-        editor.putString(this.postalcode, postalcode);
+        editor.putString(this.postalcode, Postalcode);
         editor.putString(this.city, city);
         editor.putString(this.address,address);
         editor.putString(this.image,image);

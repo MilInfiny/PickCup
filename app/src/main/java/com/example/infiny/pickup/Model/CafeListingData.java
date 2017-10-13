@@ -8,8 +8,27 @@ public class CafeListingData {
     private String title;
 
     private String error;
+    private int unreadNotification;
+    private int claimedReward;
+
 
     private Cafes[] cafes;
+
+    public int getUnreadNotification() {
+        return unreadNotification;
+    }
+
+    public void setUnreadNotification(int unreadNotification) {
+        this.unreadNotification = unreadNotification;
+    }
+
+    public int getClaimedReward() {
+        return claimedReward;
+    }
+
+    public void setClaimedReward(int claimedReward) {
+        this.claimedReward = claimedReward;
+    }
 
     public String getTitle ()
     {

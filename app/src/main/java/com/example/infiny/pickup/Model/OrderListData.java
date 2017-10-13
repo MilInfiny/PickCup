@@ -5,21 +5,23 @@ package com.example.infiny.pickup.Model;
  */
 
 public class OrderListData {
+    private String canClaimedReward;
+
     private String title;
 
     private String error;
 
-
     private OrderData data;
 
-    public OrderData getData() {
-        return data;
+    public String getCanClaimedReward ()
+    {
+        return canClaimedReward;
     }
 
-    public void setData(OrderData data) {
-        this.data = data;
+    public void setCanClaimedReward (String canClaimedReward)
+    {
+        this.canClaimedReward = canClaimedReward;
     }
-
 
     public String getTitle ()
     {
@@ -41,11 +43,19 @@ public class OrderListData {
         this.error = error;
     }
 
+    public OrderData getData ()
+    {
+        return data;
+    }
 
+    public void setData (OrderData data)
+    {
+        this.data = data;
+    }
 
     @Override
     public String toString()
     {
-        return "ClassPojo [title = "+title+", error = "+error+", data = "+data+"]";
+        return "ClassPojo [canClaimedReward = "+canClaimedReward+", title = "+title+", error = "+error+", data = "+data+"]";
     }
 }

@@ -10,6 +10,7 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
@@ -67,6 +68,10 @@ public class order_history extends AppCompatActivity {
     SharedPreferences sharedPreferences;
     SessionManager sessionManager;
     Order_History_Data Order_History_Data;
+    int current_page=1;
+    ArrayList<DataOrderHistory> orderHistoryList;
+    private boolean loading = true;
+    int pastVisiblesItems, visibleItemCount, totalItemCount;
 
 
     @Override
@@ -85,13 +90,55 @@ public class order_history extends AppCompatActivity {
         twReward.setText("Order history");
         icon.setBackground(getResources().getDrawable(R.drawable.ic_history_black_48dp));
         view.setVisibility(View.VISIBLE);
+        orderHistoryList = new ArrayList<DataOrderHistory>();
+        order_history_adapter = new Order_History_Adapter(context, orderHistoryList);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
+        recycleView.setLayoutManager(mLayoutManager);
+        recycleView.setAdapter(order_history_adapter);
+        recycleView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                try {
+                    if (dy > 0) //check for scroll down
+                    {
+                        visibleItemCount = recyclerView.getChildCount();
+                        //                    totalItemCount = recyclerView.getLayoutManager().getItemCount();
+                        totalItemCount = recyclerView.getAdapter().getItemCount();
+                        pastVisiblesItems = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
+                        Log.d("value", "visibleItemCount" + visibleItemCount + "\ntotalItemCount" + totalItemCount + "\npastVisiblesItems" + pastVisiblesItems);
+                        Log.d("value", "\ncurrent_page" + current_page);
+
+                        if (totalItemCount == (current_page * 20)) {
+                            if (loading) {
+                                if ((visibleItemCount + pastVisiblesItems) >= totalItemCount) {
+                                    //                                loading = false;
+                                    Log.v("...", "Last Item Wow !");
+                                    ++current_page;
+                                    getData(current_page);
+                                    //Do pagination.. i.e. fetch new data
+                                }
+                            }
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        getData(current_page);
+
+
+
+    }
+
+    private void getData(int currentPage) {
         progressBarCyclic.setVisibility(View.VISIBLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
                 WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
         retroFitClient = new RetroFitClient(context).getBlankRetrofit();
         Call<Order_History_Data> call = retroFitClient
                 .create(ApiIntegration.class)
-                .getOrder_History_Listing(sharedPreferences.getString("token",null));
+                .getOrder_History_Listing(sharedPreferences.getString("token",null),String.valueOf(currentPage),String.valueOf(currentPage-1));
         call.enqueue(new Callback<Order_History_Data>() {
 
             @Override
@@ -106,11 +153,9 @@ public class order_history extends AppCompatActivity {
                         } else {
                             progressBarCyclic.setVisibility(View.GONE);
                             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                            ArrayList<DataOrderHistory> orderHistoryList = new ArrayList<DataOrderHistory>(Arrays.asList(Order_History_Data.getData()));
-                            order_history_adapter = new Order_History_Adapter(context, orderHistoryList);
-                            RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
-                            recycleView.setLayoutManager(mLayoutManager);
-                            recycleView.setAdapter(order_history_adapter);
+                            orderHistoryList.addAll(Arrays.asList(Order_History_Data.getData()));
+                            order_history_adapter.notifyDataSetChanged();
+
                         }
 
                     }else {
@@ -132,8 +177,6 @@ public class order_history extends AppCompatActivity {
 
             }
         });
-
-
 
     }
 
