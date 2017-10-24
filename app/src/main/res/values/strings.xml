@@ -52,4 +52,9 @@
     <string name="verified_successfull">Verify successfull</string>
     <string name="Password_set">password set seccesfully</string>
     <string name="Base_url">http://192.168.1.175:3000</string>
+    <string name="title_activity_add__card_">Add_Card_Activity</string>
+    <string name="selectValidTme">Select Valid Time</string>
+    <string name="Add_Card">Please add card</string>
+    <string name="selectTime">Select time</string>
+    <string name="pleaseEnableGps">Please enable gps</string>
 </resources>

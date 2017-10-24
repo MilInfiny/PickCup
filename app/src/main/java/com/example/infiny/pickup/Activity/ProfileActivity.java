@@ -183,6 +183,7 @@ public class ProfileActivity extends AppCompatActivity {
                 myCalendar.set(Calendar.YEAR, year);
                 myCalendar.set(Calendar.MONTH, monthOfYear);
                 myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+
                 updateLabel();
             }
 
@@ -207,13 +208,13 @@ public class ProfileActivity extends AppCompatActivity {
                         fbody = RequestBody.create(MediaType.parse("image/*"), file);
                     }
                     RequestBody token = RequestBody.create(MediaType.parse("text/plain"), sharedPreferences.getString("token", null));
-                    RequestBody email = RequestBody.create(MediaType.parse("text/plain"), etEmail.getEditText().getText().toString());
-                    RequestBody name = RequestBody.create(MediaType.parse("text/plain"), etName.getEditText().getText().toString());
-                    RequestBody surname = RequestBody.create(MediaType.parse("text/plain"), etSurname.getEditText().getText().toString());
-                    RequestBody dob = RequestBody.create(MediaType.parse("text/plain"), etDob.getEditText().getText().toString());
-                    RequestBody address = RequestBody.create(MediaType.parse("text/plain"), etAdd.getEditText().getText().toString());
-                    RequestBody city = RequestBody.create(MediaType.parse("text/plain"), etCity.getEditText().getText().toString());
-                    RequestBody postcode = RequestBody.create(MediaType.parse("text/plain"), etPostcode.getEditText().getText().toString());
+                    RequestBody email = RequestBody.create(MediaType.parse("text/plain"), etEmail.getEditText().getText().toString().trim());
+                    RequestBody name = RequestBody.create(MediaType.parse("text/plain"), etName.getEditText().getText().toString().trim());
+                    RequestBody surname = RequestBody.create(MediaType.parse("text/plain"), etSurname.getEditText().getText().toString().trim());
+                    RequestBody dob = RequestBody.create(MediaType.parse("text/plain"), etDob.getEditText().getText().toString().trim());
+                    RequestBody address = RequestBody.create(MediaType.parse("text/plain"), etAdd.getEditText().getText().toString().trim());
+                    RequestBody city = RequestBody.create(MediaType.parse("text/plain"), etCity.getEditText().getText().toString().trim());
+                    RequestBody postcode = RequestBody.create(MediaType.parse("text/plain"), etPostcode.getEditText().getText().toString().trim());
                     progressBarCyclic.setVisibility(View.VISIBLE);
                     getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
                             WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
@@ -365,9 +366,20 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void updateLabel() {
         String myFormat = "MM/dd/yy"; //In which you need put here
-        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+        SimpleDateFormat sdf = new SimpleDateFormat(myFormat);
+        Date todayDate = new Date();
+       if(myCalendar.getTime().after(todayDate))
+       {
+           etDob.getEditText().setError("Please enter valid date of birth");
 
-        etDob.getEditText().setText(sdf.format(myCalendar.getTime()));
+       }
+       else
+       {
+           etDob.getEditText().setError(null);
+           etDob.getEditText().setText(sdf.format(myCalendar.getTime()));
+       }
+
+
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -441,35 +453,35 @@ public class ProfileActivity extends AppCompatActivity {
         if (!isValidEmail(etEmail.getEditText().getText().toString())) {
             etEmail.getEditText().setError("Email is not valid ");
             status = false;
-        }        if (TextUtils.isEmpty(etEmail.getEditText().getText().toString())) {
+        }        if (TextUtils.isEmpty(etEmail.getEditText().getText().toString().trim())) {
             etEmail.getEditText().setError("Please enter email");
             status = false;
         }
-        if (TextUtils.isEmpty(etName.getEditText().getText().toString())) {
+        if (TextUtils.isEmpty(etName.getEditText().getText().toString().trim())) {
             etName.getEditText().setError("Please enter name");
             status = false;
         }
-        if (TextUtils.isEmpty(etSurname.getEditText().getText().toString())) {
+        if (TextUtils.isEmpty(etSurname.getEditText().getText().toString().trim())) {
             etSurname.getEditText().setError("Please enter surname");
             status = false;
         }
-        if (TextUtils.isEmpty(etDob.getEditText().getText().toString())) {
+        if (TextUtils.isEmpty(etDob.getEditText().getText().toString().trim())) {
             etDob.getEditText().setError("Please enter date of birth");
             status = false;
         }
-        if (TextUtils.isEmpty(etAdd.getEditText().getText().toString())) {
+        if (TextUtils.isEmpty(etAdd.getEditText().getText().toString().trim())) {
             etAdd.getEditText().setError("Please enter address");
             status = false;
         }
-        if (TextUtils.isEmpty(etCity.getEditText().getText().toString())) {
+        if (TextUtils.isEmpty(etCity.getEditText().getText().toString().trim())) {
             etCity.getEditText().setError("Please enter city");
             status = false;
         }
-        if (TextUtils.isEmpty(etPostcode.getEditText().getText().toString())) {
+        if (TextUtils.isEmpty(etPostcode.getEditText().getText().toString().trim())) {
             etPostcode.getEditText().setError("Please enter postcode");
             status = false;
         }
-        if (!etPassword.getEditText().getText().toString().equals(etConfirmpassword.getEditText().getText().toString())) {
+        if (!etPassword.getEditText().getText().toString().trim().equals(etConfirmpassword.getEditText().getText().toString().trim())) {
             etPassword.getEditText().setError("password & confirm password should be same");
             etConfirmpassword.getEditText().setError("password & confirm password should be same");
             status = false;

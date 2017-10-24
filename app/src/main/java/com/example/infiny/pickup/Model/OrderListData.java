@@ -11,7 +11,11 @@ public class OrderListData {
 
     private String error;
 
+    private String adminTax;
+
     private OrderData data;
+
+    private StripeCharge stripeCharge;
 
     public String getCanClaimedReward ()
     {
@@ -43,6 +47,16 @@ public class OrderListData {
         this.error = error;
     }
 
+    public String getAdminTax ()
+    {
+        return adminTax;
+    }
+
+    public void setAdminTax (String adminTax)
+    {
+        this.adminTax = adminTax;
+    }
+
     public OrderData getData ()
     {
         return data;
@@ -53,9 +67,19 @@ public class OrderListData {
         this.data = data;
     }
 
+    public StripeCharge getStripeCharge ()
+    {
+        return stripeCharge;
+    }
+
+    public void setStripeCharge (StripeCharge stripeCharge)
+    {
+        this.stripeCharge = stripeCharge;
+    }
+
     @Override
     public String toString()
     {
-        return "ClassPojo [canClaimedReward = "+canClaimedReward+", title = "+title+", error = "+error+", data = "+data+"]";
+        return "ClassPojo [canClaimedReward = "+canClaimedReward+", title = "+title+", error = "+error+", adminTax = "+adminTax+", data = "+data+", stripeCharge = "+stripeCharge+"]";
     }
 }

@@ -10,10 +10,13 @@ public class FooRequest {
     private String parcel;
 
     private String shopDetail;
+    private String orderType;
+
 
     private Ordered[] order;
 
     private String userToken;
+    private String timezone;
 
     private String timeForPickcup;
 
@@ -48,6 +51,22 @@ public class FooRequest {
 
     public void setOrder(Ordered[] order) {
         this.order = order;
+    }
+
+    public String getTimezone() {
+        return timezone;
+    }
+
+    public String getOrderType() {
+        return orderType;
+    }
+
+    public void setOrderType(String orderType) {
+        this.orderType = orderType;
+    }
+
+    public void setTimezone(String timezone) {
+        this.timezone = timezone;
     }
 
     public String getUserToken ()

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 
 import com.example.infiny.pickup.Activity.LoginActivity;
+import com.example.infiny.pickup.Model.ItemData;
 
 /**
  * Created by infiny on 9/4/17.
@@ -14,6 +15,9 @@ public class SessionManager {
     private static final String KEY_LOGIN_DATA = "loginData";
     private String TAG = SessionManager.class.getSimpleName();
     private static final String IS_LOGIN = "IsLoggedIn";
+    private static final String ADD_TO_CART = "ADDTOCART";
+    private static final String CURR_LAT = "latitude";
+    private static final String CURR_LONG = "longitude";
 
     // Shared Preferences
     SharedPreferences pref;
@@ -69,6 +73,8 @@ public class SessionManager {
     }
 
 
+
+
     public boolean isLoggedIn() {
         return pref.getBoolean(IS_LOGIN, false);
     }
@@ -77,6 +83,12 @@ public class SessionManager {
     public void clear() {
         editor.clear();
         editor.commit();
+    }
+    public void storeLocation(double lat, double longi) {
+        editor.putString(CURR_LAT, String.valueOf(lat));
+        editor.putString(CURR_LONG, String.valueOf(longi));
+        editor.commit();
+
     }
 
 }

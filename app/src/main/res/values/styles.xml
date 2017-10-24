@@ -43,6 +43,7 @@
     <style name="DialogTheme">
         <item name="colorPrimary">@color/colorPrimary</item>
     </style>
+
     <style name="Theme.MyFancyTheme" parent="android:Theme.Holo">
         <item name="android:homeAsUpIndicator">@drawable/ic_keyboard_backspace_black_24dp</item>
     </style>

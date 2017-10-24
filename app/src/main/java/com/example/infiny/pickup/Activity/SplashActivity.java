@@ -16,6 +16,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import com.example.infiny.pickup.Helpers.GPSTracker;
 import com.example.infiny.pickup.Helpers.SessionManager;
 import com.example.infiny.pickup.R;
 import com.gun0912.tedpermission.PermissionListener;
@@ -31,6 +32,7 @@ public class SplashActivity extends AppCompatActivity {
     private Context mContext;
     private final int SPLASH_DISPLAY_LENGTH = 3000;
     private SessionManager sessionManager;
+    GPSTracker gps;
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -52,36 +54,48 @@ public class SplashActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        if(checkPermission()){
-            nextScreen();
-        }else {
-            PermissionListener permissionlistener = new PermissionListener() {
-                @Override
-                public void onPermissionGranted() {
+        gps = new GPSTracker(SplashActivity.this);
+        if (gps.canGetLocation()) {
+            double latitude = gps.getLatitude();
+            double longitude = gps.getLongitude();
+            sessionManager.storeLocation(latitude, longitude);
+            if(checkPermission()){
+                nextScreen();
+            }else {
+                PermissionListener permissionlistener = new PermissionListener() {
+                    @Override
+                    public void onPermissionGranted() {
 //                Toast.makeText(context, "Permission Granted", Toast.LENGTH_SHORT).show();
-                    nextScreen();
-                }
+                        nextScreen();
+                    }
 
-                @Override
-                public void onPermissionDenied(ArrayList<String> deniedPermissions) {
-                    Toast.makeText(mContext, "Permission Denied\n" + deniedPermissions.toString(), Toast.LENGTH_SHORT).show();
-                }
+                    @Override
+                    public void onPermissionDenied(ArrayList<String> deniedPermissions) {
+                        Toast.makeText(mContext, "Permission Denied\n" + deniedPermissions.toString(), Toast.LENGTH_SHORT).show();
+                    }
 
 
-            };
+                };
 
-            new TedPermission(this)
-                    .setPermissionListener(permissionlistener)
-                    .setDeniedMessage("If you reject permission,you can not use this service\n\nPlease turn on permissions at [Setting] > [Permission]")
-                    .setPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE
-                            , Manifest.permission.ACCESS_FINE_LOCATION
-                            ,Manifest.permission.ACCESS_COARSE_LOCATION,
-                            Manifest.permission.ACCESS_NETWORK_STATE,
-                            Manifest.permission.CHANGE_NETWORK_STATE,
-                            Manifest.permission.CAMERA,
-                            Manifest.permission.READ_EXTERNAL_STORAGE)
-                    .check();
+                new TedPermission(this)
+                        .setPermissionListener(permissionlistener)
+                        .setDeniedMessage("If you reject permission,you can not use this service\n\nPlease turn on permissions at [Setting] > [Permission]")
+                        .setPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE
+                                , Manifest.permission.ACCESS_FINE_LOCATION
+                                ,Manifest.permission.ACCESS_COARSE_LOCATION,
+                                Manifest.permission.ACCESS_NETWORK_STATE,
+                                Manifest.permission.CHANGE_NETWORK_STATE,
+                                Manifest.permission.CAMERA,
+                                Manifest.permission.ACCESS_FINE_LOCATION,
+                                Manifest.permission.READ_EXTERNAL_STORAGE)
+                        .check();
+            }
+
+        } else {
+            gps.showSettingsAlert();
         }
+
+
 
     }
 

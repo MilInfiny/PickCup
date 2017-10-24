@@ -7,7 +7,7 @@
 
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.example.infiny.pickup.Activity.SignupActivity"
-    tools:showIn="@layout/activity_signup">
+   >
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -53,6 +53,7 @@
                     android:id="@+id/et_email"
                     android:layout_width="match_parent"
                     android:layout_height="70dp"
+                    android:layout_below="@+id/et_surname"
                     android:hint="Email">
 
                     <EditText
@@ -103,7 +104,6 @@
                     android:id="@+id/et_name"
                     android:layout_width="match_parent"
                     android:layout_height="70dp"
-                    android:layout_below="@+id/et_confirmpassword"
                     android:hint="Name">
 
                     <EditText
@@ -111,6 +111,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="54dp"
                         android:singleLine="true"
+                        android:digits="abcdefghijklmnopqrstuvwxyz012345789"
+
                         android:backgroundTint="#1e1d1e"
                         android:textColor="@color/colorPrimary" />
                 </android.support.design.widget.TextInputLayout>
@@ -127,6 +129,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="54dp"
                         android:singleLine="true"
+                        android:digits="abcdefghijklmnopqrstuvwxyz012345789"
+
                         android:backgroundTint="#1e1d1e"
                         android:textColor="@color/colorPrimary" />
                 </android.support.design.widget.TextInputLayout>
@@ -135,7 +139,7 @@
                     android:id="@+id/et_dob"
                     android:layout_width="match_parent"
                     android:layout_height="70dp"
-                    android:layout_below="@+id/et_surname"
+                    android:layout_below="@+id/et_confirmpassword"
                     android:hint="Date of birth">
 
                     <EditText
@@ -175,6 +179,7 @@
                         android:id="@+id/tie_postcode"
                         android:layout_width="match_parent"
                         android:layout_height="54dp"
+                        android:digits="abcdefghijklmnopqrstuvwxyz012345789"
                         android:singleLine="true"
                         android:backgroundTint="#1e1d1e"
                         android:textColor="@color/colorPrimary" />
@@ -193,7 +198,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="54dp"
                         android:singleLine="true"
-                        android:inputType="number"
+                        android:digits="abcdefghijklmnopqrstuvwxyz012345789"
                         android:backgroundTint="#1e1d1e"
                         android:textColor="@color/colorPrimary" />
                 </android.support.design.widget.TextInputLayout>

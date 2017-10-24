@@ -8,9 +8,6 @@ android:paddingTop="20dp"
     tools:context="com.example.infiny.pickup.Activity.MainActivity"
     tools:showIn="@layout/app_bar_main"
    >
-
-
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"

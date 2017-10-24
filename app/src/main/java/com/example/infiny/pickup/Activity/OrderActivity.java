@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -32,6 +33,7 @@ import com.example.infiny.pickup.Helpers.SessionManager;
 import com.example.infiny.pickup.Interfaces.ApiIntegration;
 import com.example.infiny.pickup.Interfaces.OnItemClickListener;
 import com.example.infiny.pickup.Model.Cafes;
+import com.example.infiny.pickup.Model.CardDetails;
 import com.example.infiny.pickup.Model.CreateOrderData;
 import com.example.infiny.pickup.Model.FooRequest;
 import com.example.infiny.pickup.Model.ItemData;
@@ -44,8 +46,11 @@ import com.squareup.picasso.Picasso;
 
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.TimeZone;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -54,6 +59,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
+
+import static com.example.infiny.pickup.R.drawable.ic_person_black_48dp;
 
 public class OrderActivity extends AppCompatActivity implements OnItemClickListener {
 
@@ -67,7 +74,7 @@ public class OrderActivity extends AppCompatActivity implements OnItemClickListe
     SessionManager sessionManager;
     SharedPreferences sharedPreferences;
     CreateOrderData createOrderData;
-    public static String dateString, parcel = "false", note;
+    public static String dateString=null, parcel = "false", note;
     String total;
     ;
     OnItemClickListener onItemClickListener;
@@ -134,20 +141,11 @@ public class OrderActivity extends AppCompatActivity implements OnItemClickListe
     RelativeLayout relTime;
     @BindView(R.id.card_view)
     CardView cardView;
-    @BindView(R.id.tw_pay)
-    TextView twPay;
-    @BindView(R.id.list_item_genre_arrow)
-    ImageView listItemGenreArrow;
-    @BindView(R.id.paylayout)
-    RelativeLayout paylayout;
-    @BindView(R.id.card_pay)
-    CardView cardPay;
     Sub_Menu_Adapter subMenuAdapter;
     Ordered[] ordered;
     ArrayList<Ordered> ordereds;
     Ordered orderedObject;
-    String sid;
-    Boolean fromMenu;
+    String sid, fromMenu, cafeName;
     @BindView(R.id.nodata)
     TextView nodata;
     @BindView(R.id.layoutyscrollview)
@@ -158,6 +156,23 @@ public class OrderActivity extends AppCompatActivity implements OnItemClickListe
     Switch simpleSwitch;
     @BindView(R.id.claimlayout)
     RelativeLayout claimlayout;
+    Float tax = 0f;
+    Float totalpercentage;
+    @BindView(R.id.taxprice)
+    TextView taxprice;
+    @BindView(R.id.taxview)
+    RelativeLayout taxview;
+    @BindView(R.id.texbelowview)
+    View texbelowview;
+    @BindView(R.id.belowSwitch)
+    View belowSwitch;
+    @BindView(R.id.paylayout)
+    Button paylayout;
+    @BindView(R.id.rating4)
+    ImageView rating4;
+    @BindView(R.id.rating5)
+    ImageView rating5;
+    String rating;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -178,18 +193,18 @@ public class OrderActivity extends AppCompatActivity implements OnItemClickListe
         ordereds = new ArrayList<>();
         Intent intent = getIntent();
         sid = intent.getStringExtra("sid");
-        fromMenu = intent.getBooleanExtra("fromMenu", false);
-        subMenuAdapter = new Sub_Menu_Adapter(context, ordereds, onItemClickListener, sid);
-        recycleView.setLayoutManager(layoutManager);
-        recycleView.setAdapter(subMenuAdapter);
-        recycleView.setNestedScrollingEnabled(false);
+        rating=intent.getStringExtra("rating");
+        fromMenu = intent.getStringExtra("fromPage");
+        cafeName = intent.getStringExtra("tittle");
+
         progressBarCyclic.setVisibility(View.VISIBLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
                 WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
         retroFitClient = new RetroFitClient(context).getBlankRetrofit();
         Call<OrderListData> call = retroFitClient
                 .create(ApiIntegration.class)
-                .getOrderListing(sharedPreferences.getString("token", null));
+                .getOrderListing(sharedPreferences.getString("token", null),
+                                 sid);
         call.enqueue(new Callback<OrderListData>() {
 
             @Override
@@ -200,18 +215,64 @@ public class OrderActivity extends AppCompatActivity implements OnItemClickListe
                         if (orderListData.getError().equals("true")) {
                             progressBarCyclic.setVisibility(View.GONE);
                             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                            nodata.setVisibility(View.VISIBLE);
-                            layoutyscrollview.setVisibility(View.GONE);
-                            logo1.setVisibility(View.VISIBLE);
+                            if (!fromMenu.equals("rewardActivity")) {
+                                nodata.setVisibility(View.VISIBLE);
+                                layoutyscrollview.setVisibility(View.GONE);
+                                logo1.setVisibility(View.VISIBLE);
+
+                            } else {
+                                layoutyscrollview.setVisibility(View.VISIBLE);
+                                progressBarCyclic.setVisibility(View.GONE);
+                                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                simpleSwitch.setChecked(true);
+                                claimlayout.setVisibility(View.VISIBLE);
+                                belowSwitch.setVisibility(View.VISIBLE);
+                                taxprice.setText("0");
+                                totalprice.setText("0");
+                                mainLayout.setVisibility(View.VISIBLE);
+                                note = etNote.getText().toString().trim();
+                                if (subLayout.getVisibility() == View.VISIBLE) {
+                                    subLayout.setVisibility(View.GONE);
+                                    arrow.setRotation(360);
+                                } else {
+                                    subLayout.setVisibility(View.VISIBLE);
+                                    arrow.setRotation(180);
+                                }
+                            }
 
                         } else {
-                            Picasso.with(context)
-                                    .load(orderListData.getData().getShopDetail().getImageurl())
-                                    .placeholder(R.drawable.cofeecup)
-                                    .into(tittleimage);
+                            layoutyscrollview.setVisibility(View.VISIBLE);
+
+                            if (isTablet(context)) {
+                                Picasso.with(context)
+                                        .invalidate(orderListData.getData().getShopDetail().getImageurl() + "_large.png");
+                                Picasso.with(context)
+                                        .load(orderListData.getData().getShopDetail().getImageurl() + "_large.png")
+                                        .placeholder(ic_person_black_48dp)
+                                        .into(tittleimage);
+                            } else {
+                                Picasso.with(context)
+                                        .invalidate(orderListData.getData().getShopDetail().getImageurl() + "_small.png");
+                                Picasso.with(context)
+                                        .load(orderListData.getData().getShopDetail().getImageurl() + "_small.png")
+                                        .placeholder(ic_person_black_48dp)
+                                        .into(tittleimage);
+                            }
+                            ;
                             tittle.setText(orderListData.getData().getShopDetail().getCafe_name());
                             progressBarCyclic.setVisibility(View.GONE);
                             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                            if (orderListData.getCanClaimedReward().equals("false")) {
+                                simpleSwitch.setChecked(false);
+                                claimlayout.setVisibility(View.GONE);
+                                belowSwitch.setVisibility(View.GONE);
+                            } else {
+                                simpleSwitch.setChecked(true);
+                                claimlayout.setVisibility(View.VISIBLE);
+                                belowSwitch.setVisibility(View.VISIBLE);
+                            }
+                            totalpercentage = Float.valueOf(orderListData.getStripeCharge().getPercentCharge()) + Float.valueOf(orderListData.getAdminTax());
+
 
                             orderDatas = new ArrayList<>(Arrays.asList(orderListData.getData()));
                             for (int i = 0; i < orderDatas.size(); i++) {
@@ -220,12 +281,17 @@ public class OrderActivity extends AppCompatActivity implements OnItemClickListe
                                 Sub_Menu_Adapter.totalprize = 0f;
                                 image = R.drawable.graycup1;
                                 ordered = orderData.getOrdered();
+                                sid = orderListData.getData().getShopDetail().get_id();
                                 for (int j = 0; j < ordered.length; j++) {
                                     orderedObject = ordered[j];
                                     orderedObject.setImage(image);
                                     ordereds.add(orderedObject);
 
                                 }
+                                subMenuAdapter = new Sub_Menu_Adapter(context, ordereds, onItemClickListener, sid);
+                                recycleView.setLayoutManager(layoutManager);
+                                recycleView.setAdapter(subMenuAdapter);
+                                recycleView.setNestedScrollingEnabled(false);
 
 
                                 mainLayout.setVisibility(View.VISIBLE);
@@ -241,6 +307,7 @@ public class OrderActivity extends AppCompatActivity implements OnItemClickListe
 
 
                         }
+
 
                     } else {
                         if (response.code() == 404 || response.code() == 500) {
@@ -270,69 +337,109 @@ public class OrderActivity extends AppCompatActivity implements OnItemClickListe
         paylayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                progressBarCyclic.setVisibility(View.VISIBLE);
-                getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-                        WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                Ordered[] ordereds1=ordered;
-                retroFitClient = new RetroFitClient(context).getBlankRetrofit();
-                fooRequest = new FooRequest();
-                fooRequest.setUserToken(sharedPreferences.getString("token", null));
-                fooRequest.setParcel(parcel);
-                fooRequest.setOrder(ordered);
-                fooRequest.setNote(note);
-                fooRequest.setTimeForPickcup(dateString);
-                fooRequest.setShopDetail(orderListData.getData().getShopDetail().get_id());
-                fooRequest.setTotalPrice(total);
-                Gson gson = new Gson();
-                JSONObject s = null;
-                try {
-                    s = new JSONObject(gson.toJson(fooRequest));
-                } catch (Exception e) {
-                    e.printStackTrace();
+
+                Ordered[] ordereds1 = ordered;
+
+                if (!fromMenu.equals("rewardActivity")) {
+                    if (orderListData.getData().getUserDetail().getCardDetails().length == 0) {
+                        Toast.makeText(context, R.string.Add_Card, Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(context, Add_Card_Activity.class);
+                        intent.putExtra("fromOrder", true);
+                        startActivity(intent);
+                        finish();
+
+                    }
+                }
+               if(dateString==null)
+                {
+                    Toast.makeText(context,R.string.selectTime,Toast.LENGTH_SHORT).show();
                 }
 
-                Call<CreateOrderData> call = retroFitClient
-                        .create(ApiIntegration.class)
-                        .getCreateOrder("application/json", fooRequest);
-                call.enqueue(new Callback<CreateOrderData>() {
+                else {
 
-                    @Override
-                    public void onResponse(Call<CreateOrderData> call, Response<CreateOrderData> response) {
-                        if (response != null) {
-                            createOrderData = response.body();
-                            if (createOrderData != null) {
-                                if (createOrderData.getError().equals("true")) {
-                                    progressBarCyclic.setVisibility(View.GONE);
-                                    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                    progressBarCyclic.setVisibility(View.VISIBLE);
+                    getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
+                    retroFitClient = new RetroFitClient(context).getBlankRetrofit();
+                    fooRequest = new FooRequest();
+                    fooRequest.setUserToken(sharedPreferences.getString("token", null));
+                    fooRequest.setParcel(parcel);
+                    if (ordered == null && simpleSwitch.isChecked()) {
+                        fooRequest.setOrderType("0");
+                    } else if (ordered.length >= 0 && simpleSwitch.isChecked()) {
+                        fooRequest.setOrderType("2");
+                    } else if (ordered.length >= 0 && simpleSwitch.isChecked() == false) {
+                        fooRequest.setOrderType("1");
+                    }
+
+                    fooRequest.setOrder(ordered);
+                    fooRequest.setNote(note);
+                    fooRequest.setTimezone(TimeZone.getDefault().getID());
+                    fooRequest.setTimeForPickcup(dateString);
+                    if (orderListData.getData() == null) {
+                        fooRequest.setShopDetail(sid);
+                    } else {
+                        fooRequest.setShopDetail(orderListData.getData().getShopDetail().get_id());
+                    }
+
+                    fooRequest.setTotalPrice(total);
+                    Gson gson = new Gson();
+                    JSONObject s = null;
+                    try {
+                        s = new JSONObject(gson.toJson(fooRequest));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                    Call<CreateOrderData> call = retroFitClient
+                            .create(ApiIntegration.class)
+                            .getCreateOrder("application/json", fooRequest);
+                    call.enqueue(new Callback<CreateOrderData>() {
+
+                        @Override
+                        public void onResponse(Call<CreateOrderData> call, Response<CreateOrderData> response) {
+                            if (response != null) {
+                                createOrderData = response.body();
+                                if (createOrderData != null) {
+                                    if (createOrderData.getError().equals("true")) {
+                                        dateString=null;
+                                        progressBarCyclic.setVisibility(View.GONE);
+                                        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
+                                    } else {
+                                        dateString=null;
+                                        Intent intent = new Intent(context, MainActivity.class);
+                                        startActivity(intent);
+                                        finish();
+                                    }
 
                                 } else {
-                                    Intent intent = new Intent(context, MainActivity.class);
-                                    startActivity(intent);
-                                    finish();
-
-                                }
-
-                            } else {
-                                if (response.code() == 404 || response.code() == 500) {
-                                    progressBarCyclic.setVisibility(View.GONE);
-                                    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                                    Toast.makeText(context, R.string.server_not_responding, Toast.LENGTH_SHORT).show();
+                                    dateString=null;
+                                    if (response.code() == 404 || response.code() == 500) {
+                                        progressBarCyclic.setVisibility(View.GONE);
+                                        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                        Toast.makeText(context, R.string.server_not_responding, Toast.LENGTH_SHORT).show();
+                                    }
                                 }
                             }
+                            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
                         }
-                        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
-                    }
+                        @Override
+                        public void onFailure(Call<CreateOrderData> call, Throwable t) {
+                            progressBarCyclic.setVisibility(View.GONE);
+                            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                            Toast.makeText(context, R.string.server_not_responding, Toast.LENGTH_SHORT).show();
 
-                    @Override
-                    public void onFailure(Call<CreateOrderData> call, Throwable t) {
-                        progressBarCyclic.setVisibility(View.GONE);
-                        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                        Toast.makeText(context, R.string.server_not_responding, Toast.LENGTH_SHORT).show();
+                        }
+                    });
 
-                    }
-                });
+                }
             }
+
+
         });
         btPickcup.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -388,6 +495,11 @@ public class OrderActivity extends AppCompatActivity implements OnItemClickListe
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
     public String getCorrectValue(String price) {
         String[] priceSpl = price.split("\\.");
         if (priceSpl.length > 1)
@@ -434,26 +546,56 @@ public class OrderActivity extends AppCompatActivity implements OnItemClickListe
 
     @Override
     public void totalPrice(String total) {
-        this.total=total;
-        totalprice.setText("£ " + getCorrectValue(String.format("%.2f", Float.valueOf(total))));
+        if (Float.valueOf(total) == 0) {
+            subLayout.setVisibility(View.GONE);
+            arrow.setRotation(360);
+            taxprice.setText("£ " + "0");
+            totalprice.setText("£ " + "0");
+        } else {
+            tax = (Float.valueOf(total) * totalpercentage / 100) + Float.valueOf(orderListData.getStripeCharge().getAdditional());
+            this.total = getCorrectValue(String.format("%.2f", Float.valueOf(total) + tax));
+            taxprice.setText("£ " + getCorrectValue(String.format("%.2f", tax)));
+            totalprice.setText("£ " + getCorrectValue(String.format("%.2f", Float.valueOf(this.total))));
+        }
     }
 
     public void onBackpresss() {
-        if (fromMenu) {
-            Intent intent = new Intent(OrderActivity.this, MenuActivity.class);
+        if (fromMenu.equals("menuActivity")) {
+            Intent intent = new Intent(context, MenuActivity.class);
             intent.putExtra("sid", sid);
+            intent.putExtra("tittle", cafeName);
+            intent.putExtra("image", orderListData.getData().getShopDetail().getImageurl());
+            intent.putExtra("rating",rating);
+
             startActivity(intent);
             finish();
-        } else {
+        } else if (fromMenu.equals("rewardActivity")) {
+            Intent intent = new Intent(context, RewardActivity.class);
+            startActivity(intent);
+            finish();
+        } else if (fromMenu.equals("mainActivity")) {
             Intent intent = new Intent(context, MainActivity.class);
             startActivity(intent);
+            finish();
         }
 
+    }
+
+    public boolean isTablet(Context context) {
+        boolean xlarge = ((context.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == 4);
+        boolean large = ((context.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_LARGE);
+        return (xlarge || large);
     }
 
     @Override
     public void ordereddata(Ordered[] ordered) {
         this.ordered = ordered;
+    }
+
+    @Override
+    public void cardSet(ArrayList<CardDetails> cardDetailses) {
+
+
     }
 
 

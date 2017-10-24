@@ -33,7 +33,7 @@
             android:layout_width="95dp"
             android:layout_height="30dp"
             android:background="@drawable/border_hollow_full_black"
-            android:text="now"
+            android:text="Now"
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:layout_below="@+id/rl"

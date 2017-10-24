@@ -66,6 +66,13 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService{
                     case "orderCompleted":
                         showSmallNotificationsMessages(orderId);
                         break;
+                    case "orderReady":
+                        showSmallNotificationsMessages(orderId);
+                        break;
+                    case "rewardCompleted":
+                        showSmallNotificationsMessages(orderId);
+                        break;
+
                     default:
                         Log.d(TAG, "Default Mode set");
                 }
@@ -92,7 +99,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService{
            mBuilder.setContentText(message);
            mBuilder.setPriority(Notification.PRIORITY_HIGH);
            mBuilder.setVisibility(Notification.VISIBILITY_PUBLIC);
-           mBuilder.setSmallIcon(R.drawable.cofeecup);
+           mBuilder.setSmallIcon(R.drawable.logo);
+           mBuilder.setColor(R.color.colorPrimary);
            mBuilder.setAutoCancel(true);
            mBuilder.setDefaults(Notification.DEFAULT_ALL);
            Intent resultIntent = new Intent(this, OrderDetailsActivity.class);

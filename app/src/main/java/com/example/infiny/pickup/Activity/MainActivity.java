@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.IdRes;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.NavigationView;
@@ -40,6 +41,7 @@ import com.example.infiny.pickup.Interfaces.ApiIntegration;
 import com.example.infiny.pickup.Interfaces.OnItemClickListener;
 import com.example.infiny.pickup.Model.CafeListingData;
 import com.example.infiny.pickup.Model.Cafes;
+import com.example.infiny.pickup.Model.CardDetails;
 import com.example.infiny.pickup.Model.ItemData;
 import com.example.infiny.pickup.Model.LoginData;
 import com.example.infiny.pickup.Model.Ordered;
@@ -56,6 +58,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
+
+import static com.example.infiny.pickup.R.drawable.*;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -106,10 +110,10 @@ public class MainActivity extends AppCompatActivity
         sharedPreferences=getSharedPreferences(sessionManager.PREF_NAME,0);
         navView.setNavigationItemSelectedListener(this);
         Log.e("userToken",sharedPreferences.getString("token",null));
-        Notifications=(TextView) MenuItemCompat.getActionView(navView.getMenu().
-                findItem(R.id.nav_notification));
-        Rewards=(TextView) MenuItemCompat.getActionView(navView.getMenu().
-                findItem(R.id.nav_reward));
+        Notifications=(TextView)navView.getMenu().
+                findItem(R.id.nav_notification).getActionView().findViewById(R.id.menu_Count);
+        Rewards=(TextView) navView.getMenu().
+                findItem(R.id.nav_reward).getActionView().findViewById(R.id.menu_Count);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         badgeToggle = new BadgeDrawerToggle(
@@ -127,6 +131,8 @@ public class MainActivity extends AppCompatActivity
                 intent.putExtra("image",item.getImageurl());
                 intent.putExtra("tittle",item.getCafe_name());
                 intent.putExtra("sid",item.get_id());
+                intent.putExtra("rating",item.getRating());
+
                 startActivity(intent);
             }
 
@@ -142,6 +148,11 @@ public class MainActivity extends AppCompatActivity
 
             @Override
             public void ordereddata(Ordered[] ordered) {
+
+            }
+
+            @Override
+            public void cardSet(ArrayList<CardDetails> cardDetailses) {
 
             }
 
@@ -207,7 +218,7 @@ public class MainActivity extends AppCompatActivity
                     .invalidate(sharedPreferences.getString(sessionManager.image, null)+"_large.png");
             Picasso.with(context)
                     .load(sharedPreferences.getString(sessionManager.image, null)+"_large.png")
-                    .placeholder(R.drawable.ic_person_black_48dp)
+                    .placeholder(ic_person_black_48dp)
                     .into(profileView);
 
         }
@@ -217,7 +228,7 @@ public class MainActivity extends AppCompatActivity
                     .invalidate(sharedPreferences.getString(sessionManager.image, null)+"_small.png");
             Picasso.with(context)
                     .load(sharedPreferences.getString(sessionManager.image, null)+"_small.png")
-                    .placeholder(R.drawable.ic_person_black_48dp)
+                    .placeholder(ic_person_black_48dp)
                     .into(profileView);
         };
         profileView.setOnClickListener(new View.OnClickListener() {
@@ -235,6 +246,8 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
+
+
 
 
     }
@@ -279,24 +292,35 @@ public class MainActivity extends AppCompatActivity
                         } else {
                             progressBarCyclic.setVisibility(View.GONE);
                             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                            if(cafeListingData.getClaimedReward()!=0)
+                            if(cafeListingData.getClaimedReward()!=0 || cafeListingData.getUnreadNotification() != 0)
                             {
-
-
-                            }
-                            if(cafeListingData.getUnreadNotification() != 0)
-                            {
-
-                            }
-                            else {
+                                Notifications.setVisibility(View.VISIBLE);
+                                Rewards.setVisibility(View.VISIBLE);
                                 badgeToggle.setBadgeEnabled(true);
                                 badgeToggle.setBadgeText(String.valueOf(cafeListingData.getUnreadNotification()+cafeListingData.getClaimedReward()));
-                                Notifications.setText(String.valueOf(cafeListingData.getUnreadNotification()));
-                                Notifications.setGravity(Gravity.CENTER_VERTICAL);
-                                Rewards.setText(String.valueOf(cafeListingData.getClaimedReward()));
-                                Rewards.setGravity(Gravity.CENTER_VERTICAL);
+                                if(cafeListingData.getClaimedReward()==0)
+                                {
+                                   Rewards.setVisibility(View.GONE);
+                                }
+                                else {
+
+                                    Rewards.setText(String.valueOf(cafeListingData.getClaimedReward()));
+
+                                }
+                                if(cafeListingData.getUnreadNotification() == 0)
+                                {
+                                    Notifications.setVisibility(View.GONE);
+                                }
+                                else {
+
+                                    Notifications.setText(String.valueOf(cafeListingData.getUnreadNotification()));
+//                                    Notifications.setGravity(Gravity.CENTER_VERTICAL);
+                                }
+
+
 
                             }
+
 
 
 
@@ -342,7 +366,7 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_cart) {
             Intent intent = new Intent(MainActivity.this, OrderActivity.class);
-            intent.putExtra("fromMenu",false);
+            intent.putExtra("fromPage","mainActivity");
             startActivity(intent);
             finish();
 
@@ -358,7 +382,7 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_logout) {
 
             Intent intent=new Intent(MainActivity.this,LoginActivity.class);
-
+            sessionManager.clear();
             startActivity(intent);
             finish();
 

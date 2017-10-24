@@ -2,6 +2,7 @@ package com.example.infiny.pickup.Adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.provider.SyncStateContract;
@@ -62,12 +63,7 @@ public class Order_History_Adapter  extends RecyclerView.Adapter<Order_History_A
     public void onBindViewHolder(MyViewHolder holder, int position) {
 
         final DataOrderHistory f1=partyName.get(position);
-        Picasso.with(context)
-                .invalidate(f1.getShopDetail().getImageurl());
-        Picasso.with(context)
-                .load(f1.getShopDetail().getImageurl())
-                .placeholder(R.drawable.ic_person_black_48dp)
-                .into(holder.imageView);
+
         holder.partyName.setText(f1.getShopDetail().getCafe_name());
         holder.tw_orderno.setText(f1.getOrderId());
         holder.tw_total.setText("£ "+f1.getTotalPrice());
@@ -85,7 +81,27 @@ public class Order_History_Adapter  extends RecyclerView.Adapter<Order_History_A
         holder.tw_date.setText(ogdate);
         ordereds=new ArrayList<>(Arrays.asList(f1.getOrdered()));
 
+        if(holder.isTablet(context))
+        {
+            Picasso.with(context)
+                    .invalidate(f1.getShopDetail().getImageurl()+"_large.png");
+            Picasso.with(context)
+                    .load(f1.getShopDetail().getImageurl()+"_large.png")
+                    .placeholder(R.drawable.ic_person_black_48dp)
+                    .into(holder.imageView);
 
+        }
+        else
+        {
+            Picasso.with(context)
+                    .invalidate(f1.getShopDetail().getImageurl()+"_small.png");
+            Picasso.with(context)
+                    .load(f1.getShopDetail().getImageurl()+"_small.png")
+                    .placeholder(R.drawable.ic_person_black_48dp)
+                    .into(holder.imageView);
+
+
+        };
 
         holder.relativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -129,5 +145,11 @@ public class Order_History_Adapter  extends RecyclerView.Adapter<Order_History_A
             tw_date=(TextView)itemView.findViewById(R.id.tw_date);
 
         }
+        public boolean isTablet(Context context) {
+            boolean xlarge = ((context.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == 4);
+            boolean large = ((context.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_LARGE);
+            return (xlarge || large);
+        }
+
     }
 }

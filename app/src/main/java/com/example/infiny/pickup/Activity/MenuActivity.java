@@ -3,6 +3,7 @@ package com.example.infiny.pickup.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -30,6 +31,7 @@ import com.example.infiny.pickup.Interfaces.ApiIntegration;
 import com.example.infiny.pickup.Interfaces.OnItemClickListener;
 import com.example.infiny.pickup.Model.AddToCartData;
 import com.example.infiny.pickup.Model.Cafes;
+import com.example.infiny.pickup.Model.CardDetails;
 import com.example.infiny.pickup.Model.Data;
 import com.example.infiny.pickup.Model.ItemData;
 import com.example.infiny.pickup.Model.MenuListData;
@@ -47,6 +49,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
+
+import static com.example.infiny.pickup.R.drawable.ic_person_black_48dp;
 
 public class MenuActivity extends AppCompatActivity implements OnItemClickListener {
 
@@ -97,7 +101,11 @@ public class MenuActivity extends AppCompatActivity implements OnItemClickListen
     @BindView(R.id.cartimage)
     ImageView cartimage;
     public static String cart_count_String;
- public static   TextView cartCount;
+    public static TextView cartCount;
+    @BindView(R.id.rating4)
+    ImageView rating4;
+    @BindView(R.id.rating5)
+    ImageView rating5;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,12 +124,58 @@ public class MenuActivity extends AppCompatActivity implements OnItemClickListen
         sessionManager = new SessionManager(context);
         sharedPreferences = getSharedPreferences(sessionManager.PREF_NAME, 0);
         tittle.setText(intent.getStringExtra("tittle"));
-        cartCount=(TextView)findViewById(R.id.cart_count);
+        cartCount = (TextView) findViewById(R.id.cart_count);
         sid = intent.getStringExtra("sid");
-        Picasso.with(context)
-                .load(intent.getStringExtra("image"))
-                .placeholder(R.drawable.cofeecup)
-                .into(tittleimage);
+        if(intent.getStringExtra("rating").equals("1"))
+        {
+            rating5.setVisibility(View.VISIBLE);
+        }
+        if(intent.getStringExtra("rating").equals("2"))
+        {
+            rating5.setVisibility(View.VISIBLE);
+            rating4.setVisibility(View.VISIBLE);
+        }
+        if(intent.getStringExtra("rating").equals("3"))
+        {
+            rating5.setVisibility(View.VISIBLE);
+            rating4.setVisibility(View.VISIBLE);
+            rating3.setVisibility(View.VISIBLE);
+        }
+        if(intent.getStringExtra("rating").equals("4"))
+        {
+            rating5.setVisibility(View.VISIBLE);
+            rating4.setVisibility(View.VISIBLE);
+            rating3.setVisibility(View.VISIBLE);
+            rating2.setVisibility(View.VISIBLE);
+        }
+        if(intent.getStringExtra("rating").equals("5"))
+        {
+            rating5.setVisibility(View.VISIBLE);
+            rating4.setVisibility(View.VISIBLE);
+            rating3.setVisibility(View.VISIBLE);
+            rating2.setVisibility(View.VISIBLE);
+            rating1.setVisibility(View.VISIBLE);
+        }
+
+        if (isTablet(context)) {
+            Picasso.with(context)
+                    .invalidate(intent.getStringExtra("image") + "_large.png");
+            Picasso.with(context)
+                    .load(intent.getStringExtra("image") + "_large.png")
+                    .placeholder(ic_person_black_48dp)
+                    .into(tittleimage);
+
+        } else {
+            Picasso.with(context)
+                    .invalidate(intent.getStringExtra("image") + "_small.png");
+            Picasso.with(context)
+                    .load(intent.getStringExtra("image") + "_small.png")
+                    .placeholder(ic_person_black_48dp)
+                    .into(tittleimage);
+        }
+        ;
+
+
         order = (RelativeLayout) findViewById(R.id.order);
         btOrder = (TextView) findViewById(R.id.bt_order);
         orderPrice = (TextView) findViewById(R.id.order_price);
@@ -130,8 +184,11 @@ public class MenuActivity extends AppCompatActivity implements OnItemClickListen
             @Override
             public void onClick(View v) {
                 Intent intent1 = new Intent(context, OrderActivity.class);
-                intent1.putExtra("sid",sid);
-                intent1.putExtra("fromMenu",true);
+                intent1.putExtra("sid", sid);
+                intent1.putExtra("fromPage", "menuActivity");
+                intent1.putExtra("tittle", intent.getStringExtra("tittle"));
+                intent1.putExtra("image", intent.getStringExtra("image"));
+                intent1.putExtra("rating",   intent.getStringExtra("rating"));
                 startActivity(intent1);
                 finish();
 
@@ -163,18 +220,18 @@ public class MenuActivity extends AppCompatActivity implements OnItemClickListen
                             progressBarCyclic.setVisibility(View.GONE);
                             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
-                            NormalMenuAdapter.total=Float.valueOf(menuItemData.getTotalPrice());
+                            NormalMenuAdapter.total = Float.valueOf(menuItemData.getTotalPrice());
 
-                            if(menuItemData.getTotalCount().equals("0") && menuItemData.getTotalPrice().equals("0"))
-                            {
-                                MenuActivity.cart_count_String="0";
+                            if (menuItemData.getTotalCount().equals("0") && menuItemData.getTotalPrice().equals("0")) {
+                                MenuActivity.cart_count_String = "0";
                                 order.setVisibility(View.GONE);
-                            }
-                            else {
+                            } else {
+                                order.setVisibility(View.VISIBLE);
                                 cartCount.setText(menuItemData.getTotalCount());
-                                cart_count_String=menuItemData.getTotalCount();
-                                orderPrice.setText("£ "+getCorrectValue(String.format("%.2f", Float.valueOf(menuItemData.getTotalPrice()))));
+                                cart_count_String = menuItemData.getTotalCount();
+                                orderPrice.setText("£ " + getCorrectValue(String.format("%.2f", Float.valueOf(menuItemData.getTotalPrice()))));
                             }
+
                             ArrayList<Data> datas = new ArrayList<>(Arrays.asList(menuItemData.getData()));
                             menuNormalAdapter = new MenuNormalAdapter(context, datas, onItemClickListener, sid);
                             RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
@@ -206,6 +263,7 @@ public class MenuActivity extends AppCompatActivity implements OnItemClickListen
 
 
     }
+
     public String getCorrectValue(String price) {
         String[] priceSpl = price.split("\\.");
         if (priceSpl.length > 1)
@@ -248,6 +306,17 @@ public class MenuActivity extends AppCompatActivity implements OnItemClickListen
     @Override
     public void ordereddata(Ordered[] ordered) {
 
+    }
+
+    @Override
+    public void cardSet(ArrayList<CardDetails> cardDetailses) {
+
+    }
+
+    public boolean isTablet(Context context) {
+        boolean xlarge = ((context.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == 4);
+        boolean large = ((context.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_LARGE);
+        return (xlarge || large);
     }
 
 

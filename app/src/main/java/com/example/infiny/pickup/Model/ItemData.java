@@ -9,7 +9,6 @@ import android.os.Parcelable;
 
 public class ItemData implements Parcelable {
     private String itemName;
-
     private String _id;
     private String size;
     String categoty;

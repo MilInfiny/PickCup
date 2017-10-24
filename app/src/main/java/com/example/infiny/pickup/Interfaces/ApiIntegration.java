@@ -1,8 +1,10 @@
 package com.example.infiny.pickup.Interfaces;
 
 import com.example.infiny.pickup.Helpers.MenuItemData;
+import com.example.infiny.pickup.Model.AddCardData;
 import com.example.infiny.pickup.Model.AddToCartData;
 import com.example.infiny.pickup.Model.CafeListingData;
+import com.example.infiny.pickup.Model.CardListingData;
 import com.example.infiny.pickup.Model.CreateOrderData;
 import com.example.infiny.pickup.Model.EditProfileData;
 import com.example.infiny.pickup.Model.FindpartiOrder;
@@ -67,12 +69,18 @@ public interface ApiIntegration {
                                          @Field("lng") String  lang,
                                          @Field("requestData") String  requestData,
                                          @Field("skipData") String  skipData);
+
     @FormUrlEncoded
     @POST("forgotPassword")
     Call<ForgotPasswordData> getForgotPassword(@Field("email") String  email);
     @FormUrlEncoded
     @POST("findpartiOrder")
     Call<FindpartiOrder> getsingalOrder(@Field("token") String  token,@Field("orderId") String  orderId);
+
+    @FormUrlEncoded
+    @POST("payCreateUserCards")
+    Call<VerifyFpOtp> registerStripeToken(@Field("userToken") String  token,
+                                          @Field("stripeToken") String  stripeToken);
 
     @FormUrlEncoded
     @POST("verifyresetPasswordToken")
@@ -89,7 +97,15 @@ public interface ApiIntegration {
 
     @FormUrlEncoded
     @POST("cartListing")
-    Call<OrderListData> getOrderListing(@Field("userToken") String  token);
+    Call<OrderListData> getOrderListing(@Field("userToken") String  token,
+                                        @Field("shopDetail") String shopDetails);
+
+
+
+    @FormUrlEncoded
+    @POST("payCreateUserCards")
+    Call<AddCardData> addCard(@Field("userToken") String  token,
+                              @Field("stripeToken") String  requestData);
 
     @FormUrlEncoded
     @POST("ListNotification")
@@ -106,6 +122,22 @@ public interface ApiIntegration {
     Call<Order_History_Data> getOrder_History_Listing(@Field("userToken") String  token,
                                                      @Field("requestData") String  requestData,
                                                       @Field("skipData") String  skipData);
+
+    @FormUrlEncoded
+    @POST("cardListing")
+    Call<CardListingData> getCardListing(@Field("userToken") String  token);
+
+    @FormUrlEncoded
+    @POST("payMakePrimary")
+    Call<CardListingData> setPrimaryCard(@Field("userToken") String  token,
+                                         @Field("makePrimaryId") String  cardId);
+
+
+    @FormUrlEncoded
+    @POST("deletecard")
+    Call<CardListingData> deleteCard(@Field("userToken") String  token,
+                                         @Field("cardId") String  cardId);
+
 
     @FormUrlEncoded
     @POST("addItemToCart")
@@ -136,7 +168,7 @@ public interface ApiIntegration {
                                        @Field("itemSize") String  itemSize,
                                       @Field("shopDetail") String  shopDetail);
 
-  @POST("createOrder")
+   @POST("createOrder")
     Call<CreateOrderData> getCreateOrder(@Header("Content-Type") String token, @Body FooRequest body);
 
     @Multipart

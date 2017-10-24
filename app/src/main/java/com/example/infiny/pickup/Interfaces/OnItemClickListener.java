@@ -2,6 +2,7 @@ package com.example.infiny.pickup.Interfaces;
 
 import com.example.infiny.pickup.Helpers.CafeLIstingHelpers;
 import com.example.infiny.pickup.Model.Cafes;
+import com.example.infiny.pickup.Model.CardDetails;
 import com.example.infiny.pickup.Model.ItemData;
 import com.example.infiny.pickup.Model.Ordered;
 
@@ -16,5 +17,6 @@ public interface OnItemClickListener {
     void voidOnAddCart(ItemData itemData);
     void totalPrice(String total);
     void ordereddata(Ordered[] ordered);
+    void cardSet( ArrayList<CardDetails> cardDetailses);
 
 }

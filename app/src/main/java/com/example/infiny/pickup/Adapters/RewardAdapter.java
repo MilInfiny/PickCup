@@ -1,6 +1,9 @@
 package com.example.infiny.pickup.Adapters;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -19,6 +22,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.example.infiny.pickup.Activity.OrderActivity;
 import com.example.infiny.pickup.Helpers.CafeLIstingHelpers;
 import com.example.infiny.pickup.Model.Data;
 import com.example.infiny.pickup.Model.DataRewards;
@@ -52,15 +56,29 @@ public class RewardAdapter extends RecyclerView.Adapter<RewardAdapter.MyViewHold
     @Override
     public void onBindViewHolder(final MyViewHolder holder, int position) {
 
-        DataRewards f1=partyName.get(position);
-        holder.partyName.setText(f1.getCafe_name());
-        Picasso.with(context)
-                .invalidate(f1.getImageurl());
-        Picasso.with(context)
-                .load(f1.getImageurl())
-                .placeholder(R.drawable.ic_person_black_48dp)
-                .into(holder.imageView);
+        final DataRewards f1=partyName.get(position);
 
+        if(holder.isTablet(context))
+        {
+            Picasso.with(context)
+                    .invalidate(f1.getImageurl()+"_large.png");
+            Picasso.with(context)
+                    .load(f1.getImageurl()+"_large.png")
+                    .placeholder(R.drawable.ic_person_black_48dp)
+                    .into(holder.imageView);
+
+        }
+        else
+        {
+            Picasso.with(context)
+                    .invalidate(f1.getImageurl()+"_small.png");
+            Picasso.with(context)
+                    .load(f1.getImageurl()+"_small.png")
+                    .placeholder(R.drawable.ic_person_black_48dp)
+                    .into(holder.imageView);
+
+
+        };
 
         if(Integer.parseInt(f1.getRewardCompleted())>=Integer.parseInt(f1.getQuantity()))
         {
@@ -81,6 +99,17 @@ public class RewardAdapter extends RecyclerView.Adapter<RewardAdapter.MyViewHold
             holder.recyclerView.setNestedScrollingEnabled(false);
 
         }
+
+        holder.claim.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(context, OrderActivity.class);
+                intent.putExtra("fromPage","rewardActivity");
+                intent.putExtra("sid",f1.getCafe_id());
+                context.startActivity(intent);
+                ((Activity)context).finish();
+            }
+        });
 
     }
 
@@ -104,6 +133,11 @@ public class RewardAdapter extends RecyclerView.Adapter<RewardAdapter.MyViewHold
             tv_rewardsdetail=(TextView)itemView.findViewById(R.id.rewarddetails);
             tv_info=(TextView)itemView.findViewById(R.id.tv_info);
             claim=(Button)itemView.findViewById(R.id.bt_claim);
+        }
+        public boolean isTablet(Context context) {
+            boolean xlarge = ((context.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == 4);
+            boolean large = ((context.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_LARGE);
+            return (xlarge || large);
         }
     }
 }

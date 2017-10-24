@@ -88,7 +88,7 @@ public class RetroFitClient {
             }
         }).build();
         retrofit = new Retrofit.Builder()
-                .baseUrl("http://dev2.infiny.in:3000/api/")
+                .baseUrl("http://192.168.1.129:3000/api/")
                 .client(okHttpClient)
                 .build();
 

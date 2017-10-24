@@ -1,6 +1,7 @@
 package com.example.infiny.pickup.Adapters;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +21,8 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 
 import butterknife.BindView;
+
+import static com.example.infiny.pickup.R.drawable.ic_person_black_48dp;
 
 /**
  * Created by infiny on 9/4/17.
@@ -61,12 +64,30 @@ public class CafeListAdapter extends RecyclerView.Adapter<CafeListAdapter.MyView
         {
             holder.status.setBackground(context.getResources().getDrawable(R.drawable.button_bg_round_yellow));
 
+        };
+
+        if(holder.isTablet(context))
+        {
+
+            Picasso.with(context)
+                    .load(cafes.getImageurl()+"_large.png")
+                    .placeholder(R.drawable.cofeecup)
+                    .into(holder.bgimage);
+            holder.tittle.setText(cafes.getCafe_name());
+
         }
-        Picasso.with(context)
-                .load(cafes.getImageurl())
-                .placeholder(R.drawable.cofeecup)
-                .into(holder.bgimage);
-        holder.tittle.setText(cafes.getCafe_name());
+        else
+        {
+
+            Picasso.with(context)
+                    .load(cafes.getImageurl()+"_small.png")
+                    .placeholder(R.drawable.cofeecup)
+                    .into(holder.bgimage);
+            holder.tittle.setText(cafes.getCafe_name());
+
+
+        };
+
         if(cafes.getRating().equals("1"))
         {
             holder.r1.setVisibility(View.VISIBLE);
@@ -134,5 +155,11 @@ public class CafeListAdapter extends RecyclerView.Adapter<CafeListAdapter.MyView
             });
 
         }
+        public boolean isTablet(Context context) {
+            boolean xlarge = ((context.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == 4);
+            boolean large = ((context.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_LARGE);
+            return (xlarge || large);
+        }
+
     }
 }

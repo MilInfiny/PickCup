@@ -16,13 +16,24 @@
 
 
 
-
         <RelativeLayout
+            android:id="@+id/mainLayout"
             android:layout_width="match_parent"
+
             android:layout_height="match_parent"
             android:background="@color/gray">
-
-
+            <ProgressBar
+                android:id="@+id/progressBar_cyclic"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minHeight="50dp"
+                android:minWidth="50dp"
+                android:indeterminateTint="@color/white"
+                android:visibility="gone"
+                android:translationZ="2dp"
+                android:indeterminate="true"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true" />
 
             <TextView
                 android:id="@+id/tv_order_details"
@@ -43,18 +54,6 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tv_order_details"
                 android:elevation="0dp">
-                <ProgressBar
-                    android:id="@+id/progressBar_cyclic"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:minHeight="50dp"
-                    android:minWidth="50dp"
-                    android:indeterminateTint="@color/white"
-                    android:visibility="gone"
-                    android:translationZ="2dp"
-                    android:indeterminate="true"
-                    android:layout_centerVertical="true"
-                    android:layout_centerHorizontal="true" />
 
                 <RelativeLayout
                     android:layout_width="wrap_content"
@@ -76,6 +75,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:paddingLeft="8dp"
+                            android:textAllCaps="true"
                             android:paddingRight="16dp"
                             android:text="Urban Cafe"
                             android:textSize="19sp" />
@@ -282,6 +282,7 @@
                 android:text="Beyond the type of buttons available with an input method, you should specify behaviors such as whether the input method provides spelling suggestions, capitalizes new sentences, and replaces the carriage return button with an action button such as a Done or Next. This lesson shows how to specify these characteristics.
 
 "
+                android:id="@+id/tv_notes"
                 android:textColor="#8e8e8e"
                 android:textSize="14sp" />
 

@@ -147,14 +147,14 @@ public class SignupActivity extends AppCompatActivity {
                     retroFitClient = new RetroFitClient(context).getBlankRetrofit();
                     Call<SignUpData> call = retroFitClient
                             .create(ApiIntegration.class)
-                            .getsignup(etName.getEditText().getText().toString(),
-                                    etSurname.getEditText().getText().toString(),
-                                    etEmail.getEditText().getText().toString(),
-                                    etPassword.getEditText().getText().toString(),
-                                    etDob.getEditText().getText().toString(),
-                                    etPostcode.getEditText().getText().toString(),
-                                    etAdd.getEditText().getText().toString(),
-                                    etCity.getEditText().getText().toString(),
+                            .getsignup(etName.getEditText().getText().toString().trim(),
+                                    etSurname.getEditText().getText().toString().trim(),
+                                    etEmail.getEditText().getText().toString().trim(),
+                                    etPassword.getEditText().getText().toString().trim(),
+                                    etDob.getEditText().getText().toString().trim(),
+                                    etPostcode.getEditText().getText().toString().trim(),
+                                    etAdd.getEditText().getText().toString().trim(),
+                                    etCity.getEditText().getText().toString().trim(),
                                     sharedPreferences.getString("FcmId",null));
                     call.enqueue(new Callback<SignUpData>() {
                         @Override
@@ -223,43 +223,43 @@ public class SignupActivity extends AppCompatActivity {
             etEmail.getEditText().setError("Email is not valid ");
             status = false;
         }
-        if (TextUtils.isEmpty(etEmail.getEditText().getText().toString())) {
+        if (TextUtils.isEmpty(etEmail.getEditText().getText().toString().trim())) {
             etEmail.getEditText().setError("Please enter email");
             status = false;
         }
-        if (TextUtils.isEmpty(etPassword.getEditText().getText().toString())) {
+        if (TextUtils.isEmpty(etPassword.getEditText().getText().toString().trim())) {
             etPassword.getEditText().setError("Please enter password");
             status = false;
         }
-        if (TextUtils.isEmpty(etConfirmpassword.getEditText().getText().toString())) {
+        if (TextUtils.isEmpty(etConfirmpassword.getEditText().getText().toString().trim())) {
             etConfirmpassword.getEditText().setError("Please enter confirmpassword");
             status = false;
         }
-        if (TextUtils.isEmpty(etName.getEditText().getText().toString())) {
+        if (TextUtils.isEmpty(etName.getEditText().getText().toString().trim())) {
             etName.getEditText().setError("Please enter name");
             status = false;
         }
-        if (TextUtils.isEmpty(etSurname.getEditText().getText().toString())) {
+        if (TextUtils.isEmpty(etSurname.getEditText().getText().toString().trim())) {
             etSurname.getEditText().setError("Please enter surname");
             status = false;
         }
-        if (TextUtils.isEmpty(etDob.getEditText().getText().toString())) {
+        if (TextUtils.isEmpty(etDob.getEditText().getText().toString().trim())) {
             etDob.getEditText().setError("Please enter date of birth");
             status = false;
         }
-        if (TextUtils.isEmpty(etAdd.getEditText().getText().toString())) {
+        if (TextUtils.isEmpty(etAdd.getEditText().getText().toString().trim())) {
             etAdd.getEditText().setError("Please enter address");
             status = false;
         }
-        if (TextUtils.isEmpty(etCity.getEditText().getText().toString())) {
+        if (TextUtils.isEmpty(etCity.getEditText().getText().toString().trim())) {
             etCity.getEditText().setError("Please enter city");
             status = false;
         }
-        if (TextUtils.isEmpty(etPostcode.getEditText().getText().toString())) {
+        if (TextUtils.isEmpty(etPostcode.getEditText().getText().toString().trim())) {
             etPostcode.getEditText().setError("Please enter postcode");
             status = false;
         }
-        if (!etPassword.getEditText().getText().toString().equals(etConfirmpassword.getEditText().getText().toString())) {
+        if (!etPassword.getEditText().getText().toString().trim().equals(etConfirmpassword.getEditText().getText().toString().trim())) {
             etPassword.getEditText().setError("password & confirm password should be same");
             etConfirmpassword.getEditText().setError("password & confirm password should be same");
             status = false;

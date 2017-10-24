@@ -15,13 +15,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.infiny.pickup.Adapters.NotificationAdapter;
 import com.example.infiny.pickup.Helpers.RetroFitClient;
 import com.example.infiny.pickup.Helpers.SessionManager;
 import com.example.infiny.pickup.Interfaces.ApiIntegration;
-import com.example.infiny.pickup.Model.CafeListingData;
 import com.example.infiny.pickup.Model.DataNotification;
 import com.example.infiny.pickup.Model.NotificationData;
 import com.example.infiny.pickup.R;
@@ -35,6 +35,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class NotificationActivity extends AppCompatActivity {
 
@@ -53,6 +54,8 @@ public class NotificationActivity extends AppCompatActivity {
     Context context;
     NotificationData notificationData;
     ArrayList<DataNotification> dataNotifications;
+    @BindView(R.id.noNotification)
+    TextView noNotification;
     private boolean loading = true;
     Retrofit retroFitClient;
     int pastVisiblesItems, visibleItemCount, totalItemCount;
@@ -68,14 +71,15 @@ public class NotificationActivity extends AppCompatActivity {
         appbar.setOutlineProvider(null);
         getSupportActionBar().setTitle("Notifications");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        context=this;
-        sessionManager=new SessionManager(context);
-        sharedPreferences=getSharedPreferences(sessionManager.PREF_NAME,0);
-        dataNotifications=new ArrayList<DataNotification>();
+        context = this;
+        sessionManager = new SessionManager(context);
+        sharedPreferences = getSharedPreferences(sessionManager.PREF_NAME, 0);
+        dataNotifications = new ArrayList<DataNotification>();
         notificationAdapter = new NotificationAdapter(context, dataNotifications);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         recycleView.setLayoutManager(mLayoutManager);
         recycleView.setAdapter(notificationAdapter);
+        recycleView.setNestedScrollingEnabled(false);
         recycleView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -109,19 +113,18 @@ public class NotificationActivity extends AppCompatActivity {
         getData(current_page);
 
 
-
     }
-    public void getData(int currentPage)
-    {
+
+    public void getData(int currentPage) {
         progressBarCyclic.setVisibility(View.VISIBLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
                 WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
         retroFitClient = new RetroFitClient(context).getBlankRetrofit();
         Call<NotificationData> call = retroFitClient
                 .create(ApiIntegration.class)
-                .getNotificationLIsting(sharedPreferences.getString("token",null),
-                                         String.valueOf(currentPage),
-                                         String.valueOf(currentPage-1));
+                .getNotificationLIsting(sharedPreferences.getString("token", null),
+                        String.valueOf(currentPage),
+                        String.valueOf(currentPage - 1));
         call.enqueue(new Callback<NotificationData>() {
 
             @Override
@@ -132,7 +135,8 @@ public class NotificationActivity extends AppCompatActivity {
                         if (notificationData.getError().equals("true")) {
                             progressBarCyclic.setVisibility(View.GONE);
                             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                            Toast.makeText(context,notificationData.getTitle(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context, notificationData.getTitle(), Toast.LENGTH_SHORT).show();
+                            noNotification.setVisibility(View.VISIBLE);
                         } else {
                             progressBarCyclic.setVisibility(View.GONE);
                             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
@@ -141,7 +145,7 @@ public class NotificationActivity extends AppCompatActivity {
 
                         }
 
-                    }else {
+                    } else {
                         if (response.code() == 404 || response.code() == 500) {
                             progressBarCyclic.setVisibility(View.GONE);
                             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
@@ -162,6 +166,7 @@ public class NotificationActivity extends AppCompatActivity {
         });
 
     }
+
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
@@ -171,7 +176,7 @@ public class NotificationActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(android.view.MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
                 onBackpresss();
@@ -179,11 +184,15 @@ public class NotificationActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-    public void onBackpresss()
-    {
-        Intent intent=new Intent(context,MainActivity.class);
+
+    public void onBackpresss() {
+        Intent intent = new Intent(context, MainActivity.class);
         startActivity(intent);
         finish();
+    }
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
 }

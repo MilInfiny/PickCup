@@ -8,13 +8,25 @@ import android.graphics.Bitmap;
 
 public class User
 {
+    private String imageUrl;
+
+    private String isLoggedIn;
+
+    private String __v;
+
+    private String lastname;
+
+    private String firstname;
+
+    private String password;
+
+    private CardDetails[] cardDetails;
+
     private String resetPasswordToken;
 
     private String _id;
 
     private Address address;
-
-    private String imageUrl;
 
     private String email;
 
@@ -24,44 +36,7 @@ public class User
 
     private String dob;
 
-    private String __v;
-
-    private String lastname;
-
-    private String firstname;
-
-    private String password;
-     private  Boolean isLoggedIn;
-
-    public String getResetPasswordToken ()
-    {
-        return resetPasswordToken;
-    }
-
-    public void setResetPasswordToken (String resetPasswordToken)
-    {
-        this.resetPasswordToken = resetPasswordToken;
-    }
-
-    public String get_id ()
-    {
-        return _id;
-    }
-
-    public void set_id (String _id)
-    {
-        this._id = _id;
-    }
-
-    public Address getAddress ()
-    {
-        return address;
-    }
-
-    public void setAddress (Address address)
-    {
-        this.address = address;
-    }
+    private String stripeId;
 
     public String getImageUrl ()
     {
@@ -73,52 +48,14 @@ public class User
         this.imageUrl = imageUrl;
     }
 
-    public String getEmail ()
+    public String getIsLoggedIn ()
     {
-        return email;
-    }
-
-    public void setEmail (String email)
-    {
-        this.email = email;
-    }
-
-    public String[] getDeviceToken ()
-    {
-        return deviceToken;
-    }
-
-    public void setDeviceToken (String[] deviceToken)
-    {
-        this.deviceToken = deviceToken;
-    }
-
-    public String getResetPasswordExpires ()
-    {
-        return resetPasswordExpires;
-    }
-
-    public void setResetPasswordExpires (String resetPasswordExpires)
-    {
-        this.resetPasswordExpires = resetPasswordExpires;
-    }
-
-    public Boolean getLoggedIn() {
         return isLoggedIn;
     }
 
-    public void setLoggedIn(Boolean loggedIn) {
-        isLoggedIn = loggedIn;
-    }
-
-    public String getDob ()
+    public void setIsLoggedIn (String isLoggedIn)
     {
-        return dob;
-    }
-
-    public void setDob (String dob)
-    {
-        this.dob = dob;
+        this.isLoggedIn = isLoggedIn;
     }
 
     public String get__v ()
@@ -161,9 +98,99 @@ public class User
         this.password = password;
     }
 
+    public CardDetails[] getCardDetails ()
+    {
+        return cardDetails;
+    }
+
+    public void setCardDetails (CardDetails[] cardDetails)
+    {
+        this.cardDetails = cardDetails;
+    }
+
+    public String getResetPasswordToken ()
+    {
+        return resetPasswordToken;
+    }
+
+    public void setResetPasswordToken (String resetPasswordToken)
+    {
+        this.resetPasswordToken = resetPasswordToken;
+    }
+
+    public String get_id ()
+    {
+        return _id;
+    }
+
+    public void set_id (String _id)
+    {
+        this._id = _id;
+    }
+
+    public Address getAddress ()
+    {
+        return address;
+    }
+
+    public void setAddress (Address address)
+    {
+        this.address = address;
+    }
+
+    public String getEmail ()
+    {
+        return email;
+    }
+
+    public void setEmail (String email)
+    {
+        this.email = email;
+    }
+
+    public String[] getDeviceToken ()
+    {
+        return deviceToken;
+    }
+
+    public void setDeviceToken (String[] deviceToken)
+    {
+        this.deviceToken = deviceToken;
+    }
+
+    public String getResetPasswordExpires ()
+    {
+        return resetPasswordExpires;
+    }
+
+    public void setResetPasswordExpires (String resetPasswordExpires)
+    {
+        this.resetPasswordExpires = resetPasswordExpires;
+    }
+
+    public String getDob ()
+    {
+        return dob;
+    }
+
+    public void setDob (String dob)
+    {
+        this.dob = dob;
+    }
+
+    public String getStripeId ()
+    {
+        return stripeId;
+    }
+
+    public void setStripeId (String stripeId)
+    {
+        this.stripeId = stripeId;
+    }
+
     @Override
     public String toString()
     {
-        return "ClassPojo [resetPasswordToken = "+resetPasswordToken+", _id = "+_id+", address = "+address+", imageUrl = "+imageUrl+", email = "+email+", deviceToken = "+deviceToken+", resetPasswordExpires = "+resetPasswordExpires+", dob = "+dob+", __v = "+__v+", lastname = "+lastname+", firstname = "+firstname+", password = "+password+"]";
+        return "ClassPojo [imageUrl = "+imageUrl+", isLoggedIn = "+isLoggedIn+", __v = "+__v+", lastname = "+lastname+", firstname = "+firstname+", password = "+password+", cardDetails = "+cardDetails+", resetPasswordToken = "+resetPasswordToken+", _id = "+_id+", address = "+address+", email = "+email+", deviceToken = "+deviceToken+", resetPasswordExpires = "+resetPasswordExpires+", dob = "+dob+", stripeId = "+stripeId+"]";
     }
 }

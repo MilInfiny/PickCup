@@ -99,15 +99,13 @@ public class Sub_Menu_Adapter extends RecyclerView.Adapter<Sub_Menu_Adapter.MyVi
                     } else {
                         builder = new AlertDialog.Builder(context);
                     }
-                    String s1=sharedPreferences.getString("token", null);
-                    String s2= s.getItemId();
-                    String s3=s.getItemSize();
-                    String s4=sid;
+
 
                     builder.setTitle("Delete")
                             .setMessage("Delete Item?")
                             .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
+
                                     holder.progressBar_cyclic.setVisibility(View.VISIBLE);
                                     retroFitClient = new RetroFitClient(context).getBlankRetrofit();
                                     Call<AddToCartData> call = retroFitClient
@@ -130,7 +128,11 @@ public class Sub_Menu_Adapter extends RecyclerView.Adapter<Sub_Menu_Adapter.MyVi
 
                                                     } else {
                                                         holder.progressBar_cyclic.setVisibility(View.GONE);
-                                                        MenuActivity.cart_count_String=String.valueOf(Integer.parseInt(MenuActivity.cart_count_String)-1);
+                                                        if( MenuActivity.cart_count_String!=null)
+                                                        {
+                                                            MenuActivity.cart_count_String=String.valueOf(Integer.parseInt(MenuActivity.cart_count_String)-1);
+
+                                                        }
                                                         ordereds.remove(s);
 
 
@@ -140,7 +142,7 @@ public class Sub_Menu_Adapter extends RecyclerView.Adapter<Sub_Menu_Adapter.MyVi
                                                             onItemClickListener.totalPrice(String.valueOf(totalprize));
                                                         }
                                                         else {
-                                                            totalprize=0f;
+
                                                             totalprize = totalprize - Float.valueOf(s.getItemPrice()) * Integer.parseInt(s.getItemQuantity());
                                                             Float total=Float.valueOf(s.getItemPrice())*Integer.parseInt(s.getItemQuantity());
                                                             totalprize = totalprize + total;

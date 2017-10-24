@@ -9,175 +9,209 @@
 
     tools:context="com.example.infiny.pickup.Activity.MenuActivity"
     tools:showIn="@layout/activity_menu">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+
+        >
+
+        <ImageView
+            android:id="@+id/logo"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:src="@drawable/logo1"
+            android:layout_centerHorizontal="true"
+            />
+
         <RelativeLayout
+            android:id="@+id/mainLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingLeft="15dp"
-            android:paddingRight="15dp"
-          >
+            android:layout_below="@+id/logo"
+            android:layout_marginTop="20dp"
 
-            <ImageView
-                android:id="@+id/logo"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                android:src="@drawable/logo1"
-                android:layout_centerHorizontal="true"
-                />
 
-            <RelativeLayout
+            >
+            <android.support.v7.widget.CardView
+                android:id="@+id/card_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_below="@+id/logo"
-                android:layout_marginTop="20dp"
-                >
-                <android.support.v7.widget.CardView
-                    android:id="@+id/card_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
+                android:layout_gravity="center"
+                android:layout_above="@+id/order"
 
-               >
+
+                >
 
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
                     android:background="@drawable/button_selector"
                     >
-                <ImageView
-                    android:id="@+id/tittleimage"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/cofeecup"
-                    android:scaleType="fitXY"
-                    android:adjustViewBounds="true"
-                    />
-
-                <RelativeLayout
-                    android:id="@+id/toplayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="45dp"
-                    android:background="#88ffffff">
-
-                    <TextView
-                        android:id="@+id/tittle"
-                        android:layout_width="wrap_content"
+                    <ImageView
+                        android:id="@+id/tittleimage"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Urban Cafe"
-                        android:textColor="#000"
-                        android:textSize="18dp"
-                        android:textAllCaps="true"
-                        android:layout_marginStart="17dp"
-                        android:layout_centerVertical="true"
-                        android:layout_alignParentStart="true" />
-                    <Button
-                        android:id ="@+id/status_button"
-                        android:layout_width="10dp"
-                        android:layout_height="10dp"
-                        android:text="Round Button"
-                        android:background="@drawable/button_bg_round_green"
-                        android:padding="15dp"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginTop="7dp"
-                        android:layout_alignTop="@+id/tittle"
-                        android:layout_toEndOf="@+id/tittle" />
-                    <ImageView
-                        android:id="@+id/rating1"
-                        android:layout_width="30dp"
-                        android:layout_height="50dp"
-                        android:src="@drawable/rating"
-                        android:layout_alignParentTop="true"
-                        android:layout_toStartOf="@+id/rating2" />
-                    <ImageView
-                        android:layout_width="30dp"
-                        android:layout_height="50dp"
-                        android:src="@drawable/rating"
-                        android:id="@+id/rating2"
-                        android:layout_alignParentTop="true"
-                        android:layout_toStartOf="@+id/rating3" />
-                    <ImageView
-                        android:layout_width="30dp"
-                        android:layout_height="50dp"
-                        android:src="@drawable/rating"
-                        android:id="@+id/rating3"
-                        android:layout_marginEnd="17dp"
-                        android:layout_alignBottom="@+id/rating2"
-                        android:layout_alignParentEnd="true" />
+                        android:src="@drawable/cofeecup"
+                        android:scaleType="fitXY"
+                        android:adjustViewBounds="true"
+                        />
+
+                    <RelativeLayout
+                        android:id="@+id/toplayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="45dp"
+                        android:background="#88ffffff">
+
+                        <TextView
+                            android:id="@+id/tittle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Urban Cafe"
+                            android:textColor="#000"
+                            android:textSize="18dp"
+                            android:textAllCaps="true"
+                            android:layout_marginStart="17dp"
+                            android:layout_centerVertical="true"
+                            android:layout_alignParentStart="true" />
+                        <Button
+                            android:id ="@+id/status_button"
+                            android:layout_width="10dp"
+                            android:layout_height="10dp"
+                            android:text="Round Button"
+                            android:background="@drawable/button_bg_round_green"
+                            android:padding="15dp"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginTop="7dp"
+                            android:layout_alignTop="@+id/tittle"
+                            android:layout_toEndOf="@+id/tittle" />
+                        <ImageView
+                            android:layout_width="30dp"
+                            android:layout_height="50dp"
+                            android:src="@drawable/rating"
+                            android:visibility="gone"
+                            android:id="@+id/rating1"
+                            android:layout_toLeftOf="@+id/rating2"/>
+                        <ImageView
+                            android:layout_width="30dp"
+                            android:layout_height="50dp"
+                            android:src="@drawable/rating"
+                            android:visibility="gone"
+                            android:id="@+id/rating2"
+                            android:layout_toLeftOf="@+id/rating3"/>
+
+                        <ImageView
+                            android:layout_width="30dp"
+                            android:layout_height="50dp"
+                            android:src="@drawable/rating"
+                            android:visibility="gone"
+
+                            android:id="@+id/rating3"
+                            android:layout_toLeftOf="@+id/rating4"/>
+                        <ImageView
+                            android:layout_width="30dp"
+                            android:layout_height="50dp"
+                            android:src="@drawable/rating"
+                            android:visibility="gone"
+
+                            android:id="@+id/rating4"
+                            android:layout_toLeftOf="@+id/rating5"
+
+                            />
+                        <ImageView
+                            android:layout_width="30dp"
+                            android:layout_height="50dp"
+                            android:src="@drawable/rating"
+                            android:id="@+id/rating5"
+                            android:visibility="gone"
+                            android:layout_marginEnd="17dp"
+                            android:layout_alignParentRight="true"
+
+                            />
+
+                    </RelativeLayout>
+
+                    <ScrollView
+                        android:id="@+id/scrollview"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scrollbars="none"
+                        android:layout_below="@+id/toplayout"
+                        android:background="@color/white"
+                        android:nestedScrollingEnabled="false"
+                        android:layout_alignParentStart="true">
+                        <android.support.v7.widget.RecyclerView
+                            android:id="@+id/recycleView"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
+
+                    </ScrollView>
+
                 </RelativeLayout>
-            <ScrollView
-                android:id="@+id/scrollview"
+            </android.support.v7.widget.CardView>
+            <RelativeLayout
+                android:id="@+id/order"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_below="@+id/toplayout"
-                android:scrollbars="none"
-                android:background="@color/white"
-                android:nestedScrollingEnabled="false"
+                android:layout_height="50dp"
+                android:layout_alignParentBottom="true"
+                android:paddingLeft="15dp"
+                android:visibility="gone"
+                android:paddingRight="15dp"
+                android:background="@color/colorPrimaryopacity"
                 >
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/recycleView"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
-
-            </ScrollView>
-                    <ProgressBar
-                        android:id="@+id/progressBar_cyclic"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:minHeight="50dp"
-                        android:minWidth="50dp"
-                        android:translationZ="2dp"
-                        android:useLevel="true"
-                        android:indeterminateTint="@color/colorPrimary"
-                        android:indeterminate="true"
-                        android:layout_centerVertical="true"
-                        android:layout_centerHorizontal="true" />
-                   </RelativeLayout>
-                </android.support.v7.widget.CardView>
-
+                <TextView
+                    android:id="@+id/bt_order"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:text="Order"
+                    android:textAllCaps="true"
+                    android:textColor="@color/white"
+                    android:padding="10dp"
+                    android:textSize="20dp"/>
+                <ImageView
+                    android:id="@+id/cartimage"
+                    android:layout_width="30dp"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_add_shopping_cart_black_48dp"
+                    android:layout_toRightOf="@+id/bt_order"/>
+                <TextView
+                    android:id="@+id/cart_count"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="center"
+                    android:background="@drawable/quantity_badge_count"
+                    android:text="5"
+                    android:textSize="12dp"
+                    android:textColor="@color/white"
+                    android:layout_marginStart="20dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_toEndOf="@+id/bt_order" />
+                <TextView
+                    android:id="@+id/order_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:text="£ 2.20"
+                    android:textColor="@color/white"
+                    android:padding="10dp"
+                    android:textSize="20dp"/>
             </RelativeLayout>
 
         </RelativeLayout>
-    <RelativeLayout
-        android:id="@+id/order"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_alignParentBottom="true"
-        android:paddingLeft="15dp"
+        <ProgressBar
+            android:id="@+id/progressBar_cyclic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minHeight="50dp"
+            android:minWidth="50dp"
+            android:visibility="gone"
+            android:indeterminate="true"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true" />
 
-        android:paddingRight="15dp"
-        android:background="@color/colorPrimaryopacity"
-        >
-        <TextView
-            android:id="@+id/bt_order"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="left"
-            android:text="Order"
-            android:textAllCaps="true"
-            android:textColor="@color/white"
-            android:padding="10dp"
-            android:textSize="20dp"/>
-        <ImageView
-            android:id="@+id/cartimage"
-            android:layout_width="30dp"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_add_shopping_cart_black_48dp"
-            android:layout_toRightOf="@+id/bt_order"/>
-        <TextView
-            android:id="@+id/cart_count"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="5"
-            android:textSize="20dp"
-            android:layout_toRightOf="@+id/cartimage"
-            android:textColor="@color/white"/>
-        <TextView
-            android:id="@+id/order_price"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:text="£ 2.20"
-            android:textColor="@color/white"
-            android:padding="10dp"
-            android:textSize="20dp"/>
-        </RelativeLayout>
+    </RelativeLayout>
+
 </RelativeLayout>

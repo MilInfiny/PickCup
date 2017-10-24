@@ -7,7 +7,6 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -15,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -25,8 +25,6 @@ import com.example.infiny.pickup.Helpers.MenuItemData;
 import com.example.infiny.pickup.Helpers.RetroFitClient;
 import com.example.infiny.pickup.Helpers.SessionManager;
 import com.example.infiny.pickup.Interfaces.ApiIntegration;
-import com.example.infiny.pickup.Model.CafeListingData;
-import com.example.infiny.pickup.Model.Data;
 import com.example.infiny.pickup.Model.DataFindpartiOrder;
 import com.example.infiny.pickup.Model.DataOrderHistory;
 import com.example.infiny.pickup.Model.FindpartiOrder;
@@ -92,6 +90,10 @@ public class OrderDetailsActivity extends AppCompatActivity {
     TextView time;
     @BindView(R.id.progressBar_cyclic)
     ProgressBar progressBarCyclic;
+    @BindView(R.id.mainLayout)
+    RelativeLayout mainLayout;
+    @BindView(R.id.tv_notes)
+    EditText tvNotes;
     private Typeface font;
     ArrayList<Ordered> ordereds;
     Retrofit retroFitClient;
@@ -118,21 +120,21 @@ public class OrderDetailsActivity extends AppCompatActivity {
         appbar.setOutlineProvider(null);
         getSupportActionBar().setTitle("");
         context = this;
-        sessionManager=new SessionManager(context);
-        sharedPreferences=getSharedPreferences(sessionManager.PREF_NAME,0);
+        sessionManager = new SessionManager(context);
+        sharedPreferences = getSharedPreferences(sessionManager.PREF_NAME, 0);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         font = Typeface.createFromAsset(getAssets(), "fonts/opensansbold.ttf");
         menuItemDataArrayList = new ArrayList<MenuItemData>();
 //        tvOrderDetails.setTypeface(font);
 //        tvOrderSummary.setTypeface(font);
 //        tvSpecialNotes.setTypeface(font);
+
         tvGrandtotal.setTypeface(font);
         tvTotalCost.setTypeface(font);
         Verifybutton.setTypeface(font);
         Intent intent = getIntent();
         DataOrderHistory f1 = (DataOrderHistory) intent.getSerializableExtra("myClass");
-       orderId = intent.getStringExtra("orderId");
-
+        orderId = intent.getStringExtra("orderId");
 
 
         progressBarCyclic.setVisibility(View.VISIBLE);
@@ -141,7 +143,7 @@ public class OrderDetailsActivity extends AppCompatActivity {
         retroFitClient = new RetroFitClient(context).getBlankRetrofit();
         Call<FindpartiOrder> call = retroFitClient
                 .create(ApiIntegration.class)
-                .getsingalOrder(sharedPreferences.getString("token",null),orderId);
+                .getsingalOrder(sharedPreferences.getString("token", null), orderId);
         call.enqueue(new Callback<FindpartiOrder>() {
 
             @Override
@@ -152,34 +154,35 @@ public class OrderDetailsActivity extends AppCompatActivity {
                         if (findpartiOrder.getError().equals("true")) {
                             progressBarCyclic.setVisibility(View.GONE);
                             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                            Toast.makeText(context,findpartiOrder.getTitle(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context, findpartiOrder.getTitle(), Toast.LENGTH_SHORT).show();
                         } else {
+                            mainLayout.setVisibility(View.VISIBLE);
                             progressBarCyclic.setVisibility(View.GONE);
                             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                             tvCustomerName.setText(findpartiOrder.getData()[0].getShopDetail().getCafe_name());
-                            tvOrderNumber.setText("Order#: " +findpartiOrder.getData()[0].getOrderId());
-                            tvOtp.setText("OTP: " +findpartiOrder.getData()[0].getOtp());
-                            DataFindpartiOrder dataFindpartiOrder=findpartiOrder.getData()[0];
-                            if(findpartiOrder.getData()[0].getParcel().equals("false"))
-                            {
+                            tvOrderNumber.setText("Order#: " + findpartiOrder.getData()[0].getOrderId());
+                            tvOtp.setText("OTP: " + findpartiOrder.getData()[0].getOtp());
+                            DataFindpartiOrder dataFindpartiOrder = findpartiOrder.getData()[0];
+                            if (findpartiOrder.getData()[0].getParcel().equals("false")) {
                                 tvCustomerNametvCustomerName.setText("Order Type: Sit In");
-                            }
-                            else
-                            {
+                            } else {
                                 tvCustomerNametvCustomerName.setText("Order Type: Pick Cup");
                             }
-                            String date[]=findpartiOrder.getData()[0].getCreatedAt().split("T");
-                            String ogdate=date[0];
+                            String date[] = findpartiOrder.getData()[0].getCreatedAt().split("T");
+                            String ogdate = date[0];
                             time.setText(ogdate);
-                            tvTotalCost.setText("£ " +findpartiOrder.getData()[0].getTotalPrice());
-                            ordereds=new ArrayList<Ordered>(Arrays.asList(dataFindpartiOrder.getOrdered()));
+                            tvSpecialNotes.setText(findpartiOrder.getData()[0].getNote());
+
+                            tvTotalCost.setText("£ " + findpartiOrder.getData()[0].getTotalPrice());
+                            tvNotes.setText(findpartiOrder.getData()[0].getNote());
+                            ordereds = new ArrayList<Ordered>(Arrays.asList(dataFindpartiOrder.getOrdered()));
                             orderDetailsAdapter = new OrderDetailsAdapter(mContext, ordereds);
                             RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
                             recylerviewMenuListing.setLayoutManager(mLayoutManager);
                             recylerviewMenuListing.setAdapter(orderDetailsAdapter);
                         }
 
-                    }else {
+                    } else {
                         if (response.code() == 404 || response.code() == 500) {
                             progressBarCyclic.setVisibility(View.GONE);
                             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
@@ -189,19 +192,20 @@ public class OrderDetailsActivity extends AppCompatActivity {
                 }
 
 
-
             }
 
             @Override
             public void onFailure(Call<FindpartiOrder> call, Throwable t) {
+                progressBarCyclic.setVisibility(View.GONE);
+                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                Toast.makeText(context, R.string.server_not_responding, Toast.LENGTH_SHORT).show();
 
             }
         });
 
 
-
-
     }
+
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));

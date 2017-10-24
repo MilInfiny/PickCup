@@ -23,8 +23,10 @@ import android.widget.Toast;
 
 import com.thoughtbot.expandablerecyclerview.viewholders.GroupViewHolder;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -95,53 +97,166 @@ public class TimeviewAdapter extends ExpandableRecyclerViewAdapter<TimeviewAdapt
 
     public class ItemViewHolder extends ChildViewHolder {
         RelativeLayout rl;
-        TextView timebutton;
+        TextView timebutton,bt_now;
         AnalogClock clk;
+      String currentTime;
         public ItemViewHolder(View itemView) {
             super(itemView);
+
+
             rl = (RelativeLayout)itemView.findViewById(R.id.rl);
             timebutton=(TextView)itemView.findViewById(R.id.bt_time);
+            bt_now=(TextView)itemView.findViewById(R.id.bt_now);
+
+            Calendar mcurrentTime = Calendar.getInstance();
+            int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
+            int minute = mcurrentTime.get(Calendar.MINUTE);
+
+            String timeSet = "";
+            if (hour > 12) {
+                hour -= 12;
+                timeSet = "PM";
+            } else if (hour == 0) {
+                hour += 12;
+                timeSet = "AM";
+            } else if (hour == 12){
+                timeSet = "PM";
+            }else{
+                timeSet = "AM";
+            }
+
+            if(minute<10)
+            {
+                SimpleDateFormat timeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                currentTime = timeFormat.format(mcurrentTime.getTime());
+
+                timebutton.setText(hour + ":0" + minute+" "+timeSet);
+
+            }
+            else {
+                SimpleDateFormat timeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                currentTime = timeFormat.format(mcurrentTime.getTime());
+                timebutton.setText(hour + ":" + minute+" "+timeSet);
+
+            }
+
             rl.setOnClickListener(new View.OnClickListener() {
 
                 @Override
                 public void onClick(View v) {
-                    Calendar mcurrentTime = Calendar.getInstance();
+                    final Calendar mcurrentTime = Calendar.getInstance();
                     int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
-                    int minute = mcurrentTime.get(Calendar.MINUTE);
+                    final int minute = mcurrentTime.get(Calendar.MINUTE);
                     TimePickerDialog mTimePicker;
                     mTimePicker = new TimePickerDialog(context,new TimePickerDialog.OnTimeSetListener() {
                         @Override
                         public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
                             String timeSet = "";
-                            if (selectedHour > 12) {
-                                selectedHour -= 12;
-                                timeSet = "PM";
-                            } else if (selectedHour == 0) {
-                                selectedHour += 12;
-                                timeSet = "AM";
-                            } else if (selectedHour == 12){
-                                timeSet = "PM";
+
+                            Calendar datetime = Calendar.getInstance();
+                            Calendar c = Calendar.getInstance();
+                            datetime.set(Calendar.HOUR_OF_DAY, selectedHour);
+                            datetime.set(Calendar.MINUTE, selectedMinute);
+
+                            if(datetime.getTimeInMillis() > c.getTimeInMillis()){
+                                if(selectedMinute<10)
+                                {
+                                    OrderActivity.dateString = selectedHour + ":0" + selectedMinute+":"+"00";
+
+                                }
+                                else {
+                                    OrderActivity.dateString = selectedHour + ":" + selectedMinute+":"+"00";
+
+
+                                }
+
+                                if (selectedHour > 12) {
+                                    selectedHour -= 12;
+                                    timeSet = "PM";
+                                } else if (selectedHour == 0) {
+                                    selectedHour += 12;
+                                    timeSet = "AM";
+                                } else if (selectedHour == 12){
+                                    timeSet = "PM";
+                                }else{
+                                    timeSet = "AM";
+                                }
+
+
+
+                                if(selectedMinute<10)
+                                {
+
+                                    timebutton.setText(selectedHour + ":0" + selectedMinute+" "+timeSet);
+
+
+                                }
+                                else {
+                                    timebutton.setText(selectedHour + ":" + selectedMinute+" "+timeSet);
+
+
+                                }
+
+
                             }else{
-                                timeSet = "AM";
+                                OrderActivity.dateString=null;
+                                Toast.makeText(context,R.string.selectValidTme,Toast.LENGTH_SHORT).show();
                             }
 
-                            if(selectedMinute<10)
-                            {
-                                timebutton.setText(selectedHour + ":0" + selectedMinute+" "+timeSet);
-                            }
-                            else {
-                                timebutton.setText(selectedHour + ":" + selectedMinute+" "+timeSet);
 
-                            }
+
                         }
                     }, hour, minute, true);//Yes 24 hour time
+
                     mTimePicker.setTitle("Select Time");
-                    SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                     OrderActivity.dateString=sdf.format(mcurrentTime.getTime());
+
+
+
                     mTimePicker.show();
 
                 }
             });
+            bt_now.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Calendar mcurrentTime = Calendar.getInstance();
+                    int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
+                    int minute = mcurrentTime.get(Calendar.MINUTE);
+                    if(minute<10)
+                    {
+                        OrderActivity.dateString = hour + ":0" + minute+":"+"00";
+
+                    }
+                    else {
+                        OrderActivity.dateString =hour + ":" + minute+":"+"00";
+
+
+                    }
+                    String timeSet = "";
+                    if (hour > 12) {
+                        hour -= 12;
+                        timeSet = "PM";
+                    } else if (hour == 0) {
+                        hour += 12;
+                        timeSet = "AM";
+                    } else if (hour == 12){
+                        timeSet = "PM";
+                    }else{
+                        timeSet = "AM";
+                    }
+
+                    if(minute<10)
+                    {
+                        timebutton.setText(hour + ":0" + minute+" "+timeSet);
+                    }
+                    else {
+                        timebutton.setText(hour + ":" + minute+" "+timeSet);
+
+                    }
+                }
+            });
+
+
         }
         }
     }
