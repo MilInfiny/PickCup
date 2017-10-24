@@ -5,6 +5,7 @@ import com.example.infiny.pickup.Model.AddCardData;
 import com.example.infiny.pickup.Model.AddToCartData;
 import com.example.infiny.pickup.Model.CafeListingData;
 import com.example.infiny.pickup.Model.CardListingData;
+import com.example.infiny.pickup.Model.ClaimToCartData;
 import com.example.infiny.pickup.Model.CreateOrderData;
 import com.example.infiny.pickup.Model.EditProfileData;
 import com.example.infiny.pickup.Model.FindpartiOrder;
@@ -76,6 +77,9 @@ public interface ApiIntegration {
     @FormUrlEncoded
     @POST("findpartiOrder")
     Call<FindpartiOrder> getsingalOrder(@Field("token") String  token,@Field("orderId") String  orderId);
+    @FormUrlEncoded
+    @POST("checkIfSameOrderCart")
+    Call<ClaimToCartData> rewardtocart(@Field("userToken") String token, @Field("shopDetail") String  shopDetail);
 
     @FormUrlEncoded
     @POST("payCreateUserCards")
@@ -116,6 +120,11 @@ public interface ApiIntegration {
     @FormUrlEncoded
     @POST("getRewards")
     Call<RewardData> getRewardsListing(@Field("userToken") String  token);
+
+
+    @FormUrlEncoded
+    @POST("deleteCart")
+    Call<ClaimToCartData> deleteCart(@Field("userToken") String  token);
 
     @FormUrlEncoded
     @POST("orderHistory")
@@ -174,6 +183,7 @@ public interface ApiIntegration {
     @Multipart
     @POST("editprofile")
     Call<EditProfileData> editProfile (@Header("userToken") String token,
+                                       @Header("imageexist") String imageexist,
                                        @Part("files\"; filename=\"pp.png\" ") RequestBody file,
                                        @Part("userToken") RequestBody token1,
                                        @Part("email") RequestBody email,

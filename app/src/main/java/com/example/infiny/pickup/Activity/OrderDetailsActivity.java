@@ -25,9 +25,13 @@ import com.example.infiny.pickup.Helpers.MenuItemData;
 import com.example.infiny.pickup.Helpers.RetroFitClient;
 import com.example.infiny.pickup.Helpers.SessionManager;
 import com.example.infiny.pickup.Interfaces.ApiIntegration;
+import com.example.infiny.pickup.Interfaces.OnItemClickListener;
+import com.example.infiny.pickup.Model.Cafes;
+import com.example.infiny.pickup.Model.CardDetails;
 import com.example.infiny.pickup.Model.DataFindpartiOrder;
 import com.example.infiny.pickup.Model.DataOrderHistory;
 import com.example.infiny.pickup.Model.FindpartiOrder;
+import com.example.infiny.pickup.Model.ItemData;
 import com.example.infiny.pickup.Model.Ordered;
 import com.example.infiny.pickup.R;
 
@@ -42,7 +46,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-public class OrderDetailsActivity extends AppCompatActivity {
+public class OrderDetailsActivity extends AppCompatActivity implements OnItemClickListener {
 
 
     @BindView(R.id.tv_order_details)
@@ -101,11 +105,12 @@ public class OrderDetailsActivity extends AppCompatActivity {
     FindpartiOrder findpartiOrder;
     SessionManager sessionManager;
     SharedPreferences sharedPreferences;
-
+  Float total=0f;
     private Context mContext;
     DataOrderHistory dataOrderHistory;
 
     OrderDetailsAdapter orderDetailsAdapter;
+    OnItemClickListener onItemClickListener;
 
     ArrayList<MenuItemData> menuItemDataArrayList;
 
@@ -120,6 +125,7 @@ public class OrderDetailsActivity extends AppCompatActivity {
         appbar.setOutlineProvider(null);
         getSupportActionBar().setTitle("");
         context = this;
+        onItemClickListener=this;
         sessionManager = new SessionManager(context);
         sharedPreferences = getSharedPreferences(sessionManager.PREF_NAME, 0);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -171,12 +177,11 @@ public class OrderDetailsActivity extends AppCompatActivity {
                             String date[] = findpartiOrder.getData()[0].getCreatedAt().split("T");
                             String ogdate = date[0];
                             time.setText(ogdate);
-                            tvSpecialNotes.setText(findpartiOrder.getData()[0].getNote());
 
                             tvTotalCost.setText("£ " + findpartiOrder.getData()[0].getTotalPrice());
                             tvNotes.setText(findpartiOrder.getData()[0].getNote());
                             ordereds = new ArrayList<Ordered>(Arrays.asList(dataFindpartiOrder.getOrdered()));
-                            orderDetailsAdapter = new OrderDetailsAdapter(mContext, ordereds);
+                            orderDetailsAdapter = new OrderDetailsAdapter(mContext, ordereds,onItemClickListener);
                             RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
                             recylerviewMenuListing.setLayoutManager(mLayoutManager);
                             recylerviewMenuListing.setAdapter(orderDetailsAdapter);
@@ -224,5 +229,31 @@ public class OrderDetailsActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
+    }
+
+    @Override
+    public void OnItemClickListener(Cafes item) {
+
+    }
+
+    @Override
+    public void voidOnAddCart(ItemData itemData) {
+
+    }
+
+    @Override
+    public void totalPrice(String total) {
+        this.total=this.total+Float.valueOf(total);
+
+    }
+
+    @Override
+    public void ordereddata(Ordered[] ordered) {
+
+    }
+
+    @Override
+    public void cardSet(ArrayList<CardDetails> cardDetailses) {
+
     }
 }

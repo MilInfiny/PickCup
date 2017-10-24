@@ -35,7 +35,7 @@ public class RetroFitClient {
 
     public RetroFitClient(Context mContext) {
         this.mContext=mContext;
-     //  isOnline= CommonUtils.isOnline(mContext);
+      // isOnline= CommonUtils.isOnline(mContext);
     }
 
 
@@ -52,7 +52,7 @@ public class RetroFitClient {
 
         OkHttpClient httpClient = new OkHttpClient.Builder()
                 .addNetworkInterceptor(REWRITE_RESPONSE_INTERCEPTOR)
-      //          .addInterceptor(OFFLINE_INTERCEPTOR)
+               // .addInterceptor(OFFLINE_INTERCEPTOR)
                 .connectTimeout(100, TimeUnit.SECONDS)
                 .readTimeout(100,TimeUnit.SECONDS)
                 .cache(cache)

@@ -83,21 +83,19 @@ public class Order_History_Adapter  extends RecyclerView.Adapter<Order_History_A
 
         if(holder.isTablet(context))
         {
-            Picasso.with(context)
-                    .invalidate(f1.getShopDetail().getImageurl()+"_large.png");
+
             Picasso.with(context)
                     .load(f1.getShopDetail().getImageurl()+"_large.png")
-                    .placeholder(R.drawable.ic_person_black_48dp)
+                    .placeholder(R.drawable.cofeecup)
                     .into(holder.imageView);
 
         }
         else
         {
-            Picasso.with(context)
-                    .invalidate(f1.getShopDetail().getImageurl()+"_small.png");
+
             Picasso.with(context)
                     .load(f1.getShopDetail().getImageurl()+"_small.png")
-                    .placeholder(R.drawable.ic_person_black_48dp)
+                    .placeholder(R.drawable.cofeecup)
                     .into(holder.imageView);
 
 

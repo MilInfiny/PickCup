@@ -46,10 +46,8 @@ import com.squareup.picasso.Picasso;
 
 import org.json.JSONObject;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.TimeZone;
 
 import butterknife.BindView;
@@ -74,7 +72,7 @@ public class OrderActivity extends AppCompatActivity implements OnItemClickListe
     SessionManager sessionManager;
     SharedPreferences sharedPreferences;
     CreateOrderData createOrderData;
-    public static String dateString=null, parcel = "false", note;
+    public static String dateString = null, parcel = "false", note;
     String total;
     ;
     OnItemClickListener onItemClickListener;
@@ -97,12 +95,7 @@ public class OrderActivity extends AppCompatActivity implements OnItemClickListe
     TextView tittle;
     @BindView(R.id.status_button)
     Button statusButton;
-    @BindView(R.id.rating1)
-    ImageView rating1;
-    @BindView(R.id.rating2)
-    ImageView rating2;
-    @BindView(R.id.rating3)
-    ImageView rating3;
+
     @BindView(R.id.toplayout)
     RelativeLayout toplayout;
     @BindView(R.id.tw_order)
@@ -145,7 +138,7 @@ public class OrderActivity extends AppCompatActivity implements OnItemClickListe
     Ordered[] ordered;
     ArrayList<Ordered> ordereds;
     Ordered orderedObject;
-    String sid, fromMenu, cafeName;
+    String sid, fromMenu, cafeName, rewardcompleted, rewardQuantity;
     @BindView(R.id.nodata)
     TextView nodata;
     @BindView(R.id.layoutyscrollview)
@@ -168,11 +161,9 @@ public class OrderActivity extends AppCompatActivity implements OnItemClickListe
     View belowSwitch;
     @BindView(R.id.paylayout)
     Button paylayout;
-    @BindView(R.id.rating4)
-    ImageView rating4;
-    @BindView(R.id.rating5)
-    ImageView rating5;
     String rating;
+    @BindView(R.id.rewarddetails)
+    TextView rewarddetails;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -193,10 +184,11 @@ public class OrderActivity extends AppCompatActivity implements OnItemClickListe
         ordereds = new ArrayList<>();
         Intent intent = getIntent();
         sid = intent.getStringExtra("sid");
-        rating=intent.getStringExtra("rating");
         fromMenu = intent.getStringExtra("fromPage");
         cafeName = intent.getStringExtra("tittle");
-
+        rewardcompleted = intent.getStringExtra("rewardcompleted");
+        rewardQuantity = intent.getStringExtra("rewardQuantity");
+        rewarddetails.setText(rewardcompleted+"/"+rewardQuantity);
         progressBarCyclic.setVisibility(View.VISIBLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
                 WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
@@ -204,7 +196,7 @@ public class OrderActivity extends AppCompatActivity implements OnItemClickListe
         Call<OrderListData> call = retroFitClient
                 .create(ApiIntegration.class)
                 .getOrderListing(sharedPreferences.getString("token", null),
-                                 sid);
+                        sid);
         call.enqueue(new Callback<OrderListData>() {
 
             @Override
@@ -244,15 +236,13 @@ public class OrderActivity extends AppCompatActivity implements OnItemClickListe
                             layoutyscrollview.setVisibility(View.VISIBLE);
 
                             if (isTablet(context)) {
-                                Picasso.with(context)
-                                        .invalidate(orderListData.getData().getShopDetail().getImageurl() + "_large.png");
+
                                 Picasso.with(context)
                                         .load(orderListData.getData().getShopDetail().getImageurl() + "_large.png")
                                         .placeholder(ic_person_black_48dp)
                                         .into(tittleimage);
                             } else {
-                                Picasso.with(context)
-                                        .invalidate(orderListData.getData().getShopDetail().getImageurl() + "_small.png");
+
                                 Picasso.with(context)
                                         .load(orderListData.getData().getShopDetail().getImageurl() + "_small.png")
                                         .placeholder(ic_person_black_48dp)
@@ -337,8 +327,17 @@ public class OrderActivity extends AppCompatActivity implements OnItemClickListe
         paylayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (!fromMenu.equals("rewardActivity")) {
+                    if (ordered.length == 0) {
+                        Toast.makeText(context, "Cart is Empty ", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                }
 
-                Ordered[] ordereds1 = ordered;
+                if (dateString == null) {
+                    Toast.makeText(context, R.string.selectTime, Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
                 if (!fromMenu.equals("rewardActivity")) {
                     if (orderListData.getData().getUserDetail().getCardDetails().length == 0) {
@@ -348,93 +347,12 @@ public class OrderActivity extends AppCompatActivity implements OnItemClickListe
                         startActivity(intent);
                         finish();
 
-                    }
-                }
-               if(dateString==null)
-                {
-                    Toast.makeText(context,R.string.selectTime,Toast.LENGTH_SHORT).show();
-                }
-
-                else {
-
-                    progressBarCyclic.setVisibility(View.VISIBLE);
-                    getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-                            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-
-                    retroFitClient = new RetroFitClient(context).getBlankRetrofit();
-                    fooRequest = new FooRequest();
-                    fooRequest.setUserToken(sharedPreferences.getString("token", null));
-                    fooRequest.setParcel(parcel);
-                    if (ordered == null && simpleSwitch.isChecked()) {
-                        fooRequest.setOrderType("0");
-                    } else if (ordered.length >= 0 && simpleSwitch.isChecked()) {
-                        fooRequest.setOrderType("2");
-                    } else if (ordered.length >= 0 && simpleSwitch.isChecked() == false) {
-                        fooRequest.setOrderType("1");
-                    }
-
-                    fooRequest.setOrder(ordered);
-                    fooRequest.setNote(note);
-                    fooRequest.setTimezone(TimeZone.getDefault().getID());
-                    fooRequest.setTimeForPickcup(dateString);
-                    if (orderListData.getData() == null) {
-                        fooRequest.setShopDetail(sid);
                     } else {
-                        fooRequest.setShopDetail(orderListData.getData().getShopDetail().get_id());
+                        getData();
                     }
+                } else {
 
-                    fooRequest.setTotalPrice(total);
-                    Gson gson = new Gson();
-                    JSONObject s = null;
-                    try {
-                        s = new JSONObject(gson.toJson(fooRequest));
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-
-                    Call<CreateOrderData> call = retroFitClient
-                            .create(ApiIntegration.class)
-                            .getCreateOrder("application/json", fooRequest);
-                    call.enqueue(new Callback<CreateOrderData>() {
-
-                        @Override
-                        public void onResponse(Call<CreateOrderData> call, Response<CreateOrderData> response) {
-                            if (response != null) {
-                                createOrderData = response.body();
-                                if (createOrderData != null) {
-                                    if (createOrderData.getError().equals("true")) {
-                                        dateString=null;
-                                        progressBarCyclic.setVisibility(View.GONE);
-                                        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-
-                                    } else {
-                                        dateString=null;
-                                        Intent intent = new Intent(context, MainActivity.class);
-                                        startActivity(intent);
-                                        finish();
-                                    }
-
-                                } else {
-                                    dateString=null;
-                                    if (response.code() == 404 || response.code() == 500) {
-                                        progressBarCyclic.setVisibility(View.GONE);
-                                        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                                        Toast.makeText(context, R.string.server_not_responding, Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-                            }
-                            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-
-                        }
-
-                        @Override
-                        public void onFailure(Call<CreateOrderData> call, Throwable t) {
-                            progressBarCyclic.setVisibility(View.GONE);
-                            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                            Toast.makeText(context, R.string.server_not_responding, Toast.LENGTH_SHORT).show();
-
-                        }
-                    });
+                    getData();
 
                 }
             }
@@ -509,6 +427,86 @@ public class OrderActivity extends AppCompatActivity implements OnItemClickListe
         return price;
     }
 
+    public void getData() {
+        progressBarCyclic.setVisibility(View.VISIBLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
+        retroFitClient = new RetroFitClient(context).getBlankRetrofit();
+        fooRequest = new FooRequest();
+        fooRequest.setUserToken(sharedPreferences.getString("token", null));
+        fooRequest.setParcel(parcel);
+        if (ordered == null && simpleSwitch.isChecked()) {
+            fooRequest.setOrderType("0");
+        } else if (ordered.length >= 0 && simpleSwitch.isChecked()) {
+            fooRequest.setOrderType("2");
+        } else if (ordered.length >= 0 && simpleSwitch.isChecked() == false) {
+            fooRequest.setOrderType("1");
+        }
+
+        fooRequest.setOrder(ordered);
+        fooRequest.setNote(note);
+        fooRequest.setTimezone(TimeZone.getDefault().getID());
+        fooRequest.setTimeForPickcup(dateString);
+        if (orderListData.getData() == null) {
+            fooRequest.setShopDetail(sid);
+        } else {
+            fooRequest.setShopDetail(orderListData.getData().getShopDetail().get_id());
+        }
+
+        fooRequest.setTotalPrice(total);
+        Gson gson = new Gson();
+        JSONObject s = null;
+        try {
+            s = new JSONObject(gson.toJson(fooRequest));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        Call<CreateOrderData> call = retroFitClient
+                .create(ApiIntegration.class)
+                .getCreateOrder("application/json", fooRequest);
+        call.enqueue(new Callback<CreateOrderData>() {
+
+            @Override
+            public void onResponse(Call<CreateOrderData> call, Response<CreateOrderData> response) {
+                if (response != null) {
+                    createOrderData = response.body();
+                    if (createOrderData != null) {
+                        if (createOrderData.getError().equals("true")) {
+                            dateString = null;
+                            progressBarCyclic.setVisibility(View.GONE);
+                            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
+                        } else {
+                            dateString = null;
+                            Intent intent = new Intent(context, MainActivity.class);
+                            startActivity(intent);
+                            finish();
+                        }
+
+                    } else {
+                        dateString = null;
+                        if (response.code() == 404 || response.code() == 500) {
+                            progressBarCyclic.setVisibility(View.GONE);
+                            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                            Toast.makeText(context, R.string.server_not_responding, Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }
+                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
+            }
+
+            @Override
+            public void onFailure(Call<CreateOrderData> call, Throwable t) {
+                progressBarCyclic.setVisibility(View.GONE);
+                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                Toast.makeText(context, R.string.server_not_responding, Toast.LENGTH_SHORT).show();
+
+            }
+        });
+    }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -547,7 +545,6 @@ public class OrderActivity extends AppCompatActivity implements OnItemClickListe
     @Override
     public void totalPrice(String total) {
         if (Float.valueOf(total) == 0) {
-            subLayout.setVisibility(View.GONE);
             arrow.setRotation(360);
             taxprice.setText("£ " + "0");
             totalprice.setText("£ " + "0");
@@ -565,8 +562,8 @@ public class OrderActivity extends AppCompatActivity implements OnItemClickListe
             intent.putExtra("sid", sid);
             intent.putExtra("tittle", cafeName);
             intent.putExtra("image", orderListData.getData().getShopDetail().getImageurl());
-            intent.putExtra("rating",rating);
-
+            intent.putExtra("rewardcompleted", rewardcompleted);
+            intent.putExtra("rewardQuantity", rewardQuantity);
             startActivity(intent);
             finish();
         } else if (fromMenu.equals("rewardActivity")) {

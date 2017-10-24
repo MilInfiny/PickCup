@@ -80,7 +80,7 @@
             android:layout_height="30dp"
             android:gravity="center|center_vertical|center_horizontal"
             android:padding="0dp"
-            android:src="@drawable/ic_remove_circle_black_24dp"
+            android:src="@drawable/ic_remove_circle_black_48dp"
             android:text="-"
             android:textColor="@color/white"
             android:textStyle="bold" />
@@ -103,7 +103,7 @@
             android:padding="0dp"
             android:gravity="center"
             android:textColor="@color/white"
-            android:src="@drawable/ic_add_circle_black_24dp"
+            android:src="@drawable/ic_add_circle_black_48dp"
             android:id="@+id/increment"
             android:text="+"/>
     </LinearLayout>

@@ -284,6 +284,7 @@ public class NormalMenuAdapter extends RecyclerView.Adapter<NormalMenuAdapter.My
         public void openDiolog(final ItemData itemData)
         {
             quantity=1;
+
             LayoutInflater inflater = LayoutInflater.from(context);
             View alertLayout = inflater.inflate(R.layout.quantity, null);
             final ImageView increment=(ImageView) alertLayout.findViewById(R.id.increment);
@@ -411,12 +412,13 @@ public class NormalMenuAdapter extends RecyclerView.Adapter<NormalMenuAdapter.My
                                                                             AlertDialog.Builder builder;
                                                                             ((Activity) context).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                                                                         } else {
-
+                                                                            Toast.makeText(context, R.string.Item_Add_To_Cart, Toast.LENGTH_SHORT).show();
                                                                             progressBarCyclic.setVisibility(View.GONE);
                                                                             ((Activity) context).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                                                                             MenuActivity.order.setVisibility(View.VISIBLE);
                                                                             total=Float.valueOf(itemData.getItemPrice())*Float.valueOf(addToCartData.getData().getOrdered()[0].getItemQuantity());
-                                                                            MenuActivity.cart_count_String=String.valueOf(quantity);                                                                            itemData.setItemQuantity(String.valueOf(Float.valueOf(addToCartData.getData().getOrdered()[0].getItemQuantity())));
+                                                                            MenuActivity.cart_count_String=String.valueOf(quantity);
+                                                                            itemData.setItemQuantity(String.valueOf(Float.valueOf(addToCartData.getData().getOrdered()[0].getItemQuantity())));
                                                                             itemData.setItemTotalamount(String.valueOf(total));
                                                                             MenuActivity.orderPrice.setText("£ "+getCorrectValue(String.format("%.2f", total)));
                                                                             MenuActivity.cartCount.setText(MenuActivity.cart_count_String);
@@ -455,6 +457,8 @@ public class NormalMenuAdapter extends RecyclerView.Adapter<NormalMenuAdapter.My
                                     }
                                     else if(addToCartData.getError().equals("true"))
                                     {
+                                        Toast.makeText(context, R.string.Item_Add_To_Cart, Toast.LENGTH_SHORT).show();
+
                                         quantity=1;
                                         progressBarCyclic.setVisibility(View.GONE);
                                         ((Activity) context).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
@@ -464,6 +468,8 @@ public class NormalMenuAdapter extends RecyclerView.Adapter<NormalMenuAdapter.My
                                     }
 
                                     else {
+                                        Toast.makeText(context, R.string.Item_Add_To_Cart, Toast.LENGTH_SHORT).show();
+
                                         quantity=1;
                                         progressBarCyclic.setVisibility(View.GONE);
                                         ((Activity) context).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
@@ -495,6 +501,7 @@ public class NormalMenuAdapter extends RecyclerView.Adapter<NormalMenuAdapter.My
                 }
             });
             alertDialog.show();
+
 
 
 
@@ -630,7 +637,7 @@ public class NormalMenuAdapter extends RecyclerView.Adapter<NormalMenuAdapter.My
                                                                             AlertDialog.Builder builder;
                                                                             ((Activity) context).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                                                                         } else {
-
+                                                                            Toast.makeText(context, R.string.Item_Add_To_Cart, Toast.LENGTH_SHORT).show();
                                                                             progressBarCyclic.setVisibility(View.GONE);
                                                                             ((Activity) context).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                                                                             MenuActivity.order.setVisibility(View.VISIBLE);
@@ -675,6 +682,8 @@ public class NormalMenuAdapter extends RecyclerView.Adapter<NormalMenuAdapter.My
                                     }
                                     else if(addToCartData.getError().equals("true"))
                                     {
+                                        Toast.makeText(context, R.string.Item_Add_To_Cart, Toast.LENGTH_SHORT).show();
+
                                         quantity=1;
                                         progressBarCyclic.setVisibility(View.GONE);
                                         ((Activity) context).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
@@ -684,6 +693,8 @@ public class NormalMenuAdapter extends RecyclerView.Adapter<NormalMenuAdapter.My
                                     }
 
                                     else {
+                                        Toast.makeText(context, R.string.Item_Add_To_Cart, Toast.LENGTH_SHORT).show();
+
                                         quantity=1;
                                         progressBarCyclic.setVisibility(View.GONE);
                                         ((Activity) context).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);

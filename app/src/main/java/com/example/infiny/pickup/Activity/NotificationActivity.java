@@ -135,7 +135,6 @@ public class NotificationActivity extends AppCompatActivity {
                         if (notificationData.getError().equals("true")) {
                             progressBarCyclic.setVisibility(View.GONE);
                             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                            Toast.makeText(context, notificationData.getTitle(), Toast.LENGTH_SHORT).show();
                             noNotification.setVisibility(View.VISIBLE);
                         } else {
                             progressBarCyclic.setVisibility(View.GONE);

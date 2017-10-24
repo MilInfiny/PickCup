@@ -64,8 +64,8 @@ public class RewardActivity extends AppCompatActivity {
     @BindView(R.id.view)
     View view;
     Context context;
-    @BindView(R.id.progressBar_cyclic)
-    ProgressBar progressBarCyclic;
+
+   public static ProgressBar progressBarCyclic;
     Retrofit retroFitClient;
     SharedPreferences sharedPreferences;
     SessionManager sessionManager;
@@ -87,6 +87,7 @@ public class RewardActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         logo.requestFocus();
         icon.setImageResource(R.drawable.rewards);
+        progressBarCyclic=(ProgressBar)findViewById(R.id.progressBar_cyclic);
         progressBarCyclic.setVisibility(View.VISIBLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
                 WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);

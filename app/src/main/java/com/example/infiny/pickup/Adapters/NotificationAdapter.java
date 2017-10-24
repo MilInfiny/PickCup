@@ -48,8 +48,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
 
         if(holder.isTablet(context))
         {
-            Picasso.with(context)
-                    .invalidate(dataNotification.getShopDetail().getImageurl()+"_large.png");
+
             Picasso.with(context)
                     .load(dataNotification.getShopDetail().getImageurl()+"_large.png")
                     .placeholder(R.drawable.ic_person_black_48dp)
@@ -58,8 +57,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         }
         else
         {
-            Picasso.with(context)
-                    .invalidate(dataNotification.getShopDetail().getImageurl()+"_small.png");
+
             Picasso.with(context)
                     .load(dataNotification.getShopDetail().getImageurl()+"_small.png")
                     .placeholder(R.drawable.ic_person_black_48dp)
@@ -68,7 +66,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
 
         };
 
-        holder.textView.setText("you order for "+dataNotification.getShopDetail().getCafe_name()+" has been successfully placed");
+        holder.textView.setText(dataNotification.getMessage());
         holder.posteddate.setText(dataNotification.getCreatedAt());
         String date[] = dataNotification.getCreatedAt().split("T");
         String ogdate = date[0];

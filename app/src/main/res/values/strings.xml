@@ -57,4 +57,5 @@
     <string name="Add_Card">Please add card</string>
     <string name="selectTime">Select time</string>
     <string name="pleaseEnableGps">Please enable gps</string>
+    <string name="Item_Add_To_Cart">Added Successfully</string>
 </resources>

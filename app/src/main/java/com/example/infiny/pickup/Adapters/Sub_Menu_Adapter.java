@@ -34,6 +34,7 @@ import com.example.infiny.pickup.Model.Ordered;
 import com.example.infiny.pickup.R;
 import com.thoughtbot.expandablerecyclerview.models.ExpandableGroup;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -135,10 +136,11 @@ public class Sub_Menu_Adapter extends RecyclerView.Adapter<Sub_Menu_Adapter.MyVi
                                                         }
                                                         ordereds.remove(s);
 
-
                                                         if(ordereds.size()==0)
                                                         {
                                                             totalprize=0f;
+                                                            Ordered [] ordered={};
+                                                            onItemClickListener.ordereddata(ordered);
                                                             onItemClickListener.totalPrice(String.valueOf(totalprize));
                                                         }
                                                         else {

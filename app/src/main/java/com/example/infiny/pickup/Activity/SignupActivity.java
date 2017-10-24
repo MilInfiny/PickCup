@@ -31,6 +31,7 @@ import com.github.rahatarmanahmed.cpv.CircularProgressView;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -203,9 +204,18 @@ public class SignupActivity extends AppCompatActivity {
     }
     private void updateLabel() {
         String myFormat = "MM/dd/yy"; //In which you need put here
-        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+        SimpleDateFormat sdf = new SimpleDateFormat(myFormat);
+        Date todayDate = new Date();
+        if(myCalendar.getTime().after(todayDate))
+        {
+            etDob.getEditText().setError("Please Enter Valid Date Of Birth");
 
-        etDob.getEditText().setText(sdf.format(myCalendar.getTime()));
+        }
+        else
+        {
+            etDob.getEditText().setError(null);
+            etDob.getEditText().setText(sdf.format(myCalendar.getTime()));
+        }
     }
     public boolean isValidEmail(String email) {
         String EMAIL_PATTERN = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
@@ -220,48 +230,47 @@ public class SignupActivity extends AppCompatActivity {
     public boolean submitForm() {
         status = true;
         if (!isValidEmail(etEmail.getEditText().getText().toString())) {
-            etEmail.getEditText().setError("Email is not valid ");
+            etEmail.getEditText().setError("Email Is Not Valid ");
             status = false;
         }
         if (TextUtils.isEmpty(etEmail.getEditText().getText().toString().trim())) {
-            etEmail.getEditText().setError("Please enter email");
+            etEmail.getEditText().setError("Please Enter Email");
             status = false;
         }
         if (TextUtils.isEmpty(etPassword.getEditText().getText().toString().trim())) {
-            etPassword.getEditText().setError("Please enter password");
+            etPassword.getEditText().setError("Please Enter Password");
             status = false;
         }
         if (TextUtils.isEmpty(etConfirmpassword.getEditText().getText().toString().trim())) {
-            etConfirmpassword.getEditText().setError("Please enter confirmpassword");
+            etConfirmpassword.getEditText().setError("Please Enter Confirm Password");
             status = false;
         }
         if (TextUtils.isEmpty(etName.getEditText().getText().toString().trim())) {
-            etName.getEditText().setError("Please enter name");
+            etName.getEditText().setError("Please Enter Name");
             status = false;
         }
         if (TextUtils.isEmpty(etSurname.getEditText().getText().toString().trim())) {
-            etSurname.getEditText().setError("Please enter surname");
+            etSurname.getEditText().setError("Please Enter Surname");
             status = false;
         }
         if (TextUtils.isEmpty(etDob.getEditText().getText().toString().trim())) {
-            etDob.getEditText().setError("Please enter date of birth");
+            etDob.getEditText().setError("Please Enter Date Of Birth");
             status = false;
         }
         if (TextUtils.isEmpty(etAdd.getEditText().getText().toString().trim())) {
-            etAdd.getEditText().setError("Please enter address");
+            etAdd.getEditText().setError("Please Enter Address");
             status = false;
         }
         if (TextUtils.isEmpty(etCity.getEditText().getText().toString().trim())) {
-            etCity.getEditText().setError("Please enter city");
+            etCity.getEditText().setError("Please Enter City");
             status = false;
         }
         if (TextUtils.isEmpty(etPostcode.getEditText().getText().toString().trim())) {
-            etPostcode.getEditText().setError("Please enter postcode");
+            etPostcode.getEditText().setError("Please Enter Postcode");
             status = false;
         }
         if (!etPassword.getEditText().getText().toString().trim().equals(etConfirmpassword.getEditText().getText().toString().trim())) {
-            etPassword.getEditText().setError("password & confirm password should be same");
-            etConfirmpassword.getEditText().setError("password & confirm password should be same");
+            etConfirmpassword.getEditText().setError("Password & Confirm Password Should Be Same");
             status = false;
         }
 

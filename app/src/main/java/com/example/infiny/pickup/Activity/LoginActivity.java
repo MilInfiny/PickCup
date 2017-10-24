@@ -3,7 +3,9 @@ package com.example.infiny.pickup.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
@@ -16,6 +18,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.infiny.pickup.Helpers.ConnectivityReceiver;
 import com.example.infiny.pickup.Helpers.RetroFitClient;
 import com.example.infiny.pickup.Helpers.SessionManager;
 import com.example.infiny.pickup.Interfaces.ApiIntegration;
@@ -93,62 +96,89 @@ public class LoginActivity extends AppCompatActivity {
         btLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (submitForm()) {
-                    progressBarCyclic.setVisibility(View.VISIBLE);
-                    getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-                            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                    retroFitClient = new RetroFitClient(context).getBlankRetrofit();
-                    Call<LoginData> call = retroFitClient
-                            .create(ApiIntegration.class)
-                            .getsignin(etEmail.getText().toString(),
-                                    password.getText().toString(),
-                                    sharedPreferences.getString("FcmId",null));
-                    call.enqueue(new Callback<LoginData>() {
 
-                        @Override
-                        public void onResponse(Call<LoginData> call, Response<LoginData> response) {
-                            if (response != null) {
-                                loginData = response.body();
-                                if (loginData != null) {
-                                    if (loginData.getError().equals("true")) {
-                                        progressBarCyclic.setVisibility(View.GONE);
-                                        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                                        Toast.makeText(context,loginData.getTitle(), Toast.LENGTH_SHORT).show();
+
+                        progressBarCyclic.setVisibility(View.VISIBLE);
+                        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                        retroFitClient = new RetroFitClient(context).getBlankRetrofit();
+                        Call<LoginData> call = retroFitClient
+                                .create(ApiIntegration.class)
+                                .getsignin(etEmail.getText().toString(),
+                                        password.getText().toString(),
+                                        sharedPreferences.getString("FcmId", null));
+                        call.enqueue(new Callback<LoginData>() {
+
+                            @Override
+                            public void onResponse(Call<LoginData> call, Response<LoginData> response) {
+                                if (response != null) {
+                                    loginData = response.body();
+                                    if (loginData != null) {
+                                        if (loginData.getError().equals("true")) {
+                                            progressBarCyclic.setVisibility(View.GONE);
+                                            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                            Toast.makeText(context, loginData.getTitle(), Toast.LENGTH_SHORT).show();
+                                        } else {
+                                            Toast.makeText(context, R.string.login_success, Toast.LENGTH_SHORT).show();
+                                            String ll = loginData.getUser().getAddress().getPostalCode();
+                                            sessionManager.createLoginSession(loginData.getUser().getFirstname(), loginData.getUser().getEmail(), loginData.getUser().getLastname(), loginData.getToken(), loginData.getUser().getDob(), loginData.getUser().getAddress().getPostalCode(), loginData.getUser().getAddress().getCity(), loginData.getUser().getAddress().getAddress(), loginData.getUser().getImageUrl());
+                                            progressBarCyclic.setVisibility(View.GONE);
+                                            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                            startActivity(intent);
+                                            finish();
+                                        }
+
                                     } else {
-                                        Toast.makeText(context, R.string.login_success, Toast.LENGTH_SHORT).show();
-                                        String ll=loginData.getUser().getAddress().getPostalCode();
-                                        sessionManager.createLoginSession(loginData.getUser().getFirstname(),loginData.getUser().getEmail(),loginData.getUser().getLastname(),loginData.getToken(),loginData.getUser().getDob(),loginData.getUser().getAddress().getPostalCode(),loginData.getUser().getAddress().getCity(),loginData.getUser().getAddress().getAddress(),loginData.getUser().getImageUrl());
-                                        progressBarCyclic.setVisibility(View.GONE);
-                                        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                        startActivity(intent);
-                                        finish();
+                                        if (response.code() == 404 || response.code() == 500) {
+                                            progressBarCyclic.setVisibility(View.GONE);
+                                            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                            Toast.makeText(context, R.string.server_not_responding, Toast.LENGTH_SHORT).show();
+                                        }
                                     }
+                                } else {
 
-                                }else {
-                                    if (response.code() == 404 || response.code() == 500) {
-                                        progressBarCyclic.setVisibility(View.GONE);
-                                        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                                        Toast.makeText(context, R.string.server_not_responding, Toast.LENGTH_SHORT).show();
-                                    }
+                                    progressBarCyclic.setVisibility(View.GONE);
+                                    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                    Toast.makeText(context, R.string.server_not_responding, Toast.LENGTH_SHORT).show();
+
                                 }
                             }
-                        }
 
-                        @Override
-                        public void onFailure(Call<LoginData> call, Throwable t) {
-                            progressBarCyclic.setVisibility(View.GONE);
-                            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                            Toast.makeText(context,R.string.Something_went_wrong,Toast.LENGTH_SHORT);
-                        }
-                    });
+                            @Override
+                            public void onFailure(Call<LoginData> call, Throwable t) {
+                                progressBarCyclic.setVisibility(View.GONE);
+                                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                Toast.makeText(context, R.string.Something_went_wrong, Toast.LENGTH_SHORT);
+                            }
+                        });
 
-                }
+                    }
 
-            }
+
         });
 
     }
+    private void showSnack(boolean isConnected) {
+        String message;
+        int color;
+        if (isConnected) {
+            message = "Connected to Internet.";
+            color = Color.WHITE;
+        } else {
+            message = "Please check your internet connection & try again";
+            color = Color.RED;
+        }
+
+        Snackbar snackbar = Snackbar
+                .make(findViewById(R.id.fab), message, Snackbar.LENGTH_LONG);
+
+        View sbView = snackbar.getView();
+        TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+        textView.setTextColor(color);
+        snackbar.show();
+    }
+
     public boolean isValidEmail(String email) {
         String EMAIL_PATTERN = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
                 + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
@@ -161,15 +191,15 @@ public class LoginActivity extends AppCompatActivity {
     public boolean submitForm() {
         status = true;
         if (!isValidEmail(etEmail.getText().toString())) {
-            etEmail.setError("Email is not valid ");
+            etEmail.setError("Email Is Not Valid ");
             status = false;
         }
         if (TextUtils.isEmpty(etEmail.getText().toString())) {
-            etEmail.setError("Please enter your email");
+            etEmail.setError("Please Enter Your Email");
             status = false;
         }
         if (TextUtils.isEmpty(password.getText().toString())) {
-            password.setError("Please enter password");
+            password.setError("Please Enter Password");
             status = false;
         }
 

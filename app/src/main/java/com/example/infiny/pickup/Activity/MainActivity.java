@@ -109,7 +109,7 @@ public class MainActivity extends AppCompatActivity
         sessionManager=new SessionManager(context);
         sharedPreferences=getSharedPreferences(sessionManager.PREF_NAME,0);
         navView.setNavigationItemSelectedListener(this);
-        Log.e("userToken",sharedPreferences.getString("token",null));
+//        Log.e("userToken",sharedPreferences.getString("token",null));
         Notifications=(TextView)navView.getMenu().
                 findItem(R.id.nav_notification).getActionView().findViewById(R.id.menu_Count);
         Rewards=(TextView) navView.getMenu().
@@ -127,12 +127,17 @@ public class MainActivity extends AppCompatActivity
 
             @Override
             public void OnItemClickListener(Cafes item) {
+                if(item.getRewardCompleted()==null)
+                {
+                    item.setRewardCompleted("0");
+                }
                 Intent intent = new Intent(MainActivity.this, MenuActivity.class);
                 intent.putExtra("image",item.getImageurl());
                 intent.putExtra("tittle",item.getCafe_name());
                 intent.putExtra("sid",item.get_id());
-                intent.putExtra("rating",item.getRating());
+                intent.putExtra("rewardcompleted",item.getRewardCompleted());
 
+                intent.putExtra("rewardQuantity",item.getRewardQuan());
                 startActivity(intent);
             }
 
@@ -212,6 +217,19 @@ public class MainActivity extends AppCompatActivity
 
 
 
+
+        profileView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        username.setText(sharedPreferences.getString("name",null)+" "+sharedPreferences.getString("surname",null));
+        email.setText(sharedPreferences.getString("email",null));
+
+
         if(isTablet(context))
         {
             Picasso.with(context)
@@ -231,25 +249,11 @@ public class MainActivity extends AppCompatActivity
                     .placeholder(ic_person_black_48dp)
                     .into(profileView);
         };
-        profileView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        username.setText(sharedPreferences.getString("name",null)+" "+sharedPreferences.getString("surname",null));
-        email.setText(sharedPreferences.getString("email",null));
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-
-
-
-
     }
 
     @Override
@@ -338,6 +342,11 @@ public class MainActivity extends AppCompatActivity
                             Toast.makeText(context, R.string.server_not_responding, Toast.LENGTH_SHORT).show();
                         }
                     }
+                }
+                else{
+                    progressBarCyclic.setVisibility(View.GONE);
+                    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                    Toast.makeText(context, R.string.server_not_responding, Toast.LENGTH_SHORT).show();
                 }
             }
             @Override

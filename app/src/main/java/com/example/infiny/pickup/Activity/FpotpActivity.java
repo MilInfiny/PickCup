@@ -132,7 +132,7 @@ public class FpotpActivity extends AppCompatActivity {
     public boolean submitForm() {
         status = true;
         if (TextUtils.isEmpty(etOtp.getEditText().getText().toString())) {
-            etOtp.getEditText().setError("Please enter your email");
+            etOtp.getEditText().setError("Please Enter Your Email");
             status = false;
         }
 

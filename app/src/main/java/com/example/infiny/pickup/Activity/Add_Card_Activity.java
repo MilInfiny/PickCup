@@ -245,10 +245,12 @@ public class Add_Card_Activity extends AppCompatActivity {
                                                             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                                                             if (fromOrder) {
                                                                 Intent intent = new Intent(context, OrderActivity.class);
+                                                                intent.putExtra("fromPage","add_card_activity");
                                                                 startActivity(intent);
                                                                 finish();
                                                             } else {
                                                                 Intent intent = new Intent(context, Card_Activity.class);
+
                                                                 startActivity(intent);
                                                                 finish();
 
@@ -332,23 +334,23 @@ public class Add_Card_Activity extends AppCompatActivity {
         status = true;
 
         if (TextUtils.isEmpty(etCardNUmber.getEditText().getText().toString().trim())) {
-            etCardNUmber.getEditText().setError("Please enter cardNumber");
+            etCardNUmber.getEditText().setError("Please Enter Card Number");
             status = false;
         }
         if (etCardNUmber.getEditText().getText().toString().trim().length()<19) {
-            etCardNUmber.getEditText().setError("card number must be 16 digits");
+            etCardNUmber.getEditText().setError("Card Number Must Be 16 Digits");
             status = false;
         }
         if (TextUtils.isEmpty(etCardholder.getEditText().getText().toString().trim())) {
-            etCardholder.getEditText().setError("Please enter cardholder name");
+            etCardholder.getEditText().setError("Please Enter Cardholder Name");
             status = false;
         }
         if (TextUtils.isEmpty(etExprireDate.getEditText().getText().toString().trim())) {
-            etExprireDate.getEditText().setError("Please enter expire date");
+            etExprireDate.getEditText().setError("Please Enter Expiration Date");
             status = false;
         }
         if (TextUtils.isEmpty(etCvv.getEditText().getText().toString().trim())) {
-            etCvv.getEditText().setError("Please enter cvv");
+            etCvv.getEditText().setError("Please Enter CVV");
             status = false;
         }
 

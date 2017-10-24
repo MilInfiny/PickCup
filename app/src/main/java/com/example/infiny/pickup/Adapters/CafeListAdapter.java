@@ -87,37 +87,21 @@ public class CafeListAdapter extends RecyclerView.Adapter<CafeListAdapter.MyView
 
 
         };
+        if(Integer.parseInt(cafes.getRewardQuan())==0 ||cafes.getRewardQuan()==null )
+        {
+            holder.rewarddetails.setText(" ");
 
-        if(cafes.getRating().equals("1"))
-        {
-            holder.r1.setVisibility(View.VISIBLE);
+
         }
-        if(cafes.getRating().equals("2"))
-        {
-            holder.r1.setVisibility(View.VISIBLE);
-            holder.r2.setVisibility(View.VISIBLE);
+        else {
+            if (cafes.getRewardCompleted() == null) {
+                holder.rewarddetails.setText("0" + "/" + cafes.getRewardQuan());
+            } else {
+                holder.rewarddetails.setText(cafes.getRewardCompleted() + "/" + cafes.getRewardQuan());
+            }
         }
-        if(cafes.getRating().equals("3"))
-        {
-            holder.r1.setVisibility(View.VISIBLE);
-            holder.r2.setVisibility(View.VISIBLE);
-            holder.r3.setVisibility(View.VISIBLE);
-        }
-        if(cafes.getRating().equals("4"))
-        {
-            holder.r1.setVisibility(View.VISIBLE);
-            holder.r2.setVisibility(View.VISIBLE);
-            holder.r3.setVisibility(View.VISIBLE);
-            holder.r4.setVisibility(View.VISIBLE);
-        }
-        if(cafes.getRating().equals("5"))
-        {
-            holder.r1.setVisibility(View.VISIBLE);
-            holder.r2.setVisibility(View.VISIBLE);
-            holder.r3.setVisibility(View.VISIBLE);
-            holder.r4.setVisibility(View.VISIBLE);
-            holder.r5.setVisibility(View.VISIBLE);
-        }
+
+
 
     }
 
@@ -127,8 +111,8 @@ public class CafeListAdapter extends RecyclerView.Adapter<CafeListAdapter.MyView
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView tittle;
-        ImageView bgimage,r1,r2,r3,r4,r5;
+        TextView tittle,rewarddetails;
+        ImageView bgimage;
         Button status;
         FrameLayout framelayout;
         public MyViewHolder(View itemView) {
@@ -137,11 +121,8 @@ public class CafeListAdapter extends RecyclerView.Adapter<CafeListAdapter.MyView
             framelayout=(FrameLayout)itemView.findViewById(R.id.Framelayout);
             bgimage=(ImageView)itemView.findViewById(R.id.bgimage);
             status=(Button)itemView.findViewById(R.id.status_button);
-            r5=(ImageView)itemView.findViewById(R.id.rating1);
-            r4=(ImageView)itemView.findViewById(R.id.rating2);
-            r3=(ImageView)itemView.findViewById(R.id.rating3);
-            r2=(ImageView)itemView.findViewById(R.id.rating4);
-            r1=(ImageView)itemView.findViewById(R.id.rating5);
+            rewarddetails=(TextView)itemView.findViewById(R.id.rewarddetails);
+
 
 
 

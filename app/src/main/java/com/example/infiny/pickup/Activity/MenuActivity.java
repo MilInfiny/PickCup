@@ -57,7 +57,7 @@ public class MenuActivity extends AppCompatActivity implements OnItemClickListen
 
     MenuNormalAdapter menuNormalAdapter;
     Context context;
-    String sid;
+    String sid,rewardcompleted,rewardQuantity;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.appbar)
@@ -70,12 +70,7 @@ public class MenuActivity extends AppCompatActivity implements OnItemClickListen
     TextView tittle;
     @BindView(R.id.status_button)
     Button statusButton;
-    @BindView(R.id.rating1)
-    ImageView rating1;
-    @BindView(R.id.rating2)
-    ImageView rating2;
-    @BindView(R.id.rating3)
-    ImageView rating3;
+
     @BindView(R.id.toplayout)
     RelativeLayout toplayout;
     @BindView(R.id.scrollview)
@@ -102,10 +97,9 @@ public class MenuActivity extends AppCompatActivity implements OnItemClickListen
     ImageView cartimage;
     public static String cart_count_String;
     public static TextView cartCount;
-    @BindView(R.id.rating4)
-    ImageView rating4;
-    @BindView(R.id.rating5)
-    ImageView rating5;
+    @BindView(R.id.rewarddetails)
+    TextView rewarddetails;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,54 +120,25 @@ public class MenuActivity extends AppCompatActivity implements OnItemClickListen
         tittle.setText(intent.getStringExtra("tittle"));
         cartCount = (TextView) findViewById(R.id.cart_count);
         sid = intent.getStringExtra("sid");
-        if(intent.getStringExtra("rating").equals("1"))
-        {
-            rating5.setVisibility(View.VISIBLE);
-        }
-        if(intent.getStringExtra("rating").equals("2"))
-        {
-            rating5.setVisibility(View.VISIBLE);
-            rating4.setVisibility(View.VISIBLE);
-        }
-        if(intent.getStringExtra("rating").equals("3"))
-        {
-            rating5.setVisibility(View.VISIBLE);
-            rating4.setVisibility(View.VISIBLE);
-            rating3.setVisibility(View.VISIBLE);
-        }
-        if(intent.getStringExtra("rating").equals("4"))
-        {
-            rating5.setVisibility(View.VISIBLE);
-            rating4.setVisibility(View.VISIBLE);
-            rating3.setVisibility(View.VISIBLE);
-            rating2.setVisibility(View.VISIBLE);
-        }
-        if(intent.getStringExtra("rating").equals("5"))
-        {
-            rating5.setVisibility(View.VISIBLE);
-            rating4.setVisibility(View.VISIBLE);
-            rating3.setVisibility(View.VISIBLE);
-            rating2.setVisibility(View.VISIBLE);
-            rating1.setVisibility(View.VISIBLE);
-        }
+        rewardcompleted=intent.getStringExtra("rewardcompleted");
+        rewardQuantity=intent.getStringExtra("rewardQuantity");
+
 
         if (isTablet(context)) {
-            Picasso.with(context)
-                    .invalidate(intent.getStringExtra("image") + "_large.png");
+
             Picasso.with(context)
                     .load(intent.getStringExtra("image") + "_large.png")
                     .placeholder(ic_person_black_48dp)
                     .into(tittleimage);
 
         } else {
-            Picasso.with(context)
-                    .invalidate(intent.getStringExtra("image") + "_small.png");
+
             Picasso.with(context)
                     .load(intent.getStringExtra("image") + "_small.png")
                     .placeholder(ic_person_black_48dp)
                     .into(tittleimage);
-        }
-        ;
+        };
+        rewarddetails.setText(rewardcompleted+"/"+rewardQuantity);
 
 
         order = (RelativeLayout) findViewById(R.id.order);
@@ -188,7 +153,8 @@ public class MenuActivity extends AppCompatActivity implements OnItemClickListen
                 intent1.putExtra("fromPage", "menuActivity");
                 intent1.putExtra("tittle", intent.getStringExtra("tittle"));
                 intent1.putExtra("image", intent.getStringExtra("image"));
-                intent1.putExtra("rating",   intent.getStringExtra("rating"));
+                intent1.putExtra("rewardcompleted",rewardcompleted);
+                intent1.putExtra("rewardQuantity",rewardQuantity);
                 startActivity(intent1);
                 finish();
 

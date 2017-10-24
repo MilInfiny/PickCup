@@ -165,7 +165,6 @@ public class ProfileActivity extends AppCompatActivity {
                     .placeholder(R.drawable.ic_person_black_48dp)
                     .into(profile);
         }
-    String lll=sharedPreferences.getString(sessionManager.postalcode, null);
         etEmail.getEditText().setText(sharedPreferences.getString(sessionManager.email, null));
         etName.getEditText().setText(sharedPreferences.getString(sessionManager.name, null));
         etSurname.getEditText().setText(sharedPreferences.getString(sessionManager.surname,null));
@@ -183,7 +182,6 @@ public class ProfileActivity extends AppCompatActivity {
                 myCalendar.set(Calendar.YEAR, year);
                 myCalendar.set(Calendar.MONTH, monthOfYear);
                 myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-
                 updateLabel();
             }
 
@@ -204,9 +202,12 @@ public class ProfileActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (submitForm()) {
                     RequestBody fbody = null;
+                    String imageexist="false";
                     if (file != null) {
                         fbody = RequestBody.create(MediaType.parse("image/*"), file);
+                         imageexist="true";
                     }
+
                     RequestBody token = RequestBody.create(MediaType.parse("text/plain"), sharedPreferences.getString("token", null));
                     RequestBody email = RequestBody.create(MediaType.parse("text/plain"), etEmail.getEditText().getText().toString().trim());
                     RequestBody name = RequestBody.create(MediaType.parse("text/plain"), etName.getEditText().getText().toString().trim());
@@ -222,7 +223,7 @@ public class ProfileActivity extends AppCompatActivity {
 
                     Call<EditProfileData> call = retroFitClient
                             .create(ApiIntegration.class)
-                            .editProfile(sharedPreferences.getString("token", null),
+                            .editProfile(sharedPreferences.getString("token", null),imageexist,
                                     fbody, token, email, name, surname, dob, address, city, postcode);
                     call.enqueue(new Callback<EditProfileData>() {
 
@@ -451,39 +452,34 @@ public class ProfileActivity extends AppCompatActivity {
     public boolean submitForm() {
         status = true;
         if (!isValidEmail(etEmail.getEditText().getText().toString())) {
-            etEmail.getEditText().setError("Email is not valid ");
+            etEmail.getEditText().setError("Email Is Not Valid ");
             status = false;
         }        if (TextUtils.isEmpty(etEmail.getEditText().getText().toString().trim())) {
-            etEmail.getEditText().setError("Please enter email");
+            etEmail.getEditText().setError("Please Enter Email");
             status = false;
         }
         if (TextUtils.isEmpty(etName.getEditText().getText().toString().trim())) {
-            etName.getEditText().setError("Please enter name");
+            etName.getEditText().setError("Please Enter Name");
             status = false;
         }
         if (TextUtils.isEmpty(etSurname.getEditText().getText().toString().trim())) {
-            etSurname.getEditText().setError("Please enter surname");
+            etSurname.getEditText().setError("Please Enter Surname");
             status = false;
         }
         if (TextUtils.isEmpty(etDob.getEditText().getText().toString().trim())) {
-            etDob.getEditText().setError("Please enter date of birth");
+            etDob.getEditText().setError("Please Enter Date of Birth");
             status = false;
         }
         if (TextUtils.isEmpty(etAdd.getEditText().getText().toString().trim())) {
-            etAdd.getEditText().setError("Please enter address");
+            etAdd.getEditText().setError("Please Enter Address");
             status = false;
         }
         if (TextUtils.isEmpty(etCity.getEditText().getText().toString().trim())) {
-            etCity.getEditText().setError("Please enter city");
+            etCity.getEditText().setError("Please Enter City");
             status = false;
         }
         if (TextUtils.isEmpty(etPostcode.getEditText().getText().toString().trim())) {
-            etPostcode.getEditText().setError("Please enter postcode");
-            status = false;
-        }
-        if (!etPassword.getEditText().getText().toString().trim().equals(etConfirmpassword.getEditText().getText().toString().trim())) {
-            etPassword.getEditText().setError("password & confirm password should be same");
-            etConfirmpassword.getEditText().setError("password & confirm password should be same");
+            etPostcode.getEditText().setError("Please Enter Postcode");
             status = false;
         }
 

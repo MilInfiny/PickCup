@@ -1,13 +1,17 @@
 package com.example.infiny.pickup.Adapters;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
+import android.os.Build;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -17,19 +21,36 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.infiny.pickup.Activity.MenuActivity;
 import com.example.infiny.pickup.Activity.OrderActivity;
+import com.example.infiny.pickup.Activity.RewardActivity;
 import com.example.infiny.pickup.Helpers.CafeLIstingHelpers;
+import com.example.infiny.pickup.Helpers.RetroFitClient;
+import com.example.infiny.pickup.Helpers.SessionManager;
+import com.example.infiny.pickup.Interfaces.ApiIntegration;
+import com.example.infiny.pickup.Model.AddToCartData;
+import com.example.infiny.pickup.Model.CafeListingData;
+import com.example.infiny.pickup.Model.ClaimToCartData;
 import com.example.infiny.pickup.Model.Data;
 import com.example.infiny.pickup.Model.DataRewards;
+import com.example.infiny.pickup.Model.Ordered;
 import com.example.infiny.pickup.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 /**
  * Created by infiny on 9/9/17.
@@ -40,10 +61,16 @@ public class RewardAdapter extends RecyclerView.Adapter<RewardAdapter.MyViewHold
     ArrayList<DataRewards> partyName;
     ArrayList<Integer> quantities;
     RewardsQuantityAdapter rewardsQuantityAdapter;
+    Retrofit retroFitClient;
+    SharedPreferences sharedPreferences;
+    ClaimToCartData claimToCartData;
+    SessionManager sessionManager;
 
     public RewardAdapter(Context context, ArrayList<DataRewards> partyName) {
         this.context = context;
         this.partyName = partyName;
+        sessionManager=new SessionManager(this.context);
+        sharedPreferences=this.context.getSharedPreferences(sessionManager.PREF_NAME,0);
     }
 
     @Override
@@ -57,6 +84,7 @@ public class RewardAdapter extends RecyclerView.Adapter<RewardAdapter.MyViewHold
     public void onBindViewHolder(final MyViewHolder holder, int position) {
 
         final DataRewards f1=partyName.get(position);
+        holder.cafeNAme.setText(f1.getCafe_name());
 
         if(holder.isTablet(context))
         {
@@ -64,7 +92,7 @@ public class RewardAdapter extends RecyclerView.Adapter<RewardAdapter.MyViewHold
                     .invalidate(f1.getImageurl()+"_large.png");
             Picasso.with(context)
                     .load(f1.getImageurl()+"_large.png")
-                    .placeholder(R.drawable.ic_person_black_48dp)
+                    .placeholder(R.drawable.cofeecup)
                     .into(holder.imageView);
 
         }
@@ -103,11 +131,133 @@ public class RewardAdapter extends RecyclerView.Adapter<RewardAdapter.MyViewHold
         holder.claim.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(context, OrderActivity.class);
-                intent.putExtra("fromPage","rewardActivity");
-                intent.putExtra("sid",f1.getCafe_id());
-                context.startActivity(intent);
-                ((Activity)context).finish();
+
+                RewardActivity.progressBarCyclic.setVisibility(View.VISIBLE);
+                ((Activity)context).getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                        WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                retroFitClient = new RetroFitClient(context).getBlankRetrofit();
+                String token =sharedPreferences.getString("token",null);
+
+                Call<ClaimToCartData> call = retroFitClient
+                        .create(ApiIntegration.class)
+                        .rewardtocart(sharedPreferences.getString("token",null),
+                               f1.getCafe_id());
+                call.enqueue(new Callback<ClaimToCartData>() {
+
+                    @Override
+                    public void onResponse(Call<ClaimToCartData> call, Response<ClaimToCartData> response) {
+                        if (response != null) {
+                            claimToCartData = response.body();
+                            if (claimToCartData != null) {
+                                if (claimToCartData.getError().equals("true")) {
+
+                                    AlertDialog.Builder builder;
+                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                                        builder = new AlertDialog.Builder(context, android.R.style.Theme_Material_Dialog_Alert);
+                                    } else {
+                                        builder = new AlertDialog.Builder(context);
+                                    }
+
+                                    builder.setTitle("Delete Cart")
+                                            .setMessage("Some items from another cafe already exist in your cart. Adding this item will remove those items, are you sure you want to proceed?")
+                                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                                public void onClick(DialogInterface dialog, int which) {
+
+                                                    RewardActivity.progressBarCyclic.setVisibility(View.VISIBLE);
+                                                    ((Activity) context).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                                    retroFitClient = new RetroFitClient(context).getBlankRetrofit();
+                                                    Call<ClaimToCartData> call = retroFitClient
+                                                            .create(ApiIntegration.class)
+                                                            .deleteCart(sharedPreferences.getString("token", null));
+
+                                                    call.enqueue(new Callback<ClaimToCartData>() {
+                                                        @Override
+                                                        public void onResponse(Call<ClaimToCartData> call, Response<ClaimToCartData> response) {
+                                                            if (response != null) {
+                                                                claimToCartData = response.body();
+                                                                if (claimToCartData != null) {
+                                                                    if (claimToCartData.getError().equals("true")) {
+                                                                        RewardActivity.progressBarCyclic.setVisibility(View.GONE);
+                                                                        ((Activity) context).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
+                                                                    } else {
+                                                                        RewardActivity.progressBarCyclic.setVisibility(View.GONE);
+                                                                        ((Activity) context).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                                                        Intent intent=new Intent(context, OrderActivity.class);
+                                                                        intent.putExtra("fromPage","rewardActivity");
+                                                                        intent.putExtra("sid",f1.getCafe_id());
+                                                                        intent.putExtra("rewardcompleted",f1.getRewardCompleted());
+                                                                        intent.putExtra("rewardQuantity",f1.getQuantity());
+                                                                        context.startActivity(intent);
+                                                                        ((Activity)context).finish();
+
+
+
+                                                                    }
+                                                                }
+                                                                else {
+
+                                                                    RewardActivity.progressBarCyclic.setVisibility(View.GONE);
+                                                                        ((Activity) context).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                                                        Toast.makeText(context, R.string.server_not_responding, Toast.LENGTH_SHORT).show();
+
+                                                                }
+                                                            }
+
+                                                        }
+
+                                                        @Override
+                                                        public void onFailure(Call<ClaimToCartData> call, Throwable t) {
+                                                            RewardActivity.progressBarCyclic.setVisibility(View.GONE);
+                                                            ((Activity) context).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                                            Toast.makeText(context, R.string.server_not_responding, Toast.LENGTH_SHORT).show();
+
+
+                                                        }
+                                                    });
+                                                }}).setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+
+                                        }
+                                    })
+                                            .setIcon(android.R.drawable.ic_dialog_alert)
+                                            .show();;
+
+
+
+                                } else {
+                                    RewardActivity.progressBarCyclic.setVisibility(View.GONE);
+                                    ((Activity) context).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                    Intent intent=new Intent(context, OrderActivity.class);
+                                    intent.putExtra("fromPage","rewardActivity");
+                                    intent.putExtra("sid",f1.getCafe_id());
+                                    intent.putExtra("rewardcompleted",f1.getRewardCompleted());
+                                    intent.putExtra("rewardQuantity",f1.getQuantity());
+                                    context.startActivity(intent);
+                                    ((Activity)context).finish();
+
+                                }
+
+                            }
+
+                        } else {
+                            RewardActivity.progressBarCyclic.setVisibility(View.GONE);
+                            ((Activity) context).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                            Toast.makeText(context, R.string.server_not_responding, Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ClaimToCartData> call, Throwable t) {
+                        RewardActivity.progressBarCyclic.setVisibility(View.GONE);
+                        ((Activity) context).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                        Toast.makeText(context,R.string.Something_went_wrong,Toast.LENGTH_SHORT);
+
+                    }
+                });
+
+
+
             }
         });
 
@@ -120,13 +270,13 @@ public class RewardAdapter extends RecyclerView.Adapter<RewardAdapter.MyViewHold
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         RelativeLayout relativeLayout;
-        TextView partyName,tv_rewardsdetail,tv_info;
+        TextView cafeNAme,tv_rewardsdetail,tv_info;
         ImageView imageView,r1,r2,r3,r4,r5;
         RecyclerView recyclerView;
         Button claim;
         public MyViewHolder(View itemView) {
             super(itemView);
-            partyName=(TextView)itemView.findViewById(R.id.tittle);
+            cafeNAme=(TextView)itemView.findViewById(R.id.tittle);
             imageView=(ImageView)itemView.findViewById(R.id.tittleimage);
             relativeLayout=(RelativeLayout)itemView.findViewById(R.id.toplayout);
             recyclerView=(RecyclerView)itemView.findViewById(R.id.quantityRecycleView);

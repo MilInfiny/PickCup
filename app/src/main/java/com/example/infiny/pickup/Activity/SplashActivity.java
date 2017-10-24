@@ -21,6 +21,7 @@ import com.example.infiny.pickup.Helpers.SessionManager;
 import com.example.infiny.pickup.R;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
+import com.novoda.merlin.Merlin;
 
 import java.util.ArrayList;
 
@@ -47,13 +48,13 @@ public class SplashActivity extends AppCompatActivity {
         mContext = this;
         sessionManager=new SessionManager(mContext);
 
+
     }
 
 
     @Override
     protected void onResume() {
         super.onResume();
-
         gps = new GPSTracker(SplashActivity.this);
         if (gps.canGetLocation()) {
             double latitude = gps.getLatitude();
@@ -98,6 +99,8 @@ public class SplashActivity extends AppCompatActivity {
 
 
     }
+
+
 
     public void nextScreen() {
         new Handler().postDelayed(new Runnable() {

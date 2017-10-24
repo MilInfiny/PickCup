@@ -152,7 +152,6 @@ public class order_history extends AppCompatActivity {
                             {
                                 noorders.setVisibility(View.VISIBLE);
                             }
-                            Toast.makeText(context, Order_History_Data.getTitle(), Toast.LENGTH_SHORT).show();
                         } else {
 
                             progressBarCyclic.setVisibility(View.GONE);

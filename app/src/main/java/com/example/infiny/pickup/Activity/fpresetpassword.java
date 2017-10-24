@@ -138,11 +138,11 @@ public class fpresetpassword extends AppCompatActivity {
     public boolean submitForm() {
         status = true;
         if (TextUtils.isEmpty(etNewpassword.getEditText().getText().toString())) {
-            etNewpassword.getEditText().setError("Please enter your email");
+            etNewpassword.getEditText().setError("Please Enter Your Email");
             status = false;
         }
         if (TextUtils.isEmpty(etConfirmpassword.getEditText().getText().toString())) {
-            etConfirmpassword.getEditText().setError("Please enter password");
+            etConfirmpassword.getEditText().setError("Please Enter Password");
             status = false;
         }
 

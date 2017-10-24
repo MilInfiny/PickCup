@@ -161,10 +161,12 @@ public class TimeviewAdapter extends ExpandableRecyclerViewAdapter<TimeviewAdapt
                             if(datetime.getTimeInMillis() > c.getTimeInMillis()){
                                 if(selectedMinute<10)
                                 {
+                                    timebutton.setText(selectedHour + ":0" + selectedMinute+" "+timeSet);
                                     OrderActivity.dateString = selectedHour + ":0" + selectedMinute+":"+"00";
 
                                 }
                                 else {
+                                    timebutton.setText(selectedHour + ":" + selectedMinute+" "+timeSet);
                                     OrderActivity.dateString = selectedHour + ":" + selectedMinute+":"+"00";
 
 

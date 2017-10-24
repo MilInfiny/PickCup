@@ -48,7 +48,7 @@
                     android:id="@+id/et_cardholder"
                     android:layout_width="match_parent"
                     android:layout_height="70dp"
-                    android:hint="Card holder name">
+                    android:hint="Cardholder Name">
 
                     <EditText
                         android:id="@+id/tie_email"
@@ -63,7 +63,7 @@
                     android:id="@+id/et_cardNUmber"
                     android:layout_width="match_parent"
                     android:layout_height="70dp"
-                    android:hint="Card number"
+                    android:hint="Card Number"
                     android:layout_below="@+id/et_cardholder">
 
                     <EditText
@@ -81,7 +81,7 @@
                     android:id="@+id/et_exprireDate"
                     android:layout_width="match_parent"
                     android:layout_height="70dp"
-                    android:hint="Expire Date"
+                    android:hint="Expiration Date"
                     android:layout_below="@+id/et_cardNUmber">
 
                     <EditText
@@ -102,7 +102,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="70dp"
                     android:layout_below="@+id/et_exprireDate"
-                    android:hint="Cvv number">
+                    android:hint="CVV Number">
 
                     <EditText
                         android:id="@+id/tie_name"

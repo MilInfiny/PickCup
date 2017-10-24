@@ -11,6 +11,11 @@ public class Cafes
     private String cafe_name;
 
     private String _id;
+    private String rewardCompleted;
+
+    private String rewardQuan;
+    private String rewardId;
+
 
     private String storePass;
 
@@ -59,6 +64,30 @@ public class Cafes
     public String getStorePass ()
     {
         return storePass;
+    }
+
+    public String getRewardCompleted() {
+        return rewardCompleted;
+    }
+
+    public void setRewardCompleted(String rewardCompleted) {
+        this.rewardCompleted = rewardCompleted;
+    }
+
+    public String getRewardQuan() {
+        return rewardQuan;
+    }
+
+    public void setRewardQuan(String rewardQuan) {
+        this.rewardQuan = rewardQuan;
+    }
+
+    public String getRewardId() {
+        return rewardId;
+    }
+
+    public void setRewardId(String rewardId) {
+        this.rewardId = rewardId;
     }
 
     public void setStorePass (String storePass)

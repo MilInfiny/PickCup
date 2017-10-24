@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.infiny.pickup.Helpers.MenuItemData;
+import com.example.infiny.pickup.Interfaces.OnItemClickListener;
 import com.example.infiny.pickup.Model.Data;
 import com.example.infiny.pickup.Model.DataFindpartiOrder;
 import com.example.infiny.pickup.Model.Ordered;
@@ -23,10 +24,12 @@ public class OrderDetailsAdapter extends RecyclerView.Adapter<OrderDetailsAdapte
 
     Context mContext;
     ArrayList<Ordered> menuItemDataArrayList;
+    OnItemClickListener onItemClickListener;
 
-    public OrderDetailsAdapter(Context mContext,  ArrayList<Ordered> menuItemDataArrayList) {
+    public OrderDetailsAdapter(Context mContext,  ArrayList<Ordered> menuItemDataArrayList,OnItemClickListener onItemClickListener) {
         this.mContext=mContext;
         this.menuItemDataArrayList=menuItemDataArrayList;
+        this.onItemClickListener=onItemClickListener;
     }
 
     @Override
@@ -45,6 +48,8 @@ public class OrderDetailsAdapter extends RecyclerView.Adapter<OrderDetailsAdapte
             holder.tv_quantity.setText(data.getItemQuantity());
             Float total=Float.valueOf(data.getItemPrice())* Float.valueOf(data.getItemQuantity());
             holder.tv_price.setText("£ " +String.valueOf(total));
+        onItemClickListener.totalPrice(String.valueOf(total));
+
 
     }
 

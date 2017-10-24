@@ -108,7 +108,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="54dp"
                         android:singleLine="true"
-                        android:digits="abcdefghijklmnopqrstuvwxyz012345789"
+                        android:digits="abcdefghijklmnopqrstuvwxyz"
                         android:backgroundTint="#1e1d1e"
                         android:textColor="@color/colorPrimary" />
                 </android.support.design.widget.TextInputLayout>
@@ -124,7 +124,7 @@
                         android:id="@+id/tie_surname"
                         android:layout_width="match_parent"
                         android:layout_height="54dp"
-                        android:digits="abcdefghijklmnopqrstuvwxyz012345789"
+                        android:digits="abcdefghijklmnopqrstuvwxyz"
 
                         android:singleLine="true"
                         android:backgroundTint="#1e1d1e"
@@ -177,7 +177,7 @@
                         android:layout_height="54dp"
                         android:singleLine="true"
                         android:backgroundTint="#1e1d1e"
-                        android:digits="abcdefghijklmnopqrstuvwxyz012345789"
+                        android:digits="abcdefghijklmnopqrstuvwxyz0123456789"
                         android:textColor="@color/colorPrimary" />
                 </android.support.design.widget.TextInputLayout>
 
@@ -195,7 +195,7 @@
                         android:layout_height="54dp"
                         android:singleLine="true"
                         android:backgroundTint="#1e1d1e"
-                        android:digits="abcdefghijklmnopqrstuvwxyz012345789"
+                        android:digits="abcdefghijklmnopqrstuvwxyz0123456789"
                         android:textColor="@color/colorPrimary" />
                 </android.support.design.widget.TextInputLayout>
 
