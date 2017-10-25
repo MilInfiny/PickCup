@@ -112,7 +112,7 @@ public class CustomPagerAdapter  extends PagerAdapter {
             public void onClick(View view) {
                 if(cardDetails.getIsPrimary().equals("true"))
                 {
-                    Toast.makeText(mContext,"Card is already primary ", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext,"Card Is Already Primary ", Toast.LENGTH_SHORT).show();
                 }
                 else {
 
@@ -150,7 +150,7 @@ public class CustomPagerAdapter  extends PagerAdapter {
                                                     } else {
                                                         progressBarCyclic.setVisibility(View.GONE);
                                                         ((Activity) mContext).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                                                        Toast.makeText(mContext, "set Primary successfully ", Toast.LENGTH_SHORT).show();
+                                                        Toast.makeText(mContext, "Change Successfully", Toast.LENGTH_SHORT).show();
                                                         Intent intent = new Intent(mContext, Card_Activity.class);
                                                         mContext.startActivity(intent);
                                                         ((Activity) mContext).finish();
@@ -229,7 +229,7 @@ public class CustomPagerAdapter  extends PagerAdapter {
                                                     ((Activity)mContext).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                                                     Toast.makeText(mContext,cardListingData.getTitle(), Toast.LENGTH_SHORT).show();
                                                 } else {
-                                                    Toast.makeText(mContext,cardListingData.getTitle(), Toast.LENGTH_SHORT).show();
+                                                    Toast.makeText(mContext,"Card Delete Successfully", Toast.LENGTH_SHORT).show();
                                                     Intent intent=new Intent(mContext,Card_Activity.class);
                                                     mContext.startActivity(intent);
                                                 }

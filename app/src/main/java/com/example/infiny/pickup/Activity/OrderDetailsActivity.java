@@ -98,6 +98,10 @@ public class OrderDetailsActivity extends AppCompatActivity implements OnItemCli
     RelativeLayout mainLayout;
     @BindView(R.id.tv_notes)
     EditText tvNotes;
+    @BindView(R.id.tv_Tax)
+    TextView tvTax;
+    @BindView(R.id.tv_tax_cost)
+    TextView tvTaxCost;
     private Typeface font;
     ArrayList<Ordered> ordereds;
     Retrofit retroFitClient;
@@ -105,7 +109,7 @@ public class OrderDetailsActivity extends AppCompatActivity implements OnItemCli
     FindpartiOrder findpartiOrder;
     SessionManager sessionManager;
     SharedPreferences sharedPreferences;
-  Float total=0f;
+    Float total = 0f;
     private Context mContext;
     DataOrderHistory dataOrderHistory;
 
@@ -125,7 +129,7 @@ public class OrderDetailsActivity extends AppCompatActivity implements OnItemCli
         appbar.setOutlineProvider(null);
         getSupportActionBar().setTitle("");
         context = this;
-        onItemClickListener=this;
+        onItemClickListener = this;
         sessionManager = new SessionManager(context);
         sharedPreferences = getSharedPreferences(sessionManager.PREF_NAME, 0);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -181,7 +185,7 @@ public class OrderDetailsActivity extends AppCompatActivity implements OnItemCli
                             tvTotalCost.setText("£ " + findpartiOrder.getData()[0].getTotalPrice());
                             tvNotes.setText(findpartiOrder.getData()[0].getNote());
                             ordereds = new ArrayList<Ordered>(Arrays.asList(dataFindpartiOrder.getOrdered()));
-                            orderDetailsAdapter = new OrderDetailsAdapter(mContext, ordereds,onItemClickListener);
+                            orderDetailsAdapter = new OrderDetailsAdapter(mContext, ordereds, onItemClickListener);
                             RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
                             recylerviewMenuListing.setLayoutManager(mLayoutManager);
                             recylerviewMenuListing.setAdapter(orderDetailsAdapter);
@@ -221,7 +225,7 @@ public class OrderDetailsActivity extends AppCompatActivity implements OnItemCli
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                super.onBackPressed();  // optional depending on your needs
+                super.onBackPressed();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -243,7 +247,8 @@ public class OrderDetailsActivity extends AppCompatActivity implements OnItemCli
 
     @Override
     public void totalPrice(String total) {
-        this.total=this.total+Float.valueOf(total);
+        this.total = this.total + Float.valueOf(total);
+        tvTaxCost.setText("£" +" "+getCorrectValue(String.format("%.2f", Float.valueOf(findpartiOrder.getData()[0].getTotalPrice())-this.total)));
 
     }
 
@@ -255,5 +260,13 @@ public class OrderDetailsActivity extends AppCompatActivity implements OnItemCli
     @Override
     public void cardSet(ArrayList<CardDetails> cardDetailses) {
 
+    }
+    public String getCorrectValue(String price) {
+        String[] priceSpl = price.split("\\.");
+        if (priceSpl.length > 1)
+            if (priceSpl[1].equals("00") || priceSpl[1].equals("0")) {
+                price = priceSpl[0];
+            }
+        return price;
     }
 }

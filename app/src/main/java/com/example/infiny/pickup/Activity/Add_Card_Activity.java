@@ -334,23 +334,23 @@ public class Add_Card_Activity extends AppCompatActivity {
         status = true;
 
         if (TextUtils.isEmpty(etCardNUmber.getEditText().getText().toString().trim())) {
-            etCardNUmber.getEditText().setError("Please Enter Card Number");
+            etCardNUmber.setError("Please Enter Credit Card Number");
             status = false;
         }
         if (etCardNUmber.getEditText().getText().toString().trim().length()<19) {
-            etCardNUmber.getEditText().setError("Card Number Must Be 16 Digits");
+            etCardNUmber.setError("Credit Card Number Must Be 16 Digits");
             status = false;
         }
         if (TextUtils.isEmpty(etCardholder.getEditText().getText().toString().trim())) {
-            etCardholder.getEditText().setError("Please Enter Cardholder Name");
+            etCardholder.setError("Please Enter Cardholder Name");
             status = false;
         }
         if (TextUtils.isEmpty(etExprireDate.getEditText().getText().toString().trim())) {
-            etExprireDate.getEditText().setError("Please Enter Expiration Date");
+            etExprireDate.setError("Please Enter Expiration Date");
             status = false;
         }
         if (TextUtils.isEmpty(etCvv.getEditText().getText().toString().trim())) {
-            etCvv.getEditText().setError("Please Enter CVV");
+            etCvv.setError("Please Enter CVV Code");
             status = false;
         }
 

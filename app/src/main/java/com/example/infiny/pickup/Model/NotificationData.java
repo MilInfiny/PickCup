@@ -9,6 +9,7 @@ public class NotificationData {
 
     private String error;
 
+
     private DataNotification[] data;
 
     public String getTitle ()
@@ -34,6 +35,8 @@ public class NotificationData {
     public DataNotification[] getData() {
         return data;
     }
+
+
 
     public void setData(DataNotification[] data) {
         this.data = data;

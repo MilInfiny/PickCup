@@ -44,6 +44,16 @@ public class RetroFitClient {
 
 
 
+    public static OkHttpClient getOkHTTPClient(){
+        OkHttpClient httpClient = new OkHttpClient.Builder()
+                .addNetworkInterceptor(REWRITE_RESPONSE_INTERCEPTOR)
+                // .addInterceptor(OFFLINE_INTERCEPTOR)
+                .connectTimeout(100, TimeUnit.SECONDS)
+                .readTimeout(100,TimeUnit.SECONDS)
+                .build();
+        return httpClient;
+    }
+
     public Retrofit getBlankRetrofit(){
 
         File httpCacheDirectory = new File(mContext.getCacheDir(),  "responses");

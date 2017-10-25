@@ -1,11 +1,15 @@
 package com.example.infiny.pickup.Activity;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Notification;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
@@ -48,6 +52,8 @@ import com.example.infiny.pickup.Model.Ordered;
 import com.example.infiny.pickup.R;
 import com.squareup.picasso.Picasso;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -87,6 +93,7 @@ public class MainActivity extends AppCompatActivity
     CafeListingData cafeListingData;
     Context context;
     private boolean loading = true;
+    Bitmap profile_image;
     Retrofit retroFitClient;
     int pastVisiblesItems, visibleItemCount, totalItemCount;
     private int current_page = 1;
@@ -130,6 +137,10 @@ public class MainActivity extends AppCompatActivity
                 if(item.getRewardCompleted()==null)
                 {
                     item.setRewardCompleted("0");
+                }
+                if(item.getRewardQuan()==null)
+                {
+                    item.setRewardQuan("0");
                 }
                 Intent intent = new Intent(MainActivity.this, MenuActivity.class);
                 intent.putExtra("image",item.getImageurl());
@@ -228,27 +239,28 @@ public class MainActivity extends AppCompatActivity
 
         username.setText(sharedPreferences.getString("name",null)+" "+sharedPreferences.getString("surname",null));
         email.setText(sharedPreferences.getString("email",null));
+         profile_image=loadImageBitmap(getApplicationContext(), "user_Image.jpg");
+        String dxcds=sharedPreferences.getString("image",null);
 
-
-        if(isTablet(context))
-        {
-            Picasso.with(context)
-                    .invalidate(sharedPreferences.getString(sessionManager.image, null)+"_large.png");
-            Picasso.with(context)
-                    .load(sharedPreferences.getString(sessionManager.image, null)+"_large.png")
-                    .placeholder(ic_person_black_48dp)
-                    .into(profileView);
-
+        if(profile_image!=null ){
+            profileView.setImageBitmap(profile_image);
         }
-        else
-        {
-            Picasso.with(context)
-                    .invalidate(sharedPreferences.getString(sessionManager.image, null)+"_small.png");
-            Picasso.with(context)
-                    .load(sharedPreferences.getString(sessionManager.image, null)+"_small.png")
-                    .placeholder(ic_person_black_48dp)
-                    .into(profileView);
-        };
+
+
+
+    }
+    public Bitmap loadImageBitmap(Context context, String imageName) {
+        Bitmap bitmap = null;
+        FileInputStream fiStream;
+        try {
+            fiStream    = context.openFileInput(imageName);
+            bitmap      = BitmapFactory.decodeStream(fiStream);
+            fiStream.close();
+        } catch (Exception e) {
+            Log.d("saveImage", "Exception 3, Something went wrong!");
+            e.printStackTrace();
+        }
+        return bitmap;
     }
 
     @Override
@@ -320,19 +332,9 @@ public class MainActivity extends AppCompatActivity
                                     Notifications.setText(String.valueOf(cafeListingData.getUnreadNotification()));
 //                                    Notifications.setGravity(Gravity.CENTER_VERTICAL);
                                 }
-
-
-
                             }
-
-
-
-
-
                             cafeLIstingHelperseslist.addAll(Arrays.asList(cafeListingData.getCafes()));
                             CafeListAdapter.notifyDataSetChanged();
-
-
                         }
 
                     }else {
@@ -391,6 +393,9 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_logout) {
 
             Intent intent=new Intent(MainActivity.this,LoginActivity.class);
+            File file = new File("user_Image.jpg");
+            file = new File(file.getAbsolutePath());
+            boolean deleted = file.delete();
             sessionManager.clear();
             startActivity(intent);
             finish();
@@ -415,6 +420,29 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
+
+    @Override
+    public void onBackPressed() {
+        onBackpressed();
+    }
+
+    public void onBackpressed()
+    {
+        new AlertDialog.Builder(this)
+                .setMessage("Exit App?")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent(Intent.ACTION_MAIN);
+                        intent.addCategory(Intent.CATEGORY_HOME);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);//***Change Here***
+//                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                        startActivity(intent);
+                        finishAffinity();
+//                            System.exit(0);
+                    }
+                }).setNegativeButton("No", null).show();
     }
     public boolean isTablet(Context context) {
         boolean xlarge = ((context.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == 4);

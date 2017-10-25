@@ -12,14 +12,17 @@ import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.infiny.pickup.Helpers.RetroFitClient;
@@ -138,6 +141,7 @@ public class SignupActivity extends AppCompatActivity {
             }
         });
 
+
         btSignup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -201,6 +205,8 @@ public class SignupActivity extends AppCompatActivity {
             }
         });
 
+
+
     }
     private void updateLabel() {
         String myFormat = "MM/dd/yy"; //In which you need put here
@@ -253,22 +259,7 @@ public class SignupActivity extends AppCompatActivity {
             etSurname.getEditText().setError("Please Enter Surname");
             status = false;
         }
-        if (TextUtils.isEmpty(etDob.getEditText().getText().toString().trim())) {
-            etDob.getEditText().setError("Please Enter Date Of Birth");
-            status = false;
-        }
-        if (TextUtils.isEmpty(etAdd.getEditText().getText().toString().trim())) {
-            etAdd.getEditText().setError("Please Enter Address");
-            status = false;
-        }
-        if (TextUtils.isEmpty(etCity.getEditText().getText().toString().trim())) {
-            etCity.getEditText().setError("Please Enter City");
-            status = false;
-        }
-        if (TextUtils.isEmpty(etPostcode.getEditText().getText().toString().trim())) {
-            etPostcode.getEditText().setError("Please Enter Postcode");
-            status = false;
-        }
+
         if (!etPassword.getEditText().getText().toString().trim().equals(etConfirmpassword.getEditText().getText().toString().trim())) {
             etConfirmpassword.getEditText().setError("Password & Confirm Password Should Be Same");
             status = false;

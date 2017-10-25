@@ -97,63 +97,64 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+                if (submitForm()) {
+                    progressBarCyclic.setVisibility(View.VISIBLE);
+                    getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                    retroFitClient = new RetroFitClient(context).getBlankRetrofit();
+                    Call<LoginData> call = retroFitClient
+                            .create(ApiIntegration.class)
+                            .getsignin(etEmail.getText().toString(),
+                                    password.getText().toString(),
+                                    sharedPreferences.getString("FcmId", null));
+                    call.enqueue(new Callback<LoginData>() {
 
-                        progressBarCyclic.setVisibility(View.VISIBLE);
-                        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-                                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                        retroFitClient = new RetroFitClient(context).getBlankRetrofit();
-                        Call<LoginData> call = retroFitClient
-                                .create(ApiIntegration.class)
-                                .getsignin(etEmail.getText().toString(),
-                                        password.getText().toString(),
-                                        sharedPreferences.getString("FcmId", null));
-                        call.enqueue(new Callback<LoginData>() {
-
-                            @Override
-                            public void onResponse(Call<LoginData> call, Response<LoginData> response) {
-                                if (response != null) {
-                                    loginData = response.body();
-                                    if (loginData != null) {
-                                        if (loginData.getError().equals("true")) {
-                                            progressBarCyclic.setVisibility(View.GONE);
-                                            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                                            Toast.makeText(context, loginData.getTitle(), Toast.LENGTH_SHORT).show();
-                                        } else {
-                                            Toast.makeText(context, R.string.login_success, Toast.LENGTH_SHORT).show();
-                                            String ll = loginData.getUser().getAddress().getPostalCode();
-                                            sessionManager.createLoginSession(loginData.getUser().getFirstname(), loginData.getUser().getEmail(), loginData.getUser().getLastname(), loginData.getToken(), loginData.getUser().getDob(), loginData.getUser().getAddress().getPostalCode(), loginData.getUser().getAddress().getCity(), loginData.getUser().getAddress().getAddress(), loginData.getUser().getImageUrl());
-                                            progressBarCyclic.setVisibility(View.GONE);
-                                            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                            startActivity(intent);
-                                            finish();
-                                        }
-
+                        @Override
+                        public void onResponse(Call<LoginData> call, Response<LoginData> response) {
+                            if (response != null) {
+                                loginData = response.body();
+                                if (loginData != null) {
+                                    if (loginData.getError().equals("true")) {
+                                        progressBarCyclic.setVisibility(View.GONE);
+                                        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                        Toast.makeText(context, loginData.getTitle(), Toast.LENGTH_SHORT).show();
                                     } else {
-                                        if (response.code() == 404 || response.code() == 500) {
-                                            progressBarCyclic.setVisibility(View.GONE);
-                                            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                                            Toast.makeText(context, R.string.server_not_responding, Toast.LENGTH_SHORT).show();
-                                        }
+                                        Toast.makeText(context, R.string.login_success, Toast.LENGTH_SHORT).show();
+                                        String ll = loginData.getUser().getAddress().getPostalCode();
+                                        sessionManager.createLoginSession(loginData.getUser().getFirstname(), loginData.getUser().getEmail(), loginData.getUser().getLastname(), loginData.getToken(), loginData.getUser().getDob(), loginData.getUser().getAddress().getPostalCode(), loginData.getUser().getAddress().getCity(), loginData.getUser().getAddress().getAddress(), loginData.getUser().getImageUrl());
+                                        progressBarCyclic.setVisibility(View.GONE);
+                                        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                        startActivity(intent);
+                                        finish();
                                     }
+
                                 } else {
-
-                                    progressBarCyclic.setVisibility(View.GONE);
-                                    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                                    Toast.makeText(context, R.string.server_not_responding, Toast.LENGTH_SHORT).show();
-
+                                    if (response.code() == 404 || response.code() == 500) {
+                                        progressBarCyclic.setVisibility(View.GONE);
+                                        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                        Toast.makeText(context, R.string.server_not_responding, Toast.LENGTH_SHORT).show();
+                                    }
                                 }
-                            }
+                            } else {
 
-                            @Override
-                            public void onFailure(Call<LoginData> call, Throwable t) {
                                 progressBarCyclic.setVisibility(View.GONE);
                                 getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                                Toast.makeText(context, R.string.Something_went_wrong, Toast.LENGTH_SHORT);
-                            }
-                        });
+                                Toast.makeText(context, R.string.server_not_responding, Toast.LENGTH_SHORT).show();
 
-                    }
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<LoginData> call, Throwable t) {
+                            progressBarCyclic.setVisibility(View.GONE);
+                            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                            Toast.makeText(context, R.string.Something_went_wrong, Toast.LENGTH_SHORT);
+                        }
+                    });
+
+                }
+            }
 
 
         });

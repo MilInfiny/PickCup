@@ -51,6 +51,7 @@ public class NormalMenuAdapter extends RecyclerView.Adapter<NormalMenuAdapter.My
     String category;
     int quantity=1;
     Retrofit retroFitClient;
+    public static String cartRewardsCompleted,cartRewatdQuantity;
     AddToCartData addToCartData;
     public static Float total=0.0f;
     String sid;
@@ -81,10 +82,7 @@ public class NormalMenuAdapter extends RecyclerView.Adapter<NormalMenuAdapter.My
         final ItemData f1=tittles.get(position);
         Log.d("tittle",String.valueOf(tittles.size()));
         Log.d("position",String.valueOf(position));
-        if(tittles.size()-1==position)
-        {
-            holder.bottom_light_View.setVisibility(View.GONE);
-        }
+
 
         holder.menuname.setText(f1.getItemName());
         holder.price.setText("£ "+holder.getCorrectValue(String.format("%.2f",Float.valueOf(f1.getItemPrice()))));
@@ -346,6 +344,8 @@ public class NormalMenuAdapter extends RecyclerView.Adapter<NormalMenuAdapter.My
             btOk.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    cartRewardsCompleted =MenuActivity.rewardcompleted;
+                    cartRewatdQuantity=MenuActivity.rewardQuantity;
                     alertDialog.dismiss();
                     total=total + Float.valueOf(itemData.getItemPrice())*quantity;
                     itemData.setItemQuantity(String.valueOf(quantity));
@@ -412,6 +412,8 @@ public class NormalMenuAdapter extends RecyclerView.Adapter<NormalMenuAdapter.My
                                                                             AlertDialog.Builder builder;
                                                                             ((Activity) context).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                                                                         } else {
+                                                                            cartRewardsCompleted =MenuActivity.rewardcompleted;
+                                                                            cartRewatdQuantity=MenuActivity.rewardQuantity;
                                                                             Toast.makeText(context, R.string.Item_Add_To_Cart, Toast.LENGTH_SHORT).show();
                                                                             progressBarCyclic.setVisibility(View.GONE);
                                                                             ((Activity) context).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
@@ -457,6 +459,8 @@ public class NormalMenuAdapter extends RecyclerView.Adapter<NormalMenuAdapter.My
                                     }
                                     else if(addToCartData.getError().equals("true"))
                                     {
+                                        cartRewardsCompleted =MenuActivity.rewardcompleted;
+                                        cartRewatdQuantity=MenuActivity.rewardQuantity;
                                         Toast.makeText(context, R.string.Item_Add_To_Cart, Toast.LENGTH_SHORT).show();
 
                                         quantity=1;
@@ -468,6 +472,8 @@ public class NormalMenuAdapter extends RecyclerView.Adapter<NormalMenuAdapter.My
                                     }
 
                                     else {
+                                        cartRewardsCompleted =MenuActivity.rewardcompleted;
+                                        cartRewatdQuantity=MenuActivity.rewardQuantity;
                                         Toast.makeText(context, R.string.Item_Add_To_Cart, Toast.LENGTH_SHORT).show();
 
                                         quantity=1;
@@ -571,6 +577,8 @@ public class NormalMenuAdapter extends RecyclerView.Adapter<NormalMenuAdapter.My
             btOk.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    cartRewardsCompleted =MenuActivity.rewardcompleted;
+                    cartRewatdQuantity=MenuActivity.rewardQuantity;
                     alertDialog.dismiss();
                     total=total + Float.valueOf(itemData.getItemPrice())*quantity;
                     itemData.setItemQuantity(String.valueOf(quantity));
@@ -637,6 +645,8 @@ public class NormalMenuAdapter extends RecyclerView.Adapter<NormalMenuAdapter.My
                                                                             AlertDialog.Builder builder;
                                                                             ((Activity) context).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                                                                         } else {
+                                                                            cartRewardsCompleted =MenuActivity.rewardcompleted;
+                                                                            cartRewatdQuantity=MenuActivity.rewardQuantity;
                                                                             Toast.makeText(context, R.string.Item_Add_To_Cart, Toast.LENGTH_SHORT).show();
                                                                             progressBarCyclic.setVisibility(View.GONE);
                                                                             ((Activity) context).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
@@ -682,6 +692,8 @@ public class NormalMenuAdapter extends RecyclerView.Adapter<NormalMenuAdapter.My
                                     }
                                     else if(addToCartData.getError().equals("true"))
                                     {
+                                        cartRewardsCompleted =MenuActivity.rewardcompleted;
+                                        cartRewatdQuantity=MenuActivity.rewardQuantity;
                                         Toast.makeText(context, R.string.Item_Add_To_Cart, Toast.LENGTH_SHORT).show();
 
                                         quantity=1;
@@ -693,6 +705,8 @@ public class NormalMenuAdapter extends RecyclerView.Adapter<NormalMenuAdapter.My
                                     }
 
                                     else {
+                                        cartRewardsCompleted =MenuActivity.rewardcompleted;
+                                        cartRewatdQuantity=MenuActivity.rewardQuantity;
                                         Toast.makeText(context, R.string.Item_Add_To_Cart, Toast.LENGTH_SHORT).show();
 
                                         quantity=1;

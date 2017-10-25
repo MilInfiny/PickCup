@@ -85,7 +85,7 @@ public class Order_History_Adapter  extends RecyclerView.Adapter<Order_History_A
         {
 
             Picasso.with(context)
-                    .load(f1.getShopDetail().getImageurl()+"_large.png")
+                    .load(f1.getShopDetail().getImageurl()+"_large.jpg")
                     .placeholder(R.drawable.cofeecup)
                     .into(holder.imageView);
 
@@ -94,7 +94,7 @@ public class Order_History_Adapter  extends RecyclerView.Adapter<Order_History_A
         {
 
             Picasso.with(context)
-                    .load(f1.getShopDetail().getImageurl()+"_small.png")
+                    .load(f1.getShopDetail().getImageurl()+"_small.jpg")
                     .placeholder(R.drawable.cofeecup)
                     .into(holder.imageView);
 
@@ -105,14 +105,7 @@ public class Order_History_Adapter  extends RecyclerView.Adapter<Order_History_A
             @Override
             public void onClick(View v) {
                 Intent intent=new Intent(context, OrderDetailsActivity.class);
-                intent.putExtra("myClass", (Parcelable) f1);
-                intent.putExtra("cafename",f1.getShopDetail().getCafe_name());
                 intent.putExtra("orderId",f1.get_id());
-                intent.putExtra("TotalPrice",f1.getTotalPrice());
-                intent.putExtra("otp",f1.getOtp());
-                intent.putExtra("parcel",f1.getParcel());
-                intent.putExtra("date",f1.getCreatedAt());
-                intent.putExtra("ordered",ordereds);
                 context.startActivity(intent);
             }
         });

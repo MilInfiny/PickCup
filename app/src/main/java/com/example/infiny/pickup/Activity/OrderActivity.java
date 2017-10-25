@@ -58,6 +58,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
+import static com.example.infiny.pickup.R.drawable.cofeecup;
 import static com.example.infiny.pickup.R.drawable.ic_person_black_48dp;
 
 public class OrderActivity extends AppCompatActivity implements OnItemClickListener {
@@ -188,7 +189,7 @@ public class OrderActivity extends AppCompatActivity implements OnItemClickListe
         cafeName = intent.getStringExtra("tittle");
         rewardcompleted = intent.getStringExtra("rewardcompleted");
         rewardQuantity = intent.getStringExtra("rewardQuantity");
-        rewarddetails.setText(rewardcompleted+"/"+rewardQuantity);
+        tittle.setText(cafeName);
         progressBarCyclic.setVisibility(View.VISIBLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
                 WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
@@ -222,7 +223,7 @@ public class OrderActivity extends AppCompatActivity implements OnItemClickListe
                                 taxprice.setText("0");
                                 totalprice.setText("0");
                                 mainLayout.setVisibility(View.VISIBLE);
-                                note = etNote.getText().toString().trim();
+
                                 if (subLayout.getVisibility() == View.VISIBLE) {
                                     subLayout.setVisibility(View.GONE);
                                     arrow.setRotation(360);
@@ -238,14 +239,14 @@ public class OrderActivity extends AppCompatActivity implements OnItemClickListe
                             if (isTablet(context)) {
 
                                 Picasso.with(context)
-                                        .load(orderListData.getData().getShopDetail().getImageurl() + "_large.png")
-                                        .placeholder(ic_person_black_48dp)
+                                        .load(orderListData.getData().getShopDetail().getImageurl() + "_large.jpg")
+                                        .placeholder(cofeecup)
                                         .into(tittleimage);
                             } else {
 
                                 Picasso.with(context)
-                                        .load(orderListData.getData().getShopDetail().getImageurl() + "_small.png")
-                                        .placeholder(ic_person_black_48dp)
+                                        .load(orderListData.getData().getShopDetail().getImageurl() + "_small.jpg")
+                                        .placeholder(cofeecup)
                                         .into(tittleimage);
                             }
                             ;
@@ -445,7 +446,7 @@ public class OrderActivity extends AppCompatActivity implements OnItemClickListe
         }
 
         fooRequest.setOrder(ordered);
-        fooRequest.setNote(note);
+        fooRequest.setNote(etNote.getText().toString().trim());
         fooRequest.setTimezone(TimeZone.getDefault().getID());
         fooRequest.setTimeForPickcup(dateString);
         if (orderListData.getData() == null) {
@@ -563,7 +564,13 @@ public class OrderActivity extends AppCompatActivity implements OnItemClickListe
             intent.putExtra("tittle", cafeName);
             intent.putExtra("image", orderListData.getData().getShopDetail().getImageurl());
             intent.putExtra("rewardcompleted", rewardcompleted);
-            intent.putExtra("rewardQuantity", rewardQuantity);
+            if(rewardQuantity==null)
+            {
+                rewardQuantity="0";
+            }
+                intent.putExtra("rewardQuantity", rewardQuantity);
+
+
             startActivity(intent);
             finish();
         } else if (fromMenu.equals("rewardActivity")) {

@@ -70,7 +70,7 @@ public class CafeListAdapter extends RecyclerView.Adapter<CafeListAdapter.MyView
         {
 
             Picasso.with(context)
-                    .load(cafes.getImageurl()+"_large.png")
+                    .load(cafes.getImageurl()+"_large.jpg")
                     .placeholder(R.drawable.cofeecup)
                     .into(holder.bgimage);
             holder.tittle.setText(cafes.getCafe_name());
@@ -80,20 +80,15 @@ public class CafeListAdapter extends RecyclerView.Adapter<CafeListAdapter.MyView
         {
 
             Picasso.with(context)
-                    .load(cafes.getImageurl()+"_small.png")
+                    .load(cafes.getImageurl()+"_small.jpg")
                     .placeholder(R.drawable.cofeecup)
                     .into(holder.bgimage);
             holder.tittle.setText(cafes.getCafe_name());
 
 
         };
-        if(Integer.parseInt(cafes.getRewardQuan())==0 ||cafes.getRewardQuan()==null )
-        {
-            holder.rewarddetails.setText(" ");
 
 
-        }
-        else {
             if (cafes.getRewardCompleted() == null) {
                 holder.rewarddetails.setText("0" + "/" + cafes.getRewardQuan());
             } else {
@@ -103,7 +98,7 @@ public class CafeListAdapter extends RecyclerView.Adapter<CafeListAdapter.MyView
 
 
 
-    }
+
 
     @Override
     public int getItemCount() {

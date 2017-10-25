@@ -50,6 +50,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
+import static com.example.infiny.pickup.R.drawable.cofeecup;
 import static com.example.infiny.pickup.R.drawable.ic_person_black_48dp;
 
 public class MenuActivity extends AppCompatActivity implements OnItemClickListener {
@@ -57,7 +58,8 @@ public class MenuActivity extends AppCompatActivity implements OnItemClickListen
 
     MenuNormalAdapter menuNormalAdapter;
     Context context;
-    String sid,rewardcompleted,rewardQuantity;
+    String sid;
+    public static String rewardcompleted,rewardQuantity;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.appbar)
@@ -127,18 +129,26 @@ public class MenuActivity extends AppCompatActivity implements OnItemClickListen
         if (isTablet(context)) {
 
             Picasso.with(context)
-                    .load(intent.getStringExtra("image") + "_large.png")
-                    .placeholder(ic_person_black_48dp)
+                    .load(intent.getStringExtra("image") + "_large.jpg")
+                    .placeholder(cofeecup)
                     .into(tittleimage);
 
         } else {
 
             Picasso.with(context)
-                    .load(intent.getStringExtra("image") + "_small.png")
-                    .placeholder(ic_person_black_48dp)
+                    .load(intent.getStringExtra("image") + "_small.jpg")
+                    .placeholder(cofeecup)
                     .into(tittleimage);
         };
-        rewarddetails.setText(rewardcompleted+"/"+rewardQuantity);
+
+
+            rewarddetails.setText(rewardcompleted+"/"+rewardQuantity);
+
+        if (rewardcompleted == null) {
+            rewarddetails.setText("0" + "/" +rewardQuantity);
+        } else {
+            rewarddetails.setText(rewardcompleted + "/" + rewardQuantity);
+        }
 
 
         order = (RelativeLayout) findViewById(R.id.order);
@@ -153,8 +163,7 @@ public class MenuActivity extends AppCompatActivity implements OnItemClickListen
                 intent1.putExtra("fromPage", "menuActivity");
                 intent1.putExtra("tittle", intent.getStringExtra("tittle"));
                 intent1.putExtra("image", intent.getStringExtra("image"));
-                intent1.putExtra("rewardcompleted",rewardcompleted);
-                intent1.putExtra("rewardQuantity",rewardQuantity);
+
                 startActivity(intent1);
                 finish();
 

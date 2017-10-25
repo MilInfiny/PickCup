@@ -50,7 +50,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         {
 
             Picasso.with(context)
-                    .load(dataNotification.getShopDetail().getImageurl()+"_large.png")
+                    .load(dataNotification.getShopDetail().getImageurl()+"_large.jpg")
                     .placeholder(R.drawable.ic_person_black_48dp)
                     .into(holder.imageView);
 
@@ -59,7 +59,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         {
 
             Picasso.with(context)
-                    .load(dataNotification.getShopDetail().getImageurl()+"_small.png")
+                    .load(dataNotification.getShopDetail().getImageurl()+"_small.jpg")
                     .placeholder(R.drawable.ic_person_black_48dp)
                     .into(holder.imageView);
 
@@ -74,6 +74,10 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         holder.topview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Intent intent=new Intent(context,OrderDetailsActivity.class);
+                intent.putExtra("orderId",dataNotification.getOrderId());
+                context.startActivity(intent);
+
 
             }
         });

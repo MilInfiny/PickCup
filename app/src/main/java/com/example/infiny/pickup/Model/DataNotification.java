@@ -10,7 +10,7 @@ public class DataNotification {
     private String userDetail;
 
     private String updatedAt;
-
+    String orderId;
     private ShopDetail shopDetail;
 
     private String _id;
@@ -18,6 +18,14 @@ public class DataNotification {
     private String createdAt;
 
     private String __v;
+
+    public String getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(String orderId) {
+        this.orderId = orderId;
+    }
 
     public String getMessage ()
     {

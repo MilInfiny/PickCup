@@ -89,7 +89,7 @@ public class RewardAdapter extends RecyclerView.Adapter<RewardAdapter.MyViewHold
         if(holder.isTablet(context))
         {
             Picasso.with(context)
-                    .invalidate(f1.getImageurl()+"_large.png");
+                    .invalidate(f1.getImageurl()+"_large.jpg");
             Picasso.with(context)
                     .load(f1.getImageurl()+"_large.png")
                     .placeholder(R.drawable.cofeecup)
@@ -99,7 +99,7 @@ public class RewardAdapter extends RecyclerView.Adapter<RewardAdapter.MyViewHold
         else
         {
             Picasso.with(context)
-                    .invalidate(f1.getImageurl()+"_small.png");
+                    .invalidate(f1.getImageurl()+"_small.jpg");
             Picasso.with(context)
                     .load(f1.getImageurl()+"_small.png")
                     .placeholder(R.drawable.ic_person_black_48dp)

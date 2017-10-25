@@ -147,6 +147,8 @@ public class TimeviewAdapter extends ExpandableRecyclerViewAdapter<TimeviewAdapt
                     final Calendar mcurrentTime = Calendar.getInstance();
                     int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
                     final int minute = mcurrentTime.get(Calendar.MINUTE);
+                    SimpleDateFormat timeFormat = new SimpleDateFormat("yyyy-MM-dd");
+                    final String currentDate=timeFormat.format(mcurrentTime.getTime());
                     TimePickerDialog mTimePicker;
                     mTimePicker = new TimePickerDialog(context,new TimePickerDialog.OnTimeSetListener() {
                         @Override
@@ -161,13 +163,16 @@ public class TimeviewAdapter extends ExpandableRecyclerViewAdapter<TimeviewAdapt
                             if(datetime.getTimeInMillis() > c.getTimeInMillis()){
                                 if(selectedMinute<10)
                                 {
+
+
                                     timebutton.setText(selectedHour + ":0" + selectedMinute+" "+timeSet);
-                                    OrderActivity.dateString = selectedHour + ":0" + selectedMinute+":"+"00";
+                                    OrderActivity.dateString = currentDate+" "+ selectedHour + ":0" + selectedMinute+":"+"00";
+
 
                                 }
                                 else {
                                     timebutton.setText(selectedHour + ":" + selectedMinute+" "+timeSet);
-                                    OrderActivity.dateString = selectedHour + ":" + selectedMinute+":"+"00";
+                                    OrderActivity.dateString = currentDate+" "+ selectedHour + ":0" + selectedMinute+":"+"00";
 
 
                                 }
@@ -224,13 +229,18 @@ public class TimeviewAdapter extends ExpandableRecyclerViewAdapter<TimeviewAdapt
                     Calendar mcurrentTime = Calendar.getInstance();
                     int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
                     int minute = mcurrentTime.get(Calendar.MINUTE);
+                    SimpleDateFormat timeFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+                    final String currentDate=timeFormat.format(mcurrentTime.getTime());
+
+
                     if(minute<10)
                     {
-                        OrderActivity.dateString = hour + ":0" + minute+":"+"00";
+                        OrderActivity.dateString = currentDate+" "+ hour + ":0" + minute+":"+"00";
 
                     }
                     else {
-                        OrderActivity.dateString =hour + ":" + minute+":"+"00";
+                        OrderActivity.dateString = currentDate+" "+ hour + ":0" + minute+":"+"00";
 
 
                     }

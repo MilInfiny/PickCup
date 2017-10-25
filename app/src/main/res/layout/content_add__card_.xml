@@ -63,7 +63,7 @@
                     android:id="@+id/et_cardNUmber"
                     android:layout_width="match_parent"
                     android:layout_height="70dp"
-                    android:hint="Card Number"
+                    android:hint="Credit Card Number"
                     android:layout_below="@+id/et_cardholder">
 
                     <EditText
@@ -102,7 +102,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="70dp"
                     android:layout_below="@+id/et_exprireDate"
-                    android:hint="CVV Number">
+                    android:hint="CVV Code">
 
                     <EditText
                         android:id="@+id/tie_name"

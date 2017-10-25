@@ -69,6 +69,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService{
                     case "orderReady":
                         showSmallNotificationsMessages(orderId);
                         break;
+                    case "orderSuccess":
+                        showSmallNotificationsMessages(orderId);
+                        break;
                     case "rewardCompleted":
                         showSmallNotificationsMessages(orderId);
                         break;

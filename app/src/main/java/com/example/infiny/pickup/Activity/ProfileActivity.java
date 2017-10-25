@@ -11,6 +11,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -45,7 +46,11 @@ import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -56,6 +61,8 @@ import java.util.regex.Pattern;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -110,6 +117,7 @@ public class ProfileActivity extends AppCompatActivity {
     @BindView(R.id.appbar)
     AppBarLayout appbar;
     Calendar myCalendar;
+    Bitmap profile_image;
     Context context;
     Intent intent;
     Uri imageUri;
@@ -146,25 +154,11 @@ public class ProfileActivity extends AppCompatActivity {
 
         sessionManager = new SessionManager(context);
         sharedPreferences = getSharedPreferences(sessionManager.PREF_NAME, 0);
-        if(isTablet(context))
-        {
-            Picasso.with(context)
-                    .invalidate(sharedPreferences.getString(sessionManager.image, null)+"_large.png");
-            Picasso.with(context)
-                    .load(sharedPreferences.getString(sessionManager.image, null)+"_large.png")
-                    .placeholder(R.drawable.ic_person_black_48dp)
-                    .into(profile);
+         profile_image=loadImageBitmap(getApplicationContext(), "user_Image.jpg");
+        if(profile_image!=null){
+            profile.setImageBitmap(profile_image);
+        }
 
-        }
-        else
-        {
-            Picasso.with(context)
-                    .invalidate(sharedPreferences.getString(sessionManager.image, null)+"_small.png");
-            Picasso.with(context)
-                    .load(sharedPreferences.getString(sessionManager.image, null)+"_small.png")
-                    .placeholder(R.drawable.ic_person_black_48dp)
-                    .into(profile);
-        }
         etEmail.getEditText().setText(sharedPreferences.getString(sessionManager.email, null));
         etName.getEditText().setText(sharedPreferences.getString(sessionManager.name, null));
         etSurname.getEditText().setText(sharedPreferences.getString(sessionManager.surname,null));
@@ -238,11 +232,15 @@ public class ProfileActivity extends AppCompatActivity {
                                     } else {
                                         String url = editProfileData.getUser().getImageUrl();
                                         sessionManager.createLoginSession(editProfileData.getUser().getFirstname(), editProfileData.getUser().getEmail(), editProfileData.getUser().getLastname(), sharedPreferences.getString("token", null), editProfileData.getUser().getDob(), editProfileData.getUser().getAddress().getPostalCode(), editProfileData.getUser().getAddress().getCity(), editProfileData.getUser().getAddress().getAddress(), editProfileData.getUser().getImageUrl());
-                                        progressBarCyclic.setVisibility(View.GONE);
-                                        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                                        Intent intent = new Intent(context, MainActivity.class);
-                                        startActivity(intent);
-                                        finish();
+                                        if(isTablet(context))
+                                        {
+                                            new DownloadImage().execute(editProfileData.getUser().getImageUrl()+"_large.jpg");
+                                        }
+                                        else
+                                        {
+                                            new DownloadImage().execute( editProfileData.getUser().getImageUrl()+"_small.jpg");
+                                        };
+
                                     }
 
                                 } else {
@@ -276,6 +274,85 @@ public class ProfileActivity extends AppCompatActivity {
         });
 
 
+    }
+    public Bitmap loadImageBitmap(Context context, String imageName) {
+        Bitmap bitmap = null;
+        FileInputStream fiStream;
+        try {
+            fiStream    = context.openFileInput(imageName);
+            bitmap      = BitmapFactory.decodeStream(fiStream);
+            fiStream.close();
+        } catch (Exception e) {
+            Log.d("saveImage", "Exception 3, Something went wrong!");
+            e.printStackTrace();
+        }
+        return bitmap;
+    }
+    public void saveImage(Context context, Bitmap b, String imageName) {
+        FileOutputStream foStream;
+        try {
+            foStream = this.openFileOutput(imageName, Context.MODE_PRIVATE);
+            b.compress(Bitmap.CompressFormat.PNG, 100, foStream);
+            foStream.close();
+            progressBarCyclic.setVisibility(View.GONE);
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            Intent intent = new Intent(context, MainActivity.class);
+            startActivity(intent);
+            finish();
+        } catch (Exception e) {
+            Log.d("saveImage", "Exception 2, Something went wrong!"+e);
+            e.printStackTrace();
+        }
+    }
+    private class DownloadImage extends AsyncTask<String, Void, Bitmap> {
+        private String TAG = "DownloadImage";
+        private Bitmap downloadImageBitmap(String sUrl) {
+            Log.d("bitmap url", sUrl);
+            Bitmap bitmap = null;
+
+            okhttp3.Response response;
+            try{
+                OkHttpClient client = RetroFitClient.getOkHTTPClient();
+                Request request = new Request.Builder()
+                        .url(sUrl)
+                        .build();
+
+                response = client.newCall(request).execute();
+
+                FileOutputStream foStream;
+                try {
+                    foStream = getApplicationContext().openFileOutput( "user_Image.jpg", Context.MODE_PRIVATE);
+                    foStream.write(response.body().bytes());
+                    foStream.close();
+                } catch (Exception e) {
+                    Log.d("saveImage", "Exception 2, Something went wrong!"+e);
+                    e.printStackTrace();
+                }
+
+            }catch(Exception e){
+                Log.d("Error decodeing", e.getMessage());
+                e.printStackTrace();
+            }
+
+
+            return bitmap;
+
+
+        }
+
+        @Override
+        protected Bitmap doInBackground(String... params) {
+            return downloadImageBitmap(params[0]);
+        }
+
+        protected void onPostExecute(Bitmap result) {
+            //saveImage(getApplicationContext(), result, "user_Image.png");
+            progressBarCyclic.setVisibility(View.GONE);
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            Intent intent = new Intent(context, MainActivity.class);
+            startActivity(intent);
+            finish();
+        }
     }
     public boolean isTablet(Context context) {
         boolean xlarge = ((context.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == 4);
@@ -466,22 +543,7 @@ public class ProfileActivity extends AppCompatActivity {
             etSurname.getEditText().setError("Please Enter Surname");
             status = false;
         }
-        if (TextUtils.isEmpty(etDob.getEditText().getText().toString().trim())) {
-            etDob.getEditText().setError("Please Enter Date of Birth");
-            status = false;
-        }
-        if (TextUtils.isEmpty(etAdd.getEditText().getText().toString().trim())) {
-            etAdd.getEditText().setError("Please Enter Address");
-            status = false;
-        }
-        if (TextUtils.isEmpty(etCity.getEditText().getText().toString().trim())) {
-            etCity.getEditText().setError("Please Enter City");
-            status = false;
-        }
-        if (TextUtils.isEmpty(etPostcode.getEditText().getText().toString().trim())) {
-            etPostcode.getEditText().setError("Please Enter Postcode");
-            status = false;
-        }
+
 
 
         return status;

@@ -75,7 +75,13 @@ public class Sub_Menu_Adapter extends RecyclerView.Adapter<Sub_Menu_Adapter.MyVi
     public void onBindViewHolder(final MyViewHolder holder, int position) {
         final Ordered s=ordereds.get(position);
         holder.tw_itemName.setText(s.getItemName());
-        holder.tw_size.setText(s.getItemSize());
+        if(s.getItemSize()!=null)
+        {
+            String upperString = s.getItemSize().substring(0,1).toUpperCase() + s.getItemSize().substring(1);
+            holder.tw_size.setText(upperString);
+
+
+        }
         holder.itemimg.setImageResource(s.getImage());
         sessionManager=new SessionManager(context);
         sharedPreferences = context.getSharedPreferences(sessionManager.PREF_NAME, 0);
