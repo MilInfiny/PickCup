@@ -3,6 +3,7 @@ package com.example.infiny.pickup.Adapters;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.provider.SyncStateContract;
@@ -63,18 +64,29 @@ public class Order_History_Adapter  extends RecyclerView.Adapter<Order_History_A
     public void onBindViewHolder(MyViewHolder holder, int position) {
 
         final DataOrderHistory f1=partyName.get(position);
+        Typeface font = Typeface.createFromAsset(context.getAssets(), "fonts/opensansbold.ttf");
+        holder.partyName.setTypeface(font);
+        holder.tw_orderno.setTypeface(font);
+        holder.tw_total.setTypeface(font);
+        holder.tw_otp.setTypeface(font);
+        holder.type.setTypeface(font);
+        holder.tw_date.setTypeface(font);
+        if( partyName.size()-1==position)
+        {
+            holder.view.setVisibility(View.VISIBLE);
+        }
 
         holder.partyName.setText(f1.getShopDetail().getCafe_name());
         holder.tw_orderno.setText(f1.getOrderId());
         holder.tw_total.setText("£ "+f1.getTotalPrice());
-        holder.tw_otp.setText("OTP: "+f1.getOtp());
+        holder.tw_otp.setText(f1.getOtp());
         if(f1.getParcel().equals("false"))
         {
-            holder.type.setText("Order Type: Sit In");
+            holder.type.setText("Sit In");
         }
         else
         {
-            holder.type.setText("Order Type: Pick Cup");
+            holder.type.setText("Pick Cup");
         }
         String date[]=f1.getCreatedAt().split("T");
         String ogdate=date[0];
@@ -122,6 +134,8 @@ public class Order_History_Adapter  extends RecyclerView.Adapter<Order_History_A
         RelativeLayout relativeLayout;
         TextView partyName,tw_orderno,tw_total,tw_otp,type,tw_date;
         ImageView imageView;
+        View view;
+
 
 
         public MyViewHolder(View itemView) {
@@ -134,7 +148,7 @@ public class Order_History_Adapter  extends RecyclerView.Adapter<Order_History_A
             tw_otp=(TextView)itemView.findViewById(R.id.tw_otp);
             type=(TextView)itemView.findViewById(R.id.type);
             tw_date=(TextView)itemView.findViewById(R.id.tw_date);
-
+            view=(View)itemView.findViewById(R.id.view);
         }
         public boolean isTablet(Context context) {
             boolean xlarge = ((context.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == 4);

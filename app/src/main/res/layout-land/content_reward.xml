@@ -28,6 +28,7 @@
             android:id="@+id/card_view"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+
             android:layout_below="@+id/logo"
             android:layout_marginTop="20dp"
             >
@@ -72,6 +73,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="No Orders"
+                    android:visibility="gone"
+                    android:textSize="20dp"
+                    android:layout_centerInParent="true"/>
+                <TextView
+                    android:id="@+id/no_Rewards"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="No Rewards"
                     android:visibility="gone"
                     android:textSize="20dp"
                     android:layout_centerInParent="true"/>

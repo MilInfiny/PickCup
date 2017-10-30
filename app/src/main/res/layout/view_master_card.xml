@@ -2,6 +2,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_marginTop="15dp"
@@ -152,6 +155,16 @@
 
 
         </RelativeLayout>
+        <ProgressBar
+            android:id="@+id/progressBar_cyclic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minHeight="50dp"
+            android:minWidth="50dp"
+            android:visibility="gone"
+            android:indeterminate="true"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true" />
 
 
         <LinearLayout
@@ -270,6 +283,7 @@
           android:layout_marginTop="40dp"
           android:layout_below="@+id/detail_card">
           <Button
+              android:id="@+id/bt_SetPrimary"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:layout_weight="0.5"
@@ -283,6 +297,7 @@
 
               />
           <Button
+              android:id="@+id/bt_DeleteCard"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:layout_weight="0.5"
@@ -298,6 +313,6 @@
       </LinearLayout>
 
     </RelativeLayout>
-
+    </ScrollView>
 
 </RelativeLayout>

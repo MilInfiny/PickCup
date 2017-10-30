@@ -14,7 +14,6 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
-
     <application
         android:name=".PickCup"
         android:allowBackup="true"
@@ -33,9 +32,10 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths" />
         </provider>
+
         <service
-            android:exported="false"
-            android:name="com.novoda.merlin.service.MerlinService" />
+            android:name="com.novoda.merlin.service.MerlinService"
+            android:exported="false" />
 
         <receiver
             android:name=".Helpers.ConnectivityReceiver"
@@ -138,7 +138,8 @@
         <activity
             android:name=".Activity.Add_Card_Activity"
             android:label="@string/title_activity_add__card_"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".Activity.CropImageActivity"></activity>
     </application>
 
 </manifest>

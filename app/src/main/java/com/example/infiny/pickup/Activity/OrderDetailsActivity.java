@@ -3,6 +3,7 @@ package com.example.infiny.pickup.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
@@ -15,6 +16,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -34,9 +36,14 @@ import com.example.infiny.pickup.Model.FindpartiOrder;
 import com.example.infiny.pickup.Model.ItemData;
 import com.example.infiny.pickup.Model.Ordered;
 import com.example.infiny.pickup.R;
+import com.squareup.picasso.Picasso;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
+import java.util.TimeZone;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -49,8 +56,6 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 public class OrderDetailsActivity extends AppCompatActivity implements OnItemClickListener {
 
 
-    @BindView(R.id.tv_order_details)
-    TextView tvOrderDetails;
     @BindView(R.id.tv_CustomerName)
     TextView tvCustomerName;
     @BindView(R.id.tv_TotalCostOrder)
@@ -59,16 +64,13 @@ public class OrderDetailsActivity extends AppCompatActivity implements OnItemCli
     TextView tvOrderNumber;
     @BindView(R.id.tv_CustomerNametv_CustomerName)
     TextView tvCustomerNametvCustomerName;
-    @BindView(R.id.tv_otp)
-    TextView tvOtp;
+
     @BindView(R.id.tv_VerifyBtn)
     TextView tvVerifyBtn;
     @BindView(R.id.rel_detailCard)
     RelativeLayout relDetailCard;
     @BindView(R.id.card_view)
     RelativeLayout cardView;
-    @BindView(R.id.tv_order_summary)
-    TextView tvOrderSummary;
     @BindView(R.id.recylerview_menu_listing)
     RecyclerView recylerviewMenuListing;
     @BindView(R.id.rel_SummaryCard)
@@ -81,8 +83,6 @@ public class OrderDetailsActivity extends AppCompatActivity implements OnItemCli
     TextView tvTotalCost;
     @BindView(R.id.card_view_summary)
     RelativeLayout cardViewSummary;
-    @BindView(R.id.tv_special_notes)
-    TextView tvSpecialNotes;
     @BindView(R.id.Verifybutton)
     Button Verifybutton;
     @BindView(R.id.toolbar)
@@ -102,6 +102,42 @@ public class OrderDetailsActivity extends AppCompatActivity implements OnItemCli
     TextView tvTax;
     @BindView(R.id.tv_tax_cost)
     TextView tvTaxCost;
+    @BindView(R.id.tv_OrderNumber_unbold)
+    TextView tvOrderNumberUnbold;
+    @BindView(R.id.tv_CustomerNametv_CustomerName_unBold)
+    TextView tvCustomerNametvCustomerNameUnBold;
+
+    @BindView(R.id.tv_otp_unBold)
+    TextView tvOtpUnBold;
+    @BindView(R.id.date_unBold)
+    TextView dateUnBold;
+    @BindView(R.id.tv_otp)
+    TextView tvOtp;
+    @BindView(R.id.tv_Date)
+    TextView tvDate;
+
+    @BindView(R.id.tv_CustomerName_unBold)
+    TextView tvCustomerNameUnBold;
+    @BindView(R.id.tittleimage)
+    ImageView tittleimage;
+    @BindView(R.id.tittle)
+    TextView tittle;
+    @BindView(R.id.toplayout)
+    RelativeLayout toplayout;
+    @BindView(R.id.middleimage)
+    ImageView middleimage;
+    @BindView(R.id.middletittle)
+    TextView middletittle;
+    @BindView(R.id.toplayout1)
+    RelativeLayout toplayout1;
+    @BindView(R.id.middlelayout)
+    RelativeLayout middlelayout;
+    @BindView(R.id.Bottomtittleimage)
+    ImageView Bottomtittleimage;
+    @BindView(R.id.bottomtittle)
+    TextView bottomtittle;
+    @BindView(R.id.bottomlayout)
+    RelativeLayout bottomlayout;
     private Typeface font;
     ArrayList<Ordered> ordereds;
     Retrofit retroFitClient;
@@ -138,10 +174,16 @@ public class OrderDetailsActivity extends AppCompatActivity implements OnItemCli
 //        tvOrderDetails.setTypeface(font);
 //        tvOrderSummary.setTypeface(font);
 //        tvSpecialNotes.setTypeface(font);
-
         tvGrandtotal.setTypeface(font);
+        tvCustomerName.setTypeface(font);
         tvTotalCost.setTypeface(font);
         Verifybutton.setTypeface(font);
+        tvCustomerName.setTypeface(font);
+        tvOrderNumber.setTypeface(font);
+        tvOtp.setTypeface(font);
+        tvCustomerNametvCustomerName.setTypeface(font);
+        tvDate.setTypeface(font);
+
         Intent intent = getIntent();
         DataOrderHistory f1 = (DataOrderHistory) intent.getSerializableExtra("myClass");
         orderId = intent.getStringExtra("orderId");
@@ -169,18 +211,128 @@ public class OrderDetailsActivity extends AppCompatActivity implements OnItemCli
                             mainLayout.setVisibility(View.VISIBLE);
                             progressBarCyclic.setVisibility(View.GONE);
                             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                            if(isTablet(context))
+                            {
+
+                                Picasso.with(context)
+                                        .load(findpartiOrder.getData()[0].getShopDetail().getImageurl()+"_large.jpg")
+                                        .placeholder(R.drawable.cofeecup)
+                                        .into(tittleimage);
+
+                                Picasso.with(context)
+                                        .load(findpartiOrder.getData()[0].getShopDetail().getImageurl()+"_large.jpg")
+                                        .placeholder(R.drawable.cofeecup)
+                                        .into(middleimage);
+
+                                Picasso.with(context)
+                                        .load(findpartiOrder.getData()[0].getShopDetail().getImageurl()+"_large.jpg")
+                                        .placeholder(R.drawable.cofeecup)
+                                        .into(Bottomtittleimage);
+
+
+                            }
+                            else
+                            {
+
+                                Picasso.with(context)
+                                        .load(findpartiOrder.getData()[0].getShopDetail().getImageurl()+"_small.jpg")
+                                        .placeholder(R.drawable.cofeecup)
+                                        .into(tittleimage);
+
+                                Picasso.with(context)
+                                        .load(findpartiOrder.getData()[0].getShopDetail().getImageurl()+"_small.jpg")
+                                        .placeholder(R.drawable.cofeecup)
+                                        .into(middleimage);
+
+                                Picasso.with(context)
+                                        .load(findpartiOrder.getData()[0].getShopDetail().getImageurl()+"_small.jpg")
+                                        .placeholder(R.drawable.cofeecup)
+                                        .into(Bottomtittleimage);
+
+
+
+
+                            };
                             tvCustomerName.setText(findpartiOrder.getData()[0].getShopDetail().getCafe_name());
-                            tvOrderNumber.setText("Order#: " + findpartiOrder.getData()[0].getOrderId());
-                            tvOtp.setText("OTP: " + findpartiOrder.getData()[0].getOtp());
+                            tvOrderNumber.setText(findpartiOrder.getData()[0].getOrderId());
+                            tvOtp.setText(findpartiOrder.getData()[0].getOtp());
                             DataFindpartiOrder dataFindpartiOrder = findpartiOrder.getData()[0];
                             if (findpartiOrder.getData()[0].getParcel().equals("false")) {
-                                tvCustomerNametvCustomerName.setText("Order Type: Sit In");
+                                tvCustomerNametvCustomerName.setText("Sit In");
                             } else {
-                                tvCustomerNametvCustomerName.setText("Order Type: Pick Cup");
+                                tvCustomerNametvCustomerName.setText("Pick Cup");
                             }
-                            String date[] = findpartiOrder.getData()[0].getCreatedAt().split("T");
+                            String date[] = findpartiOrder.getData()[0].getTimeForPickcup().split(" ");
                             String ogdate = date[0];
-                            time.setText(ogdate);
+                            String ogTime = date[1];
+                            tvDate.setText(ogdate);
+                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+                            sdf.setTimeZone(TimeZone.getDefault());
+                            try {
+                                Date myDate = sdf.parse(findpartiOrder.getData()[0].getTimeForPickcup());
+                                SimpleDateFormat timesdf = new SimpleDateFormat("HH:mm:ss");
+                                String timeString = timesdf.format(myDate);
+                                String timeformate[] = timeString.split(":");
+                                int hour = Integer.parseInt(timeformate[0]);
+                                int minutes = Integer.parseInt(timeformate[1]);
+                                String timeSet = "";
+                                if (hour > 12) {
+                                    hour -= 12;
+                                    timeSet = "PM";
+                                } else if (hour == 0) {
+                                    hour += 12;
+                                    timeSet = "AM";
+                                } else if (hour == 12) {
+                                    timeSet = "PM";
+                                } else {
+                                    timeSet = "AM";
+                                }
+                                if (minutes < 10) {
+
+                                    time.setText(hour + ":0" + minutes + " " + timeSet);
+
+                                } else {
+
+                                    time.setText(hour + ":" + minutes + " " + timeSet);
+
+                                }
+
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+
+
+/*
+
+                           String timeformate[]=ogTime.split(":");
+                            int hour=Integer.parseInt(timeformate[0]);
+                            int minutes=Integer.parseInt(timeformate[1]);
+                            String timeSet = "";
+                            if (hour > 12) {
+                                hour -= 12;
+                                timeSet = "PM";
+                            } else if (hour == 0) {
+                                hour += 12;
+                                timeSet = "AM";
+                            } else if (hour == 12){
+                                timeSet = "PM";
+                            }else{
+                                timeSet = "AM";
+                            }
+                            if(minutes<10)
+                            {
+
+                                time.setText(hour + ":0" + minutes+" "+timeSet);
+
+                            }
+                            else {
+
+                                time.setText(hour + ":" + minutes+" "+timeSet);
+
+                            }
+*/
+
 
                             tvTotalCost.setText("£ " + findpartiOrder.getData()[0].getTotalPrice());
                             tvNotes.setText(findpartiOrder.getData()[0].getNote());
@@ -213,6 +365,11 @@ public class OrderDetailsActivity extends AppCompatActivity implements OnItemCli
         });
 
 
+    }
+    public boolean isTablet(Context context) {
+        boolean xlarge = ((context.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == 4);
+        boolean large = ((context.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_LARGE);
+        return (xlarge || large);
     }
 
     @Override
@@ -248,7 +405,7 @@ public class OrderDetailsActivity extends AppCompatActivity implements OnItemCli
     @Override
     public void totalPrice(String total) {
         this.total = this.total + Float.valueOf(total);
-        tvTaxCost.setText("£" +" "+getCorrectValue(String.format("%.2f", Float.valueOf(findpartiOrder.getData()[0].getTotalPrice())-this.total)));
+        tvTaxCost.setText("£" + " " + getCorrectValue(String.format("%.2f", Float.valueOf(findpartiOrder.getData()[0].getTotalPrice()) - this.total)));
 
     }
 
@@ -258,9 +415,15 @@ public class OrderDetailsActivity extends AppCompatActivity implements OnItemCli
     }
 
     @Override
+    public void ordered(Ordered ordered) {
+
+    }
+
+    @Override
     public void cardSet(ArrayList<CardDetails> cardDetailses) {
 
     }
+
     public String getCorrectValue(String price) {
         String[] priceSpl = price.split("\\.");
         if (priceSpl.length > 1)

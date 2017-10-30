@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:paddingBottom="3dp"
     >
     <ProgressBar
         android:id="@+id/progressBar_cyclic"
@@ -29,13 +30,22 @@
             android:text="Latte"
             android:textColor="@color/colorPrimary"
             android:id="@+id/tw_manuname" />
+        <ImageView
+            android:id="@+id/iv_Eligable_For_Reward"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:visibility="gone"
+            android:src="@drawable/rewards"
+            android:layout_toEndOf="@+id/tw_manuname"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="3dp"/>
 
         <ImageView
             android:id="@+id/list_item_genre_arrow"
             android:layout_width="15dp"
             android:layout_height="15dp"
             android:src="@drawable/right_arrow"
-            android:layout_toEndOf="@+id/tw_manuname"
+            android:layout_toEndOf="@+id/iv_Eligable_For_Reward"
             android:layout_marginStart="5dp"
             android:layout_marginTop="3dp"/>
         <TextView
@@ -50,12 +60,13 @@
             />
 
     </RelativeLayout>
+
+
     <RelativeLayout
         android:id="@+id/sublayout"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:visibility="gone"
-        android:layout_height="match_parent"
-
         android:layout_below="@+id/relativeLayout">
         <ImageView
             android:layout_width="50dp"
@@ -86,7 +97,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Small"
-
             android:id="@+id/tw_small"
             android:textSize="15dp"
             android:layout_marginStart="18dp"
@@ -137,11 +147,12 @@
             android:layout_below="@+id/tw_large"
             android:layout_alignStart="@+id/tw_large" />
         <View
+            android:id="@+id/bottom_light_View"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@color/lightgray"
             android:layout_marginTop="15dp"
-            android:layout_below="@+id/tw_largeprice"
+            android:layout_below="@id/tw_smallprice"
             ></View>
 
     </RelativeLayout>
@@ -152,4 +163,5 @@
         android:background="@color/lightgray"
         android:layout_below="@+id/relativeLayout"
         ></View>
+
 </RelativeLayout>

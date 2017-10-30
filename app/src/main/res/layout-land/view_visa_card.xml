@@ -289,8 +289,6 @@
                 android:text="Set Primary"
                 android:textColor="@color/white"
                 android:layout_gravity="center"
-
-
                 />
             <Button
                 android:id="@+id/bt_DeleteCard"
@@ -302,13 +300,7 @@
                 android:textAllCaps="false"
                 android:layout_marginLeft="10dp"
                 android:textColor="@color/white"
-
                 />
-
-
         </LinearLayout>
-
     </RelativeLayout>
-
-
 </RelativeLayout>

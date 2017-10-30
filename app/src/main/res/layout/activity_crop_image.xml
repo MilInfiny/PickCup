@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
+    tools:context="com.example.infiny.pickup.Activity.CropImageActivity">
+    <com.isseiaoki.simplecropview.CropImageView
+        android:id="@+id/cropImageView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:padding="24dp"
+        custom:scv_background_color="#1C1C1C"
+        custom:scv_crop_mode="fit_image"
+        custom:scv_frame_color="@color/colorAccent"
+        custom:scv_frame_stroke_weight="1dp"
+        custom:scv_guide_color="@color/colorAccent"
+        custom:scv_guide_show_mode="show_always"
+        custom:scv_guide_stroke_weight="1dp"
+        custom:scv_handle_color="@color/colorAccent"
+        custom:scv_handle_show_mode="show_always"
+        custom:scv_handle_size="14dp"
+        custom:scv_min_frame_size="50dp"
+        custom:scv_overlay_color="#AA1C1C1C"
+        custom:scv_touch_padding="8dp"
+        />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/cropImageView"
+        android:layout_centerHorizontal="true"
+        android:background="@color/windowBackground"
+        android:orientation="horizontal"
+        >
+
+        <TextView
+            android:id="@+id/buttonCencel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_marginRight="16dp"
+            android:padding="16dp"
+            android:textColor="@color/white"
+            android:text="Cancel"
+            android:textSize="20dp"/>
+
+        <TextView
+            android:id="@+id/buttonDone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:padding="16dp"
+            android:text="Done"
+            android:textColor="@color/white"
+            android:textSize="20dp"
+            />
+    </RelativeLayout>
+
+</RelativeLayout>

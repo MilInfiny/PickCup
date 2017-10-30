@@ -69,6 +69,8 @@ public class order_history extends AppCompatActivity {
     ArrayList<DataOrderHistory> orderHistoryList;
     @BindView(R.id.noorders)
     TextView noorders;
+    @BindView(R.id.no_Rewards)
+    TextView noRewards;
     private boolean loading = true;
     int pastVisiblesItems, visibleItemCount, totalItemCount;
 
@@ -148,8 +150,7 @@ public class order_history extends AppCompatActivity {
                         if (Order_History_Data.getError().equals("true")) {
                             progressBarCyclic.setVisibility(View.GONE);
                             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                            if(orderHistoryList.size()==0)
-                            {
+                            if (orderHistoryList.size() == 0) {
                                 noorders.setVisibility(View.VISIBLE);
                             }
                         } else {

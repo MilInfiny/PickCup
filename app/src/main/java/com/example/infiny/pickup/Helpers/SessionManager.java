@@ -38,6 +38,13 @@ public class SessionManager {
     public static final String city = "city";
     public  static  final String address="address";
     public  static  final String image="image";
+    public  static  final String imageUpload="imageUpload";
+    public  static  final String contactNumber="contactNumber";
+
+
+    public  static  final String rewardsCompleted="rewardsCompleted";
+    public  static  final String rewardsQuantity="rewardsQuantity";
+    public  static  final String status="status";
 
 
     // Shared pref mode
@@ -53,7 +60,7 @@ public class SessionManager {
         pref = context.getSharedPreferences(PREF_NAME, PRIVATE_MODE);
         editor = pref.edit();
     }
-    public void createLoginSession(String name, String email,  String surname,String token,String dob,String Postalcode,String city,String address,String image) {
+    public void createLoginSession(String name, String email,  String surname,String token,String dob,String Postalcode,String city,String address,String image,String contactNumber) {
 
         editor.putBoolean(IS_LOGIN, true);
 
@@ -67,10 +74,35 @@ public class SessionManager {
         editor.putString(this.city, city);
         editor.putString(this.address,address);
         editor.putString(this.image,image);
+        if(!image.equals("noImage"))
+        {
+            editor.putString(this.imageUpload,"true");
+        }
+        else {
+            editor.putString(this.imageUpload,"false");
+        }
+
+        editor.putString(this.contactNumber,contactNumber);
 
 
         editor.commit();
     }
+
+
+    public void createRewardsSession(String rewardsCompleted,String rewardsQuantity,String status)
+    {
+        editor.putString(this.rewardsCompleted,rewardsCompleted);
+        editor.putString(this.rewardsQuantity, rewardsQuantity);
+        editor.putString(this.status, status);
+        editor.commit();
+    }
+    public void setImageUpload(String imageUpload)
+    {
+        editor.putString(this.imageUpload,imageUpload);
+
+        editor.commit();
+    }
+
 
 
 

@@ -38,6 +38,8 @@ public class User
 
     private String stripeId;
 
+    private String contact;
+
     public String getImageUrl ()
     {
         return imageUrl;
@@ -56,6 +58,14 @@ public class User
     public void setIsLoggedIn (String isLoggedIn)
     {
         this.isLoggedIn = isLoggedIn;
+    }
+
+    public String getContact() {
+        return contact;
+    }
+
+    public void setContact(String contact) {
+        this.contact = contact;
     }
 
     public String get__v ()

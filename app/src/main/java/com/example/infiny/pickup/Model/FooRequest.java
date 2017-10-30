@@ -11,7 +11,7 @@ public class FooRequest {
 
     private String shopDetail;
     private String orderType;
-
+    private String actualPrice;
 
     private Ordered[] order;
 
@@ -24,6 +24,14 @@ public class FooRequest {
     private String eligibleForRewards;
 
     private String totalPrice;
+
+    public String getActualPrice() {
+        return actualPrice;
+    }
+
+    public void setActualPrice(String actualPrice) {
+        this.actualPrice = actualPrice;
+    }
 
     public String getParcel ()
     {

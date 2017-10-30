@@ -17,6 +17,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.example.infiny.pickup.Activity.OrderDetailsActivity;
+import com.example.infiny.pickup.Activity.RewardActivity;
 import com.example.infiny.pickup.Activity.SplashActivity;
 import com.example.infiny.pickup.Model.Order_History_Data;
 import com.example.infiny.pickup.R;
@@ -69,6 +70,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService{
                     case "orderReady":
                         showSmallNotificationsMessages(orderId);
                         break;
+                    case "OfferValidity":
+                        showSmallRewardsMessages(orderId);
+                        break;
                     case "orderSuccess":
                         showSmallNotificationsMessages(orderId);
                         break;
@@ -95,7 +99,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService{
         }
 
     }
-   public void showSmallNotificationsMessages(String orderId){
+   public void showSmallRewardsMessages(String orderId){
            Notification notification=new Notification();
            NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this);
            mBuilder.setContentTitle("Pick Cup");
@@ -106,7 +110,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService{
            mBuilder.setColor(R.color.colorPrimary);
            mBuilder.setAutoCancel(true);
            mBuilder.setDefaults(Notification.DEFAULT_ALL);
-           Intent resultIntent = new Intent(this, OrderDetailsActivity.class);
+           Intent resultIntent = new Intent(this, RewardActivity.class);
 
            resultIntent.putExtra("orderId", orderId);
        resultIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -119,26 +123,36 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService{
            NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
            //  notificationID allows you to update the notification later on.
            mNotificationManager.notify(001, mBuilder.build());
-
-
-
-     /*  NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
-       //  notificationID allows you to update the notification later on.
-
-
-
-       Intent notificationIntent = new Intent(getApplicationContext(), Order_History_Data.class);
-       notificationIntent.putExtra("orderId",orderId);
-
-/*//**add this line**
-       notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-
-/*//**edit this line to put requestID as requestCode**
-       PendingIntent contentIntent = PendingIntent.getActivity(this, 0,notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-       mBuilder.setContentIntent(contentIntent);
-       mNotificationManager.notify(001, mBuilder.build());*/
    }
+    public void showSmallNotificationsMessages(String orderId){
+        Notification notification=new Notification();
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this);
+        mBuilder.setContentTitle("Pick Cup");
+        mBuilder.setContentText(message);
+        mBuilder.setPriority(Notification.PRIORITY_HIGH);
+        mBuilder.setVisibility(Notification.VISIBILITY_PUBLIC);
+        mBuilder.setSmallIcon(R.drawable.logo);
+        mBuilder.setColor(R.color.colorPrimary);
+        mBuilder.setAutoCancel(true);
+        mBuilder.setDefaults(Notification.DEFAULT_ALL);
+        Intent resultIntent = new Intent(this, OrderDetailsActivity.class);
+
+        resultIntent.putExtra("orderId", orderId);
+        resultIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        notification.flags |= Notification.FLAG_AUTO_CANCEL;
+
+
+        PendingIntent notificationIntent= PendingIntent.getActivity(getApplicationContext(),0, resultIntent,PendingIntent.FLAG_UPDATE_CURRENT);
+
+        mBuilder.setContentIntent(notificationIntent);
+        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        //  notificationID allows you to update the notification later on.
+        mNotificationManager.notify(001, mBuilder.build());
+    }
+
+
+
+
     public static boolean isAppIsInBackground(Context context) {
         boolean isInBackground = true;
         ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);

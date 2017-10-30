@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -59,7 +60,7 @@ public class MenuActivity extends AppCompatActivity implements OnItemClickListen
     MenuNormalAdapter menuNormalAdapter;
     Context context;
     String sid;
-    public static String rewardcompleted,rewardQuantity;
+    public static String rewardcompleted,rewardQuantity,status;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.appbar)
@@ -93,7 +94,7 @@ public class MenuActivity extends AppCompatActivity implements OnItemClickListen
     ItemData itemData;
     public static TextView btOrder;
     OnItemClickListener onItemClickListener;
-
+Typeface font;
     public static TextView orderPrice;
     @BindView(R.id.cartimage)
     ImageView cartimage;
@@ -115,15 +116,17 @@ public class MenuActivity extends AppCompatActivity implements OnItemClickListen
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         final Intent intent = getIntent();
         context = this;
-
+        font = Typeface.createFromAsset(context.getAssets(), "fonts/opensansbold.ttf");
         onItemClickListener = this;
         sessionManager = new SessionManager(context);
         sharedPreferences = getSharedPreferences(sessionManager.PREF_NAME, 0);
+        tittle.setTypeface(font);
         tittle.setText(intent.getStringExtra("tittle"));
         cartCount = (TextView) findViewById(R.id.cart_count);
         sid = intent.getStringExtra("sid");
         rewardcompleted=intent.getStringExtra("rewardcompleted");
         rewardQuantity=intent.getStringExtra("rewardQuantity");
+        status=intent.getStringExtra("status");
 
 
         if (isTablet(context)) {
@@ -139,6 +142,20 @@ public class MenuActivity extends AppCompatActivity implements OnItemClickListen
                     .load(intent.getStringExtra("image") + "_small.jpg")
                     .placeholder(cofeecup)
                     .into(tittleimage);
+        };
+
+        if(status.equals("ready"))
+        {
+            statusButton.setBackground(context.getResources().getDrawable(R.drawable.button_bg_round_green));
+        }
+        if(status.equals("closed"))
+        {
+            statusButton.setBackground(context.getResources().getDrawable(R.drawable.button_bg_round_red));
+        }
+        if(status.equals("busy"))
+        {
+            statusButton.setBackground(context.getResources().getDrawable(R.drawable.button_bg_round_yellow));
+
         };
 
 
@@ -280,6 +297,11 @@ public class MenuActivity extends AppCompatActivity implements OnItemClickListen
 
     @Override
     public void ordereddata(Ordered[] ordered) {
+
+    }
+
+    @Override
+    public void ordered(Ordered ordered) {
 
     }
 

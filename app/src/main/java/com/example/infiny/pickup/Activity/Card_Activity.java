@@ -208,6 +208,11 @@ public class Card_Activity extends AppCompatActivity implements OnItemClickListe
     }
 
     @Override
+    public void ordered(Ordered ordered) {
+
+    }
+
+    @Override
     public void cardSet(ArrayList<CardDetails> cardDetailses) {
         this.cardDetailses=cardDetailses;
 

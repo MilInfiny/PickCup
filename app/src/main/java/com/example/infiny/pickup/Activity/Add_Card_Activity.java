@@ -77,8 +77,10 @@ public class Add_Card_Activity extends AppCompatActivity {
     AddCardData addCardData;
     private CreditCardFormatTextWatcher tv;
     Boolean status;
+    String sid,tittle,image;
     String a;
     int keyDel;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,7 +96,6 @@ public class Add_Card_Activity extends AppCompatActivity {
         tv = new CreditCardFormatTextWatcher(etCardNUmber.getEditText());
         etCardNUmber.getEditText().addTextChangedListener(new TextWatcher() {
             int pos;
-
             @Override
             public void onTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
                 // TODO Auto-generated method stub
@@ -184,6 +185,11 @@ public class Add_Card_Activity extends AppCompatActivity {
         });
         Intent intent=getIntent();
         fromOrder=intent.getBooleanExtra("fromOrder",false);
+        sid=intent.getStringExtra("sid");
+        tittle=intent.getStringExtra("tittle");
+        image=intent.getStringExtra("image");
+
+
 
         btAdd.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -195,7 +201,7 @@ public class Add_Card_Activity extends AppCompatActivity {
                     final int year = Integer.parseInt(expiredate[1]);
                     if(month>12)
                     {
-                        etExprireDate.getEditText().setError("Please enter valid expire date");
+                        etExprireDate.getEditText().setError("Please Enter Valid Expire Date");
                     }
                     else {
                         progressBarCyclic.setVisibility(View.VISIBLE);
@@ -210,14 +216,6 @@ public class Add_Card_Activity extends AppCompatActivity {
                     card.validateNumber();
                     card.validateCVC();
                     card.setName(etCardholder.getEditText().getText().toString().trim());
-                    if (!card.validateCard()) {
-                        progressBarCyclic.setVisibility(View.GONE);
-                        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                        Toast.makeText(context,
-                                "Please enter valid Details",
-                                Toast.LENGTH_LONG
-                        ).show();
-                    } else {
                         Stripe stripe = new Stripe(context, "pk_test_YITKZXIVRXcx9u5iIHj3fV56");
                         stripe.createToken(
                                 card,
@@ -236,17 +234,30 @@ public class Add_Card_Activity extends AppCompatActivity {
                                                 if (response != null) {
                                                     addCardData = response.body();
                                                     if (addCardData != null) {
-                                                        if (addCardData.getError().equals("true")) {
-                                                            progressBarCyclic.setVisibility(View.GONE);
-                                                            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                                                            Toast.makeText(context, addCardData.getTitle(), Toast.LENGTH_SHORT).show();
+                                                        if (addCardData.getError().equals("true") )  {
+                                                            if(addCardData.getTitle().equals("Duplicate Card"))
+                                                            {
+                                                                progressBarCyclic.setVisibility(View.GONE);
+                                                                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                                                Toast.makeText(context, "A card with the same number already exists" +
+                                                                        "", Toast.LENGTH_SHORT).show();
+                                                            }
+                                                            else{
+                                                                progressBarCyclic.setVisibility(View.GONE);
+                                                                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                                                Toast.makeText(context, "Card added successfully", Toast.LENGTH_SHORT).show();
+                                                            }
+
                                                         } else {
                                                             progressBarCyclic.setVisibility(View.GONE);
                                                             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                                                             if (fromOrder) {
                                                                 Intent intent = new Intent(context, OrderActivity.class);
                                                                 intent.putExtra("fromPage","add_card_activity");
-                                                                startActivity(intent);
+                                                                intent.putExtra("sid", sid);
+                                                                intent.putExtra("tittle", tittle);
+                                                                intent.putExtra("image", image);
+                                                               startActivity(intent);
                                                                 finish();
                                                             } else {
                                                                 Intent intent = new Intent(context, Card_Activity.class);
@@ -277,15 +288,27 @@ public class Add_Card_Activity extends AppCompatActivity {
                                     }
 
                                     public void onError(Exception error) {
-                                        // Show localized error message
-                                        Toast.makeText(context,
-                                                "error",
-                                                Toast.LENGTH_LONG
-                                        ).show();
+                                        progressBarCyclic.setVisibility(View.GONE);
+                                        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                        String erroe = error.getLocalizedMessage();
+                                        if(error.getLocalizedMessage().equals("Your card number is incorrect."))
+                                        {
+                                            etCardNUmber.getEditText().setError("Please Enter Valid Credit Card Number");
+                                        }
+                                        else if(error.getLocalizedMessage().equals("Your card's security code is invalid."))
+                                        {
+                                            etCvv.getEditText().setError("Please Enter Valid CVV Code");
+                                        }
+                                        else if(error.getLocalizedMessage().equals("Your card's expiration year is invalid."))
+                                        {
+                                            etExprireDate.getEditText().setError("Please Enter Valid Expiration Date");
+
+                                        }
+
                                     }
                                 }
                         );
-                    }
+
                 }}
             }
         });
@@ -334,23 +357,23 @@ public class Add_Card_Activity extends AppCompatActivity {
         status = true;
 
         if (TextUtils.isEmpty(etCardNUmber.getEditText().getText().toString().trim())) {
-            etCardNUmber.setError("Please Enter Credit Card Number");
+            etCardNUmber.getEditText().setError("Please Enter Credit Card Number");
             status = false;
         }
         if (etCardNUmber.getEditText().getText().toString().trim().length()<19) {
-            etCardNUmber.setError("Credit Card Number Must Be 16 Digits");
+            etCardNUmber.getEditText().setError("Credit Card Number Must Be 16 Digits");
             status = false;
         }
         if (TextUtils.isEmpty(etCardholder.getEditText().getText().toString().trim())) {
-            etCardholder.setError("Please Enter Cardholder Name");
+            etCardholder.getEditText().setError("Please Enter Cardholder Name");
             status = false;
         }
         if (TextUtils.isEmpty(etExprireDate.getEditText().getText().toString().trim())) {
-            etExprireDate.setError("Please Enter Expiration Date");
+            etExprireDate.getEditText().setError("Please Enter Expiration Date");
             status = false;
         }
         if (TextUtils.isEmpty(etCvv.getEditText().getText().toString().trim())) {
-            etCvv.setError("Please Enter CVV Code");
+            etCvv.getEditText().setError("Please Enter CVV Code");
             status = false;
         }
 

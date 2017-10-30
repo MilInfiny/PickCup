@@ -19,16 +19,11 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.infiny.pickup.Adapters.CafeListAdapter;
 import com.example.infiny.pickup.Adapters.RewardAdapter;
 import com.example.infiny.pickup.Helpers.RetroFitClient;
 import com.example.infiny.pickup.Helpers.SessionManager;
 import com.example.infiny.pickup.Interfaces.ApiIntegration;
-import com.example.infiny.pickup.Interfaces.OnItemClickListener;
-import com.example.infiny.pickup.Model.Cafes;
 import com.example.infiny.pickup.Model.DataRewards;
-import com.example.infiny.pickup.Model.ItemData;
-import com.example.infiny.pickup.Model.Ordered;
 import com.example.infiny.pickup.Model.RewardData;
 import com.example.infiny.pickup.R;
 
@@ -65,11 +60,16 @@ public class RewardActivity extends AppCompatActivity {
     View view;
     Context context;
 
-   public static ProgressBar progressBarCyclic;
+    public static ProgressBar progressBarCyclic;
     Retrofit retroFitClient;
     SharedPreferences sharedPreferences;
     SessionManager sessionManager;
     RewardData rewardData;
+
+    @BindView(R.id.noorders)
+    TextView noorders;
+    @BindView(R.id.no_Rewards)
+    TextView noRewards;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,21 +80,21 @@ public class RewardActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         appbar.setOutlineProvider(null);
         getSupportActionBar().setTitle("");
-        context=this;
+        context = this;
 
-        sessionManager=new SessionManager(context);
-        sharedPreferences=getSharedPreferences(sessionManager.PREF_NAME,0);
+        sessionManager = new SessionManager(context);
+        sharedPreferences = getSharedPreferences(sessionManager.PREF_NAME, 0);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         logo.requestFocus();
         icon.setImageResource(R.drawable.rewards);
-        progressBarCyclic=(ProgressBar)findViewById(R.id.progressBar_cyclic);
+        progressBarCyclic = (ProgressBar) findViewById(R.id.progressBar_cyclic);
         progressBarCyclic.setVisibility(View.VISIBLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
                 WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
         retroFitClient = new RetroFitClient(context).getBlankRetrofit();
         Call<RewardData> call = retroFitClient
                 .create(ApiIntegration.class)
-                .getRewardsListing(sharedPreferences.getString("token",null));
+                .getRewardsListing(sharedPreferences.getString("token", null));
         call.enqueue(new Callback<RewardData>() {
 
             @Override
@@ -105,21 +105,21 @@ public class RewardActivity extends AppCompatActivity {
                         if (rewardData.getError().equals("true")) {
                             progressBarCyclic.setVisibility(View.GONE);
                             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                            Toast.makeText(context,rewardData.getTitle(), Toast.LENGTH_SHORT).show();
+                            noRewards.setVisibility(View.VISIBLE);
+                            recycleView.setVisibility(View.GONE);
+                            Toast.makeText(context, rewardData.getTitle(), Toast.LENGTH_SHORT).show();
                         } else {
                             progressBarCyclic.setVisibility(View.GONE);
                             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                             ArrayList<DataRewards> RewardsList = new ArrayList<DataRewards>(Arrays.asList(rewardData.getData()));
-                            rewardAdapter = new RewardAdapter(context,RewardsList);
+                            rewardAdapter = new RewardAdapter(context, RewardsList);
                             RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
                             recycleView.setLayoutManager(mLayoutManager);
                             recycleView.setAdapter(rewardAdapter);
                             recycleView.setNestedScrollingEnabled(false);
-
-
                         }
 
-                    }else {
+                    } else {
                         if (response.code() == 404 || response.code() == 500) {
                             progressBarCyclic.setVisibility(View.GONE);
                             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
@@ -127,7 +127,6 @@ public class RewardActivity extends AppCompatActivity {
                         }
                     }
                 }
-
 
 
             }
@@ -153,7 +152,7 @@ public class RewardActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(android.view.MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
                 onBackpresss();
@@ -161,20 +160,18 @@ public class RewardActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-    public void onBackpresss()
-    {
-        Intent intent=new Intent(context,MainActivity.class);
-        startActivity(intent);
-         finish();
-    }
 
+    public void onBackpresss() {
+        Intent intent = new Intent(context, MainActivity.class);
+        startActivity(intent);
+        finish();
+    }
 
 
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
-
 
 
 }

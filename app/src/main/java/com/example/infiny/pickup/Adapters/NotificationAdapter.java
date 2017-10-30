@@ -7,6 +7,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.support.v7.widget.RecyclerView;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.StyleSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +24,7 @@ import com.example.infiny.pickup.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Created by infiny on 9/13/17.
@@ -51,7 +55,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
 
             Picasso.with(context)
                     .load(dataNotification.getShopDetail().getImageurl()+"_large.jpg")
-                    .placeholder(R.drawable.ic_person_black_48dp)
+                    .placeholder(R.drawable.cofeecup)
                     .into(holder.imageView);
 
         }
@@ -60,13 +64,31 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
 
             Picasso.with(context)
                     .load(dataNotification.getShopDetail().getImageurl()+"_small.jpg")
-                    .placeholder(R.drawable.ic_person_black_48dp)
+                    .placeholder(R.drawable.cofeecup)
                     .into(holder.imageView);
 
 
         };
 
+
+
+
+
+
+
         holder.textView.setText(dataNotification.getMessage());
+        final SpannableStringBuilder sb = new SpannableStringBuilder(dataNotification.getMessage());
+        final StyleSpan bss = new StyleSpan(android.graphics.Typeface.BOLD);
+        int  startstringPosition =dataNotification.getMessage().indexOf(dataNotification.getShopDetail().getCafe_name());
+        int  stringPositionlenght =dataNotification.getShopDetail().getCafe_name().length();
+        int endstringPosition=startstringPosition+stringPositionlenght;
+
+        sb.setSpan(bss, startstringPosition, endstringPosition, Spannable.SPAN_INCLUSIVE_INCLUSIVE); // make first 4 characters Bold
+
+        holder.textView.setText(sb);
+
+
+
         holder.posteddate.setText(dataNotification.getCreatedAt());
         String date[] = dataNotification.getCreatedAt().split("T");
         String ogdate = date[0];
@@ -101,6 +123,10 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
             posteddate=(TextView)itemView.findViewById(R.id.posteddate);
             topview=(RelativeLayout)itemView.findViewById(R.id.topview);
 
+        }
+        int getIndex(String str, String substring)
+        {
+            return Arrays.asList(str.split("\\s+")).indexOf(substring)+1;
         }
         public boolean isTablet(Context context) {
             boolean xlarge = ((context.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == 4);

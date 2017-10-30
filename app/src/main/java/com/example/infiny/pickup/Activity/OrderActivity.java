@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -59,7 +60,6 @@ import retrofit2.Retrofit;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.example.infiny.pickup.R.drawable.cofeecup;
-import static com.example.infiny.pickup.R.drawable.ic_person_black_48dp;
 
 public class OrderActivity extends AppCompatActivity implements OnItemClickListener {
 
@@ -165,6 +165,10 @@ public class OrderActivity extends AppCompatActivity implements OnItemClickListe
     String rating;
     @BindView(R.id.rewarddetails)
     TextView rewarddetails;
+    String imageUrl;
+    Float admintaxCount;
+    String actualPrice;
+    Typeface font;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -182,14 +186,51 @@ public class OrderActivity extends AppCompatActivity implements OnItemClickListe
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         final LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         LinearLayoutManager layoutManager1 = new LinearLayoutManager(this);
+        font = Typeface.createFromAsset(context.getAssets(), "fonts/opensansbold.ttf");
         ordereds = new ArrayList<>();
         Intent intent = getIntent();
         sid = intent.getStringExtra("sid");
         fromMenu = intent.getStringExtra("fromPage");
         cafeName = intent.getStringExtra("tittle");
+        imageUrl=intent.getStringExtra("image");
         rewardcompleted = intent.getStringExtra("rewardcompleted");
         rewardQuantity = intent.getStringExtra("rewardQuantity");
+        tittle.setTypeface(font);
         tittle.setText(cafeName);
+        if(imageUrl!=null) {
+            if (isTablet(context)) {
+
+                Picasso.with(context)
+                        .load(imageUrl + "_large.jpg")
+                        .placeholder(cofeecup)
+                        .into(tittleimage);
+            } else {
+
+                Picasso.with(context)
+                        .load(imageUrl + "_small.jpg")
+                        .placeholder(cofeecup)
+                        .into(tittleimage);
+            }
+        }
+        if (fromMenu.equals("rewardActivity")) {
+            paylayout.setText("Claim Reward");
+
+        }
+        if(sharedPreferences.getString(sessionManager.status,null).equals("ready"))
+        {
+            statusButton.setBackground(context.getResources().getDrawable(R.drawable.button_bg_round_green));
+        }
+        if(sharedPreferences.getString(sessionManager.status,null).equals("closed"))
+        {
+            statusButton.setBackground(context.getResources().getDrawable(R.drawable.button_bg_round_red));
+        }
+        if(sharedPreferences.getString(sessionManager.status,null).equals("busy"))
+        {
+            statusButton.setBackground(context.getResources().getDrawable(R.drawable.button_bg_round_yellow));
+
+        };
+
+        rewarddetails.setText(sharedPreferences.getString(sessionManager.rewardsCompleted,null)+"/"+sharedPreferences.getString(sessionManager.rewardsQuantity,null));
         progressBarCyclic.setVisibility(View.VISIBLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
                 WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
@@ -249,7 +290,7 @@ public class OrderActivity extends AppCompatActivity implements OnItemClickListe
                                         .placeholder(cofeecup)
                                         .into(tittleimage);
                             }
-                            ;
+
                             tittle.setText(orderListData.getData().getShopDetail().getCafe_name());
                             progressBarCyclic.setVisibility(View.GONE);
                             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
@@ -262,7 +303,7 @@ public class OrderActivity extends AppCompatActivity implements OnItemClickListe
                                 claimlayout.setVisibility(View.VISIBLE);
                                 belowSwitch.setVisibility(View.VISIBLE);
                             }
-                            totalpercentage = Float.valueOf(orderListData.getStripeCharge().getPercentCharge()) + Float.valueOf(orderListData.getAdminTax());
+                            totalpercentage = Float.valueOf(orderListData.getStripeCharge().getPercentCharge());
 
 
                             orderDatas = new ArrayList<>(Arrays.asList(orderListData.getData()));
@@ -276,9 +317,17 @@ public class OrderActivity extends AppCompatActivity implements OnItemClickListe
                                 for (int j = 0; j < ordered.length; j++) {
                                     orderedObject = ordered[j];
                                     orderedObject.setImage(image);
+                                    if(Float.valueOf(orderedObject.getItemQuantity())*Float.valueOf(orderedObject.getItemPrice())>5)
+                                    {
+                                       admintaxCount=Float.valueOf(orderListData.getAdminTax().getBelow_5_pound());
+                                    }
+                                    else {
+                                        admintaxCount=Float.valueOf(orderListData.getAdminTax().getBelow_10_pound());
+                                    }
                                     ordereds.add(orderedObject);
 
                                 }
+
                                 subMenuAdapter = new Sub_Menu_Adapter(context, ordereds, onItemClickListener, sid);
                                 recycleView.setLayoutManager(layoutManager);
                                 recycleView.setAdapter(subMenuAdapter);
@@ -330,7 +379,7 @@ public class OrderActivity extends AppCompatActivity implements OnItemClickListe
             public void onClick(View v) {
                 if (!fromMenu.equals("rewardActivity")) {
                     if (ordered.length == 0) {
-                        Toast.makeText(context, "Cart is Empty ", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, "No items in cart", Toast.LENGTH_SHORT).show();
                         return;
                     }
                 }
@@ -345,8 +394,11 @@ public class OrderActivity extends AppCompatActivity implements OnItemClickListe
                         Toast.makeText(context, R.string.Add_Card, Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(context, Add_Card_Activity.class);
                         intent.putExtra("fromOrder", true);
+                        intent.putExtra("sid", sid);
+                        intent.putExtra("tittle", tittle.getText().toString());
+                        intent.putExtra("image", orderListData.getData().getShopDetail().getImageurl());
                         startActivity(intent);
-                        finish();
+                         finish();
 
                     } else {
                         getData();
@@ -366,16 +418,19 @@ public class OrderActivity extends AppCompatActivity implements OnItemClickListe
                 image = R.drawable.cuptake;
                 parcel = "true";
                 Sub_Menu_Adapter.totalprize = 0f;
-                ordered = orderData.getOrdered();
-                for (int j = 0; j < ordered.length; j++) {
-                    orderedObject = ordered[j];
-                    orderedObject.setImage(image);
+                if(orderData!=null) {
+
+                    ordered = orderData.getOrdered();
+                    for (int j = 0; j < ordered.length; j++) {
+                        orderedObject = ordered[j];
+                        orderedObject.setImage(image);
 
 
-                }
-                subMenuAdapter.notifyDataSetChanged();
-                if (subMenuAdapter.getItemCount() > 1) {
-                    recycleView.getLayoutManager().smoothScrollToPosition(recycleView, null, 0);
+                    }
+                    subMenuAdapter.notifyDataSetChanged();
+                    if (subMenuAdapter.getItemCount() > 1) {
+                        recycleView.getLayoutManager().smoothScrollToPosition(recycleView, null, 0);
+                    }
                 }
 
             }
@@ -383,17 +438,22 @@ public class OrderActivity extends AppCompatActivity implements OnItemClickListe
         btSitin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                parcel = "false";
                 image = R.drawable.graycup1;
                 Sub_Menu_Adapter.totalprize = 0f;
-                ordered = orderData.getOrdered();
-                for (int j = 0; j < ordered.length; j++) {
-                    orderedObject = ordered[j];
-                    orderedObject.setImage(image);
+                if(orderData!=null) {
 
-                }
-                subMenuAdapter.notifyDataSetChanged();
-                if (subMenuAdapter.getItemCount() > 1) {
-                    recycleView.getLayoutManager().smoothScrollToPosition(recycleView, null, 0);
+                    ordered = orderData.getOrdered();
+                    for (int j = 0; j < ordered.length; j++) {
+                        orderedObject = ordered[j];
+                        orderedObject.setImage(image);
+
+
+                    }
+                    subMenuAdapter.notifyDataSetChanged();
+                    if (subMenuAdapter.getItemCount() > 1) {
+                        recycleView.getLayoutManager().smoothScrollToPosition(recycleView, null, 0);
+                    }
                 }
 
             }
@@ -412,6 +472,15 @@ public class OrderActivity extends AppCompatActivity implements OnItemClickListe
             }
         });
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==2)
+        {
+            fromMenu=data.getStringExtra("fromPage");
+        }
     }
 
     @Override
@@ -437,6 +506,7 @@ public class OrderActivity extends AppCompatActivity implements OnItemClickListe
         fooRequest = new FooRequest();
         fooRequest.setUserToken(sharedPreferences.getString("token", null));
         fooRequest.setParcel(parcel);
+        fooRequest.setActualPrice(actualPrice);
         if (ordered == null && simpleSwitch.isChecked()) {
             fooRequest.setOrderType("0");
         } else if (ordered.length >= 0 && simpleSwitch.isChecked()) {
@@ -550,7 +620,9 @@ public class OrderActivity extends AppCompatActivity implements OnItemClickListe
             taxprice.setText("£ " + "0");
             totalprice.setText("£ " + "0");
         } else {
-            tax = (Float.valueOf(total) * totalpercentage / 100) + Float.valueOf(orderListData.getStripeCharge().getAdditional());
+
+            tax = (Float.valueOf(total) * totalpercentage / 100) + Float.valueOf(orderListData.getStripeCharge().getAdditional())+admintaxCount;
+            actualPrice=getCorrectValue(String.format("%.2f", Float.valueOf(total) + tax));
             this.total = getCorrectValue(String.format("%.2f", Float.valueOf(total) + tax));
             taxprice.setText("£ " + getCorrectValue(String.format("%.2f", tax)));
             totalprice.setText("£ " + getCorrectValue(String.format("%.2f", Float.valueOf(this.total))));
@@ -558,17 +630,18 @@ public class OrderActivity extends AppCompatActivity implements OnItemClickListe
     }
 
     public void onBackpresss() {
-        if (fromMenu.equals("menuActivity")) {
+        if (fromMenu.equals("menuActivity") || fromMenu.equals("add_card_activity") ) {
             Intent intent = new Intent(context, MenuActivity.class);
             intent.putExtra("sid", sid);
-            intent.putExtra("tittle", cafeName);
+            intent.putExtra("tittle", tittle.getText().toString());
             intent.putExtra("image", orderListData.getData().getShopDetail().getImageurl());
-            intent.putExtra("rewardcompleted", rewardcompleted);
+            intent.putExtra("rewardcompleted", sharedPreferences.getString(sessionManager.rewardsCompleted,null));
+            intent.putExtra("status", sharedPreferences.getString(sessionManager.status,null));
             if(rewardQuantity==null)
             {
                 rewardQuantity="0";
             }
-                intent.putExtra("rewardQuantity", rewardQuantity);
+                intent.putExtra("rewardQuantity", sharedPreferences.getString(sessionManager.rewardsQuantity,null));
 
 
             startActivity(intent);
@@ -594,6 +667,11 @@ public class OrderActivity extends AppCompatActivity implements OnItemClickListe
     @Override
     public void ordereddata(Ordered[] ordered) {
         this.ordered = ordered;
+    }
+
+    @Override
+    public void ordered(Ordered ordered) {
+
     }
 
     @Override

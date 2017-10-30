@@ -17,7 +17,7 @@
             android:layout_height="wrap_content"
             android:text="Cheesecake"
             android:layout_marginBottom="10dp"
-            android:textSize="16sp" />
+            android:textSize="18sp" />
 
 
         <TextView
@@ -27,7 +27,7 @@
 
             android:layout_below="@+id/tv_item_name"
             android:text="£ 4.00"
-            android:textSize="14sp" />
+            android:textSize="18sp" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -41,14 +41,12 @@
         <TextView
             android:id="@+id/tv_quantity"
             android:layout_width="wrap_content"
-
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
             android:paddingLeft="15dp"
             android:paddingRight="15dp"
             android:paddingTop="3dp"
             android:paddingBottom="3dp"
-
             android:textColor="@color/white"
             android:layout_alignBaseline="@+id/tv_multiply"
             android:layout_toRightOf="@+id/tv_multiply"
@@ -61,7 +59,7 @@
             android:layout_alignParentEnd="true"
             android:layout_below="@+id/tv_item_name"
             android:text="£ 4.00"
-            android:textSize="14sp" />
+            android:textSize="18sp" />
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"

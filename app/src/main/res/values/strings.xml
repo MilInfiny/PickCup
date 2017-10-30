@@ -49,13 +49,16 @@
     <string name="server_not_responding">Server not found</string>
     <string name="login_success">Login success</string>
     <string name="email_sent_please_check">Email sent please check</string>
-    <string name="verified_successfull">Verify successfull</string>
-    <string name="Password_set">password set seccesfully</string>
+    <string name="verified_successfull">Verify successfully</string>
+    <string name="Password_set">Password changed successfully</string>
     <string name="Base_url">http://192.168.1.175:3000</string>
     <string name="title_activity_add__card_">Add_Card_Activity</string>
     <string name="selectValidTme">Select Valid Time</string>
-    <string name="Add_Card">Please add card</string>
+    <string name="Add_Card">Please add card </string>
     <string name="selectTime">Select time</string>
     <string name="pleaseEnableGps">Please enable gps</string>
     <string name="Item_Add_To_Cart">Added Successfully</string>
+    <string name="Cafe_Closed">Cafe is closed now. You can\'t order</string>
+    <string name="busyPopup">This cafe is busy. Your order will take more time. Do you want to continue?</string>
+    <string name="already_Primary">Card is Already Primary</string>
 </resources>

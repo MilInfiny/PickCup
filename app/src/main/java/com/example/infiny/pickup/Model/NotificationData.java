@@ -10,6 +10,7 @@ public class NotificationData {
     private String error;
 
 
+
     private DataNotification[] data;
 
     public String getTitle ()

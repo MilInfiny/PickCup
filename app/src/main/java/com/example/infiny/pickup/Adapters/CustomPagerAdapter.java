@@ -112,9 +112,10 @@ public class CustomPagerAdapter  extends PagerAdapter {
             public void onClick(View view) {
                 if(cardDetails.getIsPrimary().equals("true"))
                 {
-                    Toast.makeText(mContext,"Card Is Already Primary ", Toast.LENGTH_SHORT).show();
+                   Toast.makeText(mContext,R.string.already_Primary,Toast.LENGTH_LONG).show();
                 }
                 else {
+
 
                     AlertDialog.Builder builder;
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -150,7 +151,7 @@ public class CustomPagerAdapter  extends PagerAdapter {
                                                     } else {
                                                         progressBarCyclic.setVisibility(View.GONE);
                                                         ((Activity) mContext).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                                                        Toast.makeText(mContext, "Change Successfully", Toast.LENGTH_SHORT).show();
+                                                        Toast.makeText(mContext, "Marked As Primary", Toast.LENGTH_SHORT).show();
                                                         Intent intent = new Intent(mContext, Card_Activity.class);
                                                         mContext.startActivity(intent);
                                                         ((Activity) mContext).finish();
@@ -190,9 +191,9 @@ public class CustomPagerAdapter  extends PagerAdapter {
 
                 }
 
-
             }
         });
+
         bt_DeleteCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -229,7 +230,7 @@ public class CustomPagerAdapter  extends PagerAdapter {
                                                     ((Activity)mContext).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                                                     Toast.makeText(mContext,cardListingData.getTitle(), Toast.LENGTH_SHORT).show();
                                                 } else {
-                                                    Toast.makeText(mContext,"Card Delete Successfully", Toast.LENGTH_SHORT).show();
+                                                    Toast.makeText(mContext,"Card Deleted Successfully", Toast.LENGTH_SHORT).show();
                                                     Intent intent=new Intent(mContext,Card_Activity.class);
                                                     mContext.startActivity(intent);
                                                 }

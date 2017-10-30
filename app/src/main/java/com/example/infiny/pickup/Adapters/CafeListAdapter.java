@@ -2,6 +2,7 @@ package com.example.infiny.pickup.Adapters;
 
 import android.content.Context;
 import android.content.res.Configuration;
+import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,6 +33,7 @@ public class CafeListAdapter extends RecyclerView.Adapter<CafeListAdapter.MyView
     Context context;
     ArrayList<Cafes> list;
     private final OnItemClickListener listener;
+    private Typeface font;
 
 
     public CafeListAdapter(Context context, ArrayList<Cafes> list, OnItemClickListener listener) {
@@ -49,18 +51,20 @@ public class CafeListAdapter extends RecyclerView.Adapter<CafeListAdapter.MyView
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
+        font = Typeface.createFromAsset(context.getAssets(), "fonts/opensansbold.ttf");
         Cafes cafes=list.get(position);
-
+        holder.tittle.setTypeface(font);
+        holder.tittle.setText(cafes.getCafe_name());
         holder.bind(cafes, listener);
         if(cafes.getStatus().equals("ready"))
         {
             holder.status.setBackground(context.getResources().getDrawable(R.drawable.button_bg_round_green));
         }
-        if(cafes.getStatus().equals("offline"))
+        if(cafes.getStatus().equals("closed"))
         {
             holder.status.setBackground(context.getResources().getDrawable(R.drawable.button_bg_round_red));
         }
-        if(cafes.getStatus().equals("await"))
+        if(cafes.getStatus().equals("busy"))
         {
             holder.status.setBackground(context.getResources().getDrawable(R.drawable.button_bg_round_yellow));
 
@@ -73,7 +77,7 @@ public class CafeListAdapter extends RecyclerView.Adapter<CafeListAdapter.MyView
                     .load(cafes.getImageurl()+"_large.jpg")
                     .placeholder(R.drawable.cofeecup)
                     .into(holder.bgimage);
-            holder.tittle.setText(cafes.getCafe_name());
+
 
         }
         else
@@ -83,7 +87,7 @@ public class CafeListAdapter extends RecyclerView.Adapter<CafeListAdapter.MyView
                     .load(cafes.getImageurl()+"_small.jpg")
                     .placeholder(R.drawable.cofeecup)
                     .into(holder.bgimage);
-            holder.tittle.setText(cafes.getCafe_name());
+
 
 
         };

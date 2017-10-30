@@ -16,6 +16,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.content.FileProvider;
@@ -42,19 +43,15 @@ import com.example.infiny.pickup.Interfaces.ApiIntegration;
 import com.example.infiny.pickup.Model.EditProfileData;
 import com.example.infiny.pickup.Model.ExifUtils;
 import com.example.infiny.pickup.R;
-import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -121,20 +118,26 @@ public class ProfileActivity extends AppCompatActivity {
     Context context;
     Intent intent;
     Uri imageUri;
-    private boolean status;
+    Boolean dobstatus=true;
+    @BindView(R.id.tie_contactNumber)
+    EditText tieContactNumber;
+    @BindView(R.id.et_contactNumber)
+    TextInputLayout etContactNumber;
+    private boolean status, removephoto = false;
     File file;
     Boolean tablet;
     SharedPreferences sharedPreferences;
     SessionManager sessionManager;
     Retrofit retroFitClient;
     EditProfileData editProfileData;
-     String imageurl;
+    String imageurl;
     public static final int MEDIA_TYPE_IMAGE = 1;
     private static final int SELECT_PICTURE = 1;
     private static final int CAMERA_REQUEST = 1888;
     String mCurrentPhotoPath;
     @BindView(R.id.progressBar_cyclic)
     ProgressBar progressBarCyclic;
+    String imageexist =null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -154,18 +157,25 @@ public class ProfileActivity extends AppCompatActivity {
 
         sessionManager = new SessionManager(context);
         sharedPreferences = getSharedPreferences(sessionManager.PREF_NAME, 0);
-         profile_image=loadImageBitmap(getApplicationContext(), "user_Image.jpg");
-        if(profile_image!=null){
-            profile.setImageBitmap(profile_image);
+        if (!sharedPreferences.getString("image", null).equals("noImage")) {
+            if (isTablet(context)) {
+                new DownloadImage().execute(sharedPreferences.getString("image", null) + "_large.jpg");
+            } else {
+                new DownloadImage().execute(sharedPreferences.getString("image", null) + "_small.jpg");
+            }
+            ;
+
         }
+
 
         etEmail.getEditText().setText(sharedPreferences.getString(sessionManager.email, null));
         etName.getEditText().setText(sharedPreferences.getString(sessionManager.name, null));
-        etSurname.getEditText().setText(sharedPreferences.getString(sessionManager.surname,null));
+        etSurname.getEditText().setText(sharedPreferences.getString(sessionManager.surname, null));
         etDob.getEditText().setText(sharedPreferences.getString(sessionManager.dob, null));
         etAdd.getEditText().setText(sharedPreferences.getString(sessionManager.address, null));
         etCity.getEditText().setText(sharedPreferences.getString(sessionManager.city, null));
         etPostcode.getEditText().setText(sharedPreferences.getString(sessionManager.postalcode, null));
+        etContactNumber.getEditText().setText(sharedPreferences.getString(sessionManager.contactNumber,null));
         myCalendar = Calendar.getInstance();
         final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
 
@@ -194,18 +204,23 @@ public class ProfileActivity extends AppCompatActivity {
         btsave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (submitForm()) {
+                if (submitForm() && dobstatus) {
                     RequestBody fbody = null;
-                    String imageexist="false";
+
                     if (file != null) {
                         fbody = RequestBody.create(MediaType.parse("image/*"), file);
-                         imageexist="true";
+                        imageexist = "true";
+                        sessionManager.setImageUpload("true");
+                    } else {
+                        imageexist = "false";
                     }
-
+                    RequestBody imageUpload = RequestBody.create(MediaType.parse("text/plain"), sharedPreferences.getString(sessionManager.imageUpload, null));
                     RequestBody token = RequestBody.create(MediaType.parse("text/plain"), sharedPreferences.getString("token", null));
                     RequestBody email = RequestBody.create(MediaType.parse("text/plain"), etEmail.getEditText().getText().toString().trim());
                     RequestBody name = RequestBody.create(MediaType.parse("text/plain"), etName.getEditText().getText().toString().trim());
                     RequestBody surname = RequestBody.create(MediaType.parse("text/plain"), etSurname.getEditText().getText().toString().trim());
+                    RequestBody contact = RequestBody.create(MediaType.parse("text/plain"), etContactNumber.getEditText().getText().toString().trim());
+
                     RequestBody dob = RequestBody.create(MediaType.parse("text/plain"), etDob.getEditText().getText().toString().trim());
                     RequestBody address = RequestBody.create(MediaType.parse("text/plain"), etAdd.getEditText().getText().toString().trim());
                     RequestBody city = RequestBody.create(MediaType.parse("text/plain"), etCity.getEditText().getText().toString().trim());
@@ -217,8 +232,8 @@ public class ProfileActivity extends AppCompatActivity {
 
                     Call<EditProfileData> call = retroFitClient
                             .create(ApiIntegration.class)
-                            .editProfile(sharedPreferences.getString("token", null),imageexist,
-                                    fbody, token, email, name, surname, dob, address, city, postcode);
+                            .editProfile(sharedPreferences.getString("token", null), imageexist,
+                                    fbody, token, email, name, surname, imageUpload, dob,contact, address, city, postcode);
                     call.enqueue(new Callback<EditProfileData>() {
 
                         @Override
@@ -230,16 +245,14 @@ public class ProfileActivity extends AppCompatActivity {
                                         progressBarCyclic.setVisibility(View.GONE);
                                         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                                     } else {
-                                        String url = editProfileData.getUser().getImageUrl();
-                                        sessionManager.createLoginSession(editProfileData.getUser().getFirstname(), editProfileData.getUser().getEmail(), editProfileData.getUser().getLastname(), sharedPreferences.getString("token", null), editProfileData.getUser().getDob(), editProfileData.getUser().getAddress().getPostalCode(), editProfileData.getUser().getAddress().getCity(), editProfileData.getUser().getAddress().getAddress(), editProfileData.getUser().getImageUrl());
-                                        if(isTablet(context))
-                                        {
-                                            new DownloadImage().execute(editProfileData.getUser().getImageUrl()+"_large.jpg");
+
+                                        sessionManager.createLoginSession(editProfileData.getUser().getFirstname(), editProfileData.getUser().getEmail(), editProfileData.getUser().getLastname(), sharedPreferences.getString("token", null), editProfileData.getUser().getDob(), editProfileData.getUser().getAddress().getPostalCode(), editProfileData.getUser().getAddress().getCity(), editProfileData.getUser().getAddress().getAddress(), editProfileData.getUser().getImageUrl(),editProfileData.getUser().getContact());
+                                        if (isTablet(context)) {
+                                            new DownloadImage().execute(editProfileData.getUser().getImageUrl() + "_large.jpg");
+                                        } else {
+                                            new DownloadImage().execute(editProfileData.getUser().getImageUrl() + "_small.jpg");
                                         }
-                                        else
-                                        {
-                                            new DownloadImage().execute( editProfileData.getUser().getImageUrl()+"_small.jpg");
-                                        };
+                                        ;
 
                                     }
 
@@ -275,12 +288,19 @@ public class ProfileActivity extends AppCompatActivity {
 
 
     }
+    private void startCropActivity(@NonNull Uri uri) {
+        Intent intent=new Intent(context,CropImageActivity.class);
+        intent.putExtra("sourceUri",uri.toString());
+        startActivityForResult(intent,2);
+    }
+
+
     public Bitmap loadImageBitmap(Context context, String imageName) {
         Bitmap bitmap = null;
         FileInputStream fiStream;
         try {
-            fiStream    = context.openFileInput(imageName);
-            bitmap      = BitmapFactory.decodeStream(fiStream);
+            fiStream = context.openFileInput(imageName);
+            bitmap = BitmapFactory.decodeStream(fiStream);
             fiStream.close();
         } catch (Exception e) {
             Log.d("saveImage", "Exception 3, Something went wrong!");
@@ -288,6 +308,7 @@ public class ProfileActivity extends AppCompatActivity {
         }
         return bitmap;
     }
+
     public void saveImage(Context context, Bitmap b, String imageName) {
         FileOutputStream foStream;
         try {
@@ -300,18 +321,20 @@ public class ProfileActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         } catch (Exception e) {
-            Log.d("saveImage", "Exception 2, Something went wrong!"+e);
+            Log.d("saveImage", "Exception 2, Something went wrong!" + e);
             e.printStackTrace();
         }
     }
+
     private class DownloadImage extends AsyncTask<String, Void, Bitmap> {
         private String TAG = "DownloadImage";
+
         private Bitmap downloadImageBitmap(String sUrl) {
             Log.d("bitmap url", sUrl);
             Bitmap bitmap = null;
 
             okhttp3.Response response;
-            try{
+            try {
                 OkHttpClient client = RetroFitClient.getOkHTTPClient();
                 Request request = new Request.Builder()
                         .url(sUrl)
@@ -321,15 +344,15 @@ public class ProfileActivity extends AppCompatActivity {
 
                 FileOutputStream foStream;
                 try {
-                    foStream = getApplicationContext().openFileOutput( "user_Image.jpg", Context.MODE_PRIVATE);
+                    foStream = getApplicationContext().openFileOutput("user_Image.jpg", Context.MODE_PRIVATE);
                     foStream.write(response.body().bytes());
                     foStream.close();
                 } catch (Exception e) {
-                    Log.d("saveImage", "Exception 2, Something went wrong!"+e);
+                    Log.d("saveImage", "Exception 2, Something went wrong!" + e);
                     e.printStackTrace();
                 }
 
-            }catch(Exception e){
+            } catch (Exception e) {
                 Log.d("Error decodeing", e.getMessage());
                 e.printStackTrace();
             }
@@ -349,11 +372,18 @@ public class ProfileActivity extends AppCompatActivity {
             //saveImage(getApplicationContext(), result, "user_Image.png");
             progressBarCyclic.setVisibility(View.GONE);
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-            Intent intent = new Intent(context, MainActivity.class);
-            startActivity(intent);
-            finish();
+            if (imageexist !=null || removephoto) {
+
+                Intent intent = new Intent(context, MainActivity.class);
+                startActivity(intent);
+                finish();
+            } else {
+                profile_image = loadImageBitmap(getApplicationContext(), "user_Image.jpg");
+                profile.setImageBitmap(profile_image);
+            }
         }
     }
+
     public boolean isTablet(Context context) {
         boolean xlarge = ((context.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == 4);
         boolean large = ((context.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_LARGE);
@@ -361,7 +391,7 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void selectImage() {
-        final CharSequence[] items = {"Take Photo", "Choose from Library"};
+        final CharSequence[] items = {"Take Photo", "Choose From Library", "Remove Photo"};
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle("Add Photo");
         builder.setItems(items, new DialogInterface.OnClickListener() {
@@ -395,11 +425,16 @@ public class ProfileActivity extends AppCompatActivity {
                     intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
                     startActivityForResult(intent, CAMERA_REQUEST);
 
-                } else if (items[item].equals("Choose from Library")) {
+                } else if (items[item].equals("Choose From Library")) {
                     Intent intent = new Intent();
                     intent.setType("image/*");
                     intent.setAction(Intent.ACTION_GET_CONTENT);
                     startActivityForResult(Intent.createChooser(intent, "Select Picture"), SELECT_PICTURE);
+                } else if (items[item].equals("Remove Photo")) {
+                    removephoto = true;
+                    imageexist = "false";
+                    sessionManager.setImageUpload("false");
+                    profile.setImageResource(R.drawable.ic_person_black_48dp);
                 }
             }
         });
@@ -446,16 +481,15 @@ public class ProfileActivity extends AppCompatActivity {
         String myFormat = "MM/dd/yy"; //In which you need put here
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat);
         Date todayDate = new Date();
-       if(myCalendar.getTime().after(todayDate))
-       {
-           etDob.getEditText().setError("Please enter valid date of birth");
+        if (myCalendar.getTime().after(todayDate)) {
+            etDob.getEditText().setError("Please enter valid date of birth");
+            dobstatus = false;
 
-       }
-       else
-       {
-           etDob.getEditText().setError(null);
-           etDob.getEditText().setText(sdf.format(myCalendar.getTime()));
-       }
+        } else {
+            etDob.getEditText().setError(null);
+            etDob.getEditText().setText(sdf.format(myCalendar.getTime()));
+            dobstatus=true;
+        }
 
 
     }
@@ -465,24 +499,25 @@ public class ProfileActivity extends AppCompatActivity {
             if (requestCode == SELECT_PICTURE) {
                 try {
                     Uri contentURI = data.getData();
-                    final int takeFlags = data.getFlags()
+                    startCropActivity(data.getData());
+                   /* final int takeFlags = data.getFlags()
                             & (Intent.FLAG_GRANT_READ_URI_PERMISSION
                             | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
                     String id = contentURI.getLastPathSegment().split(":")[1];
-                    final String[] imageColumns = {MediaStore.Images.Media.DATA };
+                    final String[] imageColumns = {MediaStore.Images.Media.DATA};
                     final String imageOrderBy = null;
                     Uri uri = getUri();
                     String selectedImagePath = "path";
                     Cursor imageCursor = managedQuery(uri, imageColumns,
-                            MediaStore.Images.Media._ID + "="+id, null, imageOrderBy);
+                            MediaStore.Images.Media._ID + "=" + id, null, imageOrderBy);
                     if (imageCursor.moveToFirst()) {
                         selectedImagePath = imageCursor.getString(imageCursor.getColumnIndex(MediaStore.Images.Media.DATA));
 
                     }
-                    Log.e("path",selectedImagePath );
-                    file=new File(selectedImagePath);
-                 /*   file=new File(getRealPathFromURI(contentURI,((Activity) context)));*/
-                    profile.setImageBitmap(fromGallaryMultiple(contentURI));
+                    Log.e("path", selectedImagePath);
+                    file = new File(selectedImagePath);
+                 *//*   file=new File(getRealPathFromURI(contentURI,((Activity) context)));*//*
+                    profile.setImageBitmap(fromGallaryMultiple(contentURI));*/
 
                 } catch (NullPointerException e) {
                 }
@@ -491,32 +526,43 @@ public class ProfileActivity extends AppCompatActivity {
         if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
             try {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-
-                    fromGallaryNog(Uri.parse(mCurrentPhotoPath));
+                    startCropActivity(imageUri);
+                   /* fromGallaryNog(Uri.parse(mCurrentPhotoPath));
                     final int takeFlags = data.getFlags()
                             & (Intent.FLAG_GRANT_READ_URI_PERMISSION
                             | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
                     String id = imageUri.getLastPathSegment().split(":")[1];
-                    final String[] imageColumns = {MediaStore.Images.Media.DATA };
+                    final String[] imageColumns = {MediaStore.Images.Media.DATA};
                     final String imageOrderBy = null;
                     Uri uri = getUri();
                     String selectedImagePath = "path";
                     Cursor imageCursor = managedQuery(uri, imageColumns,
-                            MediaStore.Images.Media._ID + "="+id, null, imageOrderBy);
+                            MediaStore.Images.Media._ID + "=" + id, null, imageOrderBy);
                     if (imageCursor.moveToFirst()) {
                         selectedImagePath = imageCursor.getString(imageCursor.getColumnIndex(MediaStore.Images.Media.DATA));
 
                     }
-                    Log.e("path",selectedImagePath );
-                    file=new File(selectedImagePath);
+                    Log.e("path", selectedImagePath);
+                    file = new File(selectedImagePath);*/
                 } else {
-                    file=new File(imageUri.getPath());
-                 profile.setImageBitmap(fromGallaryMultiple(imageUri));
+                    startCropActivity(imageUri);
+                    /*file = new File(imageUri.getPath());
+                    profile.setImageBitmap(fromGallaryMultiple(imageUri));*/
                 }
             } catch (NullPointerException e) {
             }
         }
+        if(requestCode ==2){
+            String sourceuri=data.getStringExtra("sourceuri");
+            String path=data.getStringExtra("path");
+            if(sourceuri != null) {
+                file = new File(path);
+                profile.setImageBitmap(fromGallaryMultiple(Uri.parse(sourceuri)));
+
+            }
+        }
     }
+
     public boolean isValidEmail(String email) {
         String EMAIL_PATTERN = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
                 + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
@@ -531,7 +577,8 @@ public class ProfileActivity extends AppCompatActivity {
         if (!isValidEmail(etEmail.getEditText().getText().toString())) {
             etEmail.getEditText().setError("Email Is Not Valid ");
             status = false;
-        }        if (TextUtils.isEmpty(etEmail.getEditText().getText().toString().trim())) {
+        }
+        if (TextUtils.isEmpty(etEmail.getEditText().getText().toString().trim())) {
             etEmail.getEditText().setError("Please Enter Email");
             status = false;
         }
@@ -541,6 +588,10 @@ public class ProfileActivity extends AppCompatActivity {
         }
         if (TextUtils.isEmpty(etSurname.getEditText().getText().toString().trim())) {
             etSurname.getEditText().setError("Please Enter Surname");
+            status = false;
+        }
+        if (TextUtils.isEmpty(etContactNumber.getEditText().getText().toString().trim())) {
+            etContactNumber.getEditText().setError("Please Enter Contact Number");
             status = false;
         }
 
@@ -576,7 +627,7 @@ public class ProfileActivity extends AppCompatActivity {
 
 
     public String getRealPathFromURI(Uri contentURI, Activity context) {
-        String[] projection = { MediaStore.Images.Media.DATA };
+        String[] projection = {MediaStore.Images.Media.DATA};
         @SuppressWarnings("deprecation")
         Cursor cursor = context.managedQuery(contentURI, projection, null,
                 null, null);
@@ -592,13 +643,15 @@ public class ProfileActivity extends AppCompatActivity {
         // cursor.close();
         return null;
     }
+
     private Uri getUri() {
         String state = Environment.getExternalStorageState();
-        if(!state.equalsIgnoreCase(Environment.MEDIA_MOUNTED))
+        if (!state.equalsIgnoreCase(Environment.MEDIA_MOUNTED))
             return MediaStore.Images.Media.INTERNAL_CONTENT_URI;
 
         return MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
     }
+
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
@@ -608,7 +661,7 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(android.view.MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
                 onBackpresss();
@@ -616,12 +669,13 @@ public class ProfileActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-    public void onBackpresss()
-    {
-        Intent intent=new Intent(context,MainActivity.class);
+
+    public void onBackpresss() {
+        Intent intent = new Intent(context, MainActivity.class);
         startActivity(intent);
 
     }
+
     public byte[] fromCamera() {
         try {
             Bitmap photo;
@@ -641,8 +695,6 @@ public class ProfileActivity extends AppCompatActivity {
             return null;
         }
     }
-
-
 
 
 }

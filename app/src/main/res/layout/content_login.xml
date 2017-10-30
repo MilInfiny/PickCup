@@ -111,8 +111,7 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/border_hollow_black"
                     android:textColor="@android:color/white"
-
-                    android:text="Log in"
+                    android:text="Login"
                     />
 
                 <Button

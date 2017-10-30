@@ -17,6 +17,7 @@ public interface OnItemClickListener {
     void voidOnAddCart(ItemData itemData);
     void totalPrice(String total);
     void ordereddata(Ordered[] ordered);
+    void ordered(Ordered ordered);
     void cardSet( ArrayList<CardDetails> cardDetailses);
 
 }

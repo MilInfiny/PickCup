@@ -232,39 +232,89 @@ public class TimeviewAdapter extends ExpandableRecyclerViewAdapter<TimeviewAdapt
                     SimpleDateFormat timeFormat = new SimpleDateFormat("yyyy-MM-dd");
 
                     final String currentDate=timeFormat.format(mcurrentTime.getTime());
-
-
-                    if(minute<10)
+                    if(OrderActivity.parcel.equals("true"))
                     {
-                        OrderActivity.dateString = currentDate+" "+ hour + ":0" + minute+":"+"00";
+                        minute=minute+10;
+                        if(minute>60)
+                        {
+                            hour=hour+1;
+                            if(hour>23)
+                            {
+                                hour=1;
+                            }
+                            minute =minute-60;
+
+                        }
+                        if(minute<10)
+                        {
+                            OrderActivity.dateString = currentDate+" "+ hour + ":0" + minute+":"+"00";
+
+                        }
+                        else {
+                            OrderActivity.dateString = currentDate+" "+ hour + ":0" + minute+":"+"00";
+
+
+                        }
+                        String timeSet = "";
+                        if (hour > 12) {
+                            hour -= 12;
+                            timeSet = "PM";
+                        } else if (hour == 0) {
+                            hour += 12;
+                            timeSet = "AM";
+                        } else if (hour == 12){
+                            timeSet = "PM";
+                        }else{
+                            timeSet = "AM";
+                        }
+
+                        if(minute<10)
+                        {
+                            timebutton.setText(hour + ":0" + minute+" "+timeSet);
+                        }
+                        else {
+                            timebutton.setText(hour + ":" + minute+" "+timeSet);
+
+                        }
 
                     }
                     else {
-                        OrderActivity.dateString = currentDate+" "+ hour + ":0" + minute+":"+"00";
+                        minute = mcurrentTime.get(Calendar.MINUTE);
+                        if(minute<10)
+                        {
+                            OrderActivity.dateString = currentDate+" "+ hour + ":0" + minute+":"+"00";
+
+                        }
+                        else {
+                            OrderActivity.dateString = currentDate+" "+ hour + ":0" + minute+":"+"00";
 
 
-                    }
-                    String timeSet = "";
-                    if (hour > 12) {
-                        hour -= 12;
-                        timeSet = "PM";
-                    } else if (hour == 0) {
-                        hour += 12;
-                        timeSet = "AM";
-                    } else if (hour == 12){
-                        timeSet = "PM";
-                    }else{
-                        timeSet = "AM";
+                        }
+                        String timeSet = "";
+                        if (hour > 12) {
+                            hour -= 12;
+                            timeSet = "PM";
+                        } else if (hour == 0) {
+                            hour += 12;
+                            timeSet = "AM";
+                        } else if (hour == 12){
+                            timeSet = "PM";
+                        }else{
+                            timeSet = "AM";
+                        }
+
+                        if(minute<10)
+                        {
+                            timebutton.setText(hour + ":0" + minute+" "+timeSet);
+                        }
+                        else {
+                            timebutton.setText(hour + ":" + minute+" "+timeSet);
+
+                        }
                     }
 
-                    if(minute<10)
-                    {
-                        timebutton.setText(hour + ":0" + minute+" "+timeSet);
-                    }
-                    else {
-                        timebutton.setText(hour + ":" + minute+" "+timeSet);
 
-                    }
+
                 }
             });
 

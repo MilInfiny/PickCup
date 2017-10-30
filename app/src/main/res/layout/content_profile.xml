@@ -65,12 +65,31 @@
                         android:backgroundTint="#1e1d1e"
                         android:textColor="@color/colorPrimary" />
                 </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/et_contactNumber"
+                    android:layout_width="match_parent"
+                    android:layout_height="70dp"
+                    android:layout_below="@+id/et_email"
+                    android:hint="Contact Number">
+
+                    <EditText
+                        android:id="@+id/tie_contactNumber"
+                        android:layout_width="match_parent"
+                        android:layout_height="54dp"
+                        android:singleLine="true"
+                        android:inputType="number"
+                        android:textSize="17dp"
+                        android:backgroundTint="#1e1d1e"
+                        android:textColor="@color/colorPrimary" />
+                </android.support.design.widget.TextInputLayout>
+
                 <android.support.design.widget.TextInputLayout
                     android:id="@+id/et_password"
                     android:layout_width="match_parent"
                     android:layout_height="70dp"
                     android:hint="Password"
-                    android:layout_below="@+id/et_email">
+                    android:layout_below="@+id/et_contactNumber">
 
                     <EditText
                         android:id="@+id/tie_password"

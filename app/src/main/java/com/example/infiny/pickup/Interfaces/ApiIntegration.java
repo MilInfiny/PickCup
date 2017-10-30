@@ -51,8 +51,9 @@ public interface ApiIntegration {
     Call<SignUpData> getsignup(@Field("firstname") String  firstname,
                            @Field("lastname") String  lastname,
                            @Field("email") String  email,
-                             @Field("password") String  password,
+                           @Field("password") String  password,
                             @Field("dob") String  dob,
+                            @Field("contact") String  contact,
                             @Field("postalcode") String  postalcode,
                             @Field("address") String  address,
                             @Field("city") String  City,
@@ -85,6 +86,11 @@ public interface ApiIntegration {
     @POST("payCreateUserCards")
     Call<VerifyFpOtp> registerStripeToken(@Field("userToken") String  token,
                                           @Field("stripeToken") String  stripeToken);
+
+    @FormUrlEncoded
+    @POST("logoutUser")
+    Call<ClaimToCartData> logOutUser(@Field("userToken") String  token,
+                                 @Field("deviceToken") String  deviceToken);
 
     @FormUrlEncoded
     @POST("verifyresetPasswordToken")
@@ -189,7 +195,9 @@ public interface ApiIntegration {
                                        @Part("email") RequestBody email,
                                        @Part("firstname") RequestBody name,
                                        @Part("lastname") RequestBody surname,
+                                       @Part("imageUpload") RequestBody imageUpload,
                                        @Part("dob") RequestBody dob,
+                                       @Part("contact") RequestBody contact,
                                        @Part("address") RequestBody address,
                                        @Part("city") RequestBody city,
                                        @Part("postalcode") RequestBody postcode);

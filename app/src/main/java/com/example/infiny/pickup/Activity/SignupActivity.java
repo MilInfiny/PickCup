@@ -11,18 +11,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.text.method.PasswordTransformationMethod;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
-import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.TextView;
+import android.widget.ScrollView;
 import android.widget.Toast;
 
 import com.example.infiny.pickup.Helpers.RetroFitClient;
@@ -30,12 +27,10 @@ import com.example.infiny.pickup.Helpers.SessionManager;
 import com.example.infiny.pickup.Interfaces.ApiIntegration;
 import com.example.infiny.pickup.Model.SignUpData;
 import com.example.infiny.pickup.R;
-import com.github.rahatarmanahmed.cpv.CircularProgressView;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -95,13 +90,21 @@ public class SignupActivity extends AppCompatActivity {
     AppBarLayout appbar;
     @BindView(R.id.progressBar_cyclic)
     ProgressBar progressBarCyclic;
+    @BindView(R.id.tie_contactNumber)
+    EditText tieContactNumber;
+    @BindView(R.id.et_contactNumber)
+    TextInputLayout etContactNumber;
+    @BindView(R.id.scrollView)
+    ScrollView scrollView;
     private boolean status;
     Retrofit retroFitClient;
     private Context context;
     SignUpData signUpData;
     Calendar myCalendar;
     SessionManager sessionManager;
-    SharedPreferences  sharedPreferences;
+    SharedPreferences sharedPreferences;
+    Boolean dobstatus=true;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -114,10 +117,10 @@ public class SignupActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         context = this;
         sessionManager = new SessionManager(context);
-        sharedPreferences=getSharedPreferences("Messaging",Context.MODE_PRIVATE);
+        sharedPreferences = getSharedPreferences("Messaging", Context.MODE_PRIVATE);
         tiePassword.setTransformationMethod(new PasswordTransformationMethod());
         tieConfipassword.setTransformationMethod(new PasswordTransformationMethod());
-         myCalendar = Calendar.getInstance();
+        myCalendar = Calendar.getInstance();
         final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
 
             @Override
@@ -145,7 +148,7 @@ public class SignupActivity extends AppCompatActivity {
         btSignup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (submitForm()) {
+                if (submitForm() && dobstatus) {
                     progressBarCyclic.setVisibility(View.VISIBLE);
                     getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
                             WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
@@ -157,10 +160,11 @@ public class SignupActivity extends AppCompatActivity {
                                     etEmail.getEditText().getText().toString().trim(),
                                     etPassword.getEditText().getText().toString().trim(),
                                     etDob.getEditText().getText().toString().trim(),
+                                    etContactNumber.getEditText().getText().toString().trim(),
                                     etPostcode.getEditText().getText().toString().trim(),
                                     etAdd.getEditText().getText().toString().trim(),
                                     etCity.getEditText().getText().toString().trim(),
-                                    sharedPreferences.getString("FcmId",null));
+                                    sharedPreferences.getString("FcmId", null));
                     call.enqueue(new Callback<SignUpData>() {
                         @Override
                         public void onResponse(Call<SignUpData> call, Response<SignUpData> response) {
@@ -172,7 +176,7 @@ public class SignupActivity extends AppCompatActivity {
                                         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                                         Toast.makeText(context, signUpData.getTitle(), Toast.LENGTH_SHORT).show();
                                     } else {
-                                        sessionManager.createLoginSession(signUpData.getUser().getFirstname(),signUpData.getUser().getEmail(),signUpData.getUser().getLastname(),signUpData.getToken(),signUpData.getUser().getDob(),signUpData.getUser().getAddress().getPostalCode(),signUpData.getUser().getAddress().getCity(),signUpData.getUser().getAddress().getAddress(),signUpData.getUser().getImageUrl());
+                                        sessionManager.createLoginSession(signUpData.getUser().getFirstname(), signUpData.getUser().getEmail(), signUpData.getUser().getLastname(), signUpData.getToken(), signUpData.getUser().getDob(), signUpData.getUser().getAddress().getPostalCode(), signUpData.getUser().getAddress().getCity(), signUpData.getUser().getAddress().getAddress(), signUpData.getUser().getImageUrl(),signUpData.getUser().getContact());
                                         progressBarCyclic.setVisibility(View.GONE);
                                         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                                         Intent intent = new Intent(context, MainActivity.class);
@@ -180,7 +184,7 @@ public class SignupActivity extends AppCompatActivity {
                                         finish();
                                     }
 
-                                }else {
+                                } else {
                                     if (response.code() == 404 || response.code() == 500) {
                                         progressBarCyclic.setVisibility(View.GONE);
                                         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
@@ -194,7 +198,7 @@ public class SignupActivity extends AppCompatActivity {
                         public void onFailure(Call<SignUpData> call, Throwable t) {
                             progressBarCyclic.setVisibility(View.GONE);
                             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                            Toast.makeText(context,R.string.Something_went_wrong,Toast.LENGTH_SHORT);
+                            Toast.makeText(context, R.string.Something_went_wrong, Toast.LENGTH_SHORT);
 
                         }
                     });
@@ -206,23 +210,23 @@ public class SignupActivity extends AppCompatActivity {
         });
 
 
-
     }
+
     private void updateLabel() {
         String myFormat = "MM/dd/yy"; //In which you need put here
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat);
         Date todayDate = new Date();
-        if(myCalendar.getTime().after(todayDate))
-        {
+        if (myCalendar.getTime().after(todayDate)) {
             etDob.getEditText().setError("Please Enter Valid Date Of Birth");
+            dobstatus=false;
 
-        }
-        else
-        {
+        } else {
             etDob.getEditText().setError(null);
             etDob.getEditText().setText(sdf.format(myCalendar.getTime()));
+            dobstatus=true;
         }
     }
+
     public boolean isValidEmail(String email) {
         String EMAIL_PATTERN = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
                 + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
@@ -259,6 +263,11 @@ public class SignupActivity extends AppCompatActivity {
             etSurname.getEditText().setError("Please Enter Surname");
             status = false;
         }
+        if (TextUtils.isEmpty(etContactNumber.getEditText().getText().toString().trim())) {
+            etContactNumber.getEditText().setError("Please Enter Contact Number ");
+            status = false;
+        }
+
 
         if (!etPassword.getEditText().getText().toString().trim().equals(etConfirmpassword.getEditText().getText().toString().trim())) {
             etConfirmpassword.getEditText().setError("Password & Confirm Password Should Be Same");
@@ -288,10 +297,10 @@ public class SignupActivity extends AppCompatActivity {
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
+
     @Override
-    public void onBackPressed()
-    {
-        Intent intent=new Intent(SignupActivity.this,LoginActivity.class);
+    public void onBackPressed() {
+        Intent intent = new Intent(SignupActivity.this, LoginActivity.class);
         startActivity(intent);
     }
 

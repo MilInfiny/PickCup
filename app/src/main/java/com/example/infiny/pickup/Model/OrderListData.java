@@ -11,7 +11,7 @@ public class OrderListData {
 
     private String error;
 
-    private String adminTax;
+    private AdminTax adminTax;
 
     private OrderData data;
 
@@ -47,13 +47,11 @@ public class OrderListData {
         this.error = error;
     }
 
-    public String getAdminTax ()
-    {
+    public AdminTax getAdminTax() {
         return adminTax;
     }
 
-    public void setAdminTax (String adminTax)
-    {
+    public void setAdminTax(AdminTax adminTax) {
         this.adminTax = adminTax;
     }
 

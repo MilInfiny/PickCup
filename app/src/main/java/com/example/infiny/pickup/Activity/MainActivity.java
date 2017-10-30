@@ -10,6 +10,7 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
@@ -46,6 +47,7 @@ import com.example.infiny.pickup.Interfaces.OnItemClickListener;
 import com.example.infiny.pickup.Model.CafeListingData;
 import com.example.infiny.pickup.Model.Cafes;
 import com.example.infiny.pickup.Model.CardDetails;
+import com.example.infiny.pickup.Model.ClaimToCartData;
 import com.example.infiny.pickup.Model.ItemData;
 import com.example.infiny.pickup.Model.LoginData;
 import com.example.infiny.pickup.Model.Ordered;
@@ -54,11 +56,14 @@ import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -88,7 +93,7 @@ public class MainActivity extends AppCompatActivity
     ImageView imageView;
     @BindView(R.id.progressBar_cyclic)
     ProgressBar progressBarCyclic;
-    SharedPreferences sharedPreferences;
+    SharedPreferences sharedPreferences,fcmpreferances;
     SessionManager sessionManager;
     CafeListingData cafeListingData;
     Context context;
@@ -99,7 +104,7 @@ public class MainActivity extends AppCompatActivity
     private int current_page = 1;
     private BadgeDrawerToggle badgeToggle;
     ArrayList<Cafes> cafeLIstingHelperseslist;
-
+    ClaimToCartData claimToCartData;
     TextView username,email,Notifications,Rewards;
     ImageView profileView;
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -115,6 +120,7 @@ public class MainActivity extends AppCompatActivity
          context=this;
         sessionManager=new SessionManager(context);
         sharedPreferences=getSharedPreferences(sessionManager.PREF_NAME,0);
+        fcmpreferances=getSharedPreferences("Messaging", Context.MODE_PRIVATE);
         navView.setNavigationItemSelectedListener(this);
 //        Log.e("userToken",sharedPreferences.getString("token",null));
         Notifications=(TextView)navView.getMenu().
@@ -147,8 +153,8 @@ public class MainActivity extends AppCompatActivity
                 intent.putExtra("tittle",item.getCafe_name());
                 intent.putExtra("sid",item.get_id());
                 intent.putExtra("rewardcompleted",item.getRewardCompleted());
-
                 intent.putExtra("rewardQuantity",item.getRewardQuan());
+                intent.putExtra("status",item.getStatus());
                 startActivity(intent);
             }
 
@@ -164,6 +170,11 @@ public class MainActivity extends AppCompatActivity
 
             @Override
             public void ordereddata(Ordered[] ordered) {
+
+            }
+
+            @Override
+            public void ordered(Ordered ordered) {
 
             }
 
@@ -239,16 +250,26 @@ public class MainActivity extends AppCompatActivity
 
         username.setText(sharedPreferences.getString("name",null)+" "+sharedPreferences.getString("surname",null));
         email.setText(sharedPreferences.getString("email",null));
-         profile_image=loadImageBitmap(getApplicationContext(), "user_Image.jpg");
         String dxcds=sharedPreferences.getString("image",null);
 
-        if(profile_image!=null ){
-            profileView.setImageBitmap(profile_image);
+        if(!sharedPreferences.getString("image",null).equals("noImage") ){
+            if(isTablet(context))
+            {
+                new DownloadImage().execute(sharedPreferences.getString("image",null)+"_large.jpg");
+            }
+            else
+            {
+                new DownloadImage().execute( sharedPreferences.getString("image",null)+"_small.jpg");
+            };
+
+
         }
 
 
 
+
     }
+
     public Bitmap loadImageBitmap(Context context, String imageName) {
         Bitmap bitmap = null;
         FileInputStream fiStream;
@@ -391,14 +412,56 @@ public class MainActivity extends AppCompatActivity
             finish();
 
         } else if (id == R.id.nav_logout) {
+            progressBarCyclic.setVisibility(View.VISIBLE);
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            retroFitClient = new RetroFitClient(context).getBlankRetrofit();
 
-            Intent intent=new Intent(MainActivity.this,LoginActivity.class);
-            File file = new File("user_Image.jpg");
-            file = new File(file.getAbsolutePath());
-            boolean deleted = file.delete();
-            sessionManager.clear();
-            startActivity(intent);
-            finish();
+            Call<ClaimToCartData> call = retroFitClient
+                    .create(ApiIntegration.class)
+                    .logOutUser(sharedPreferences.getString("token",null),
+                                    fcmpreferances.getString("Fcmid",null));
+            call.enqueue(new Callback<ClaimToCartData>() {
+
+                @Override
+                public void onResponse(Call<ClaimToCartData> call, Response<ClaimToCartData> response) {
+                    if (response != null) {
+                        claimToCartData = response.body();
+                        if (claimToCartData != null) {
+                            if (claimToCartData.getError().equals("true")) {
+                                progressBarCyclic.setVisibility(View.GONE);
+                                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                Toast.makeText(context,claimToCartData.getTitle(), Toast.LENGTH_SHORT).show();
+                            } else {
+                                Intent intent=new Intent(MainActivity.this,LoginActivity.class);
+                                startActivity(intent);
+                                finish();
+                            }
+
+                        }else {
+                            if (response.code() == 404 || response.code() == 500) {
+
+                            }       progressBarCyclic.setVisibility(View.GONE);
+                                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                Toast.makeText(context, R.string.server_not_responding, Toast.LENGTH_SHORT).show();
+                            }
+                    }
+                    else{
+                        progressBarCyclic.setVisibility(View.GONE);
+                        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                        Toast.makeText(context, R.string.server_not_responding, Toast.LENGTH_SHORT).show();
+                    }
+                }
+                @Override
+                public void onFailure(Call<ClaimToCartData> call, Throwable t) {
+                    progressBarCyclic.setVisibility(View.GONE);
+                    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                    Toast.makeText(context,R.string.Something_went_wrong,Toast.LENGTH_SHORT);
+
+                }
+            });
+
+
 
         } else if (id == R.id.nav_card) {
             Intent intent = new Intent(MainActivity.this, Card_Activity.class);
@@ -448,6 +511,59 @@ public class MainActivity extends AppCompatActivity
         boolean xlarge = ((context.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == 4);
         boolean large = ((context.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_LARGE);
         return (xlarge || large);
+    }
+    private class DownloadImage extends AsyncTask<String, Void, Bitmap> {
+        private String TAG = "DownloadImage";
+        private Bitmap downloadImageBitmap(String sUrl) {
+            Log.d("bitmap url", sUrl);
+            Bitmap bitmap = null;
+
+            okhttp3.Response response;
+            try{
+                OkHttpClient client = RetroFitClient.getOkHTTPClient();
+                Request request = new Request.Builder()
+                        .url(sUrl)
+                        .build();
+
+                response = client.newCall(request).execute();
+
+                FileOutputStream foStream;
+                try {
+                    foStream = getApplicationContext().openFileOutput( "user_Image.jpg", Context.MODE_PRIVATE);
+                    foStream.write(response.body().bytes());
+                    foStream.close();
+                } catch (Exception e) {
+                    Log.d("saveImage", "Exception 2, Something went wrong!"+e);
+                    e.printStackTrace();
+                }
+
+            }catch(Exception e){
+                Log.d("Error decodeing", e.getMessage());
+                e.printStackTrace();
+            }
+
+
+            return bitmap;
+
+
+        }
+
+        @Override
+        protected Bitmap doInBackground(String... params) {
+            return downloadImageBitmap(params[0]);
+        }
+
+        protected void onPostExecute(Bitmap result) {
+            //saveImage(getApplicationContext(), result, "user_Image.png");
+            progressBarCyclic.setVisibility(View.GONE);
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            profile_image=loadImageBitmap(getApplicationContext(), "user_Image.jpg");
+            if(profile_image!=null)
+            {
+                profileView.setImageBitmap(profile_image);
+
+            }
+        }
     }
 
 }

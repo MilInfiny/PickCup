@@ -17,6 +17,7 @@ public class Ordered implements Parcelable
     private String itemPrice;
     private String itemQuantity;
     private String itemId;
+    private Float adminTax;
 
 
     protected Ordered(Parcel in) {
@@ -59,6 +60,14 @@ public class Ordered implements Parcelable
 
     public void setEligibleForRewards(String eligibleForRewards) {
         this.eligibleForRewards = eligibleForRewards;
+    }
+
+    public Float getAdminTax() {
+        return adminTax;
+    }
+
+    public void setAdminTax(Float adminTax) {
+        this.adminTax = adminTax;
     }
 
     public String getItemQuantity() {

@@ -10,6 +10,7 @@ import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.support.v7.widget.GridLayoutManager;
@@ -65,6 +66,8 @@ public class RewardAdapter extends RecyclerView.Adapter<RewardAdapter.MyViewHold
     SharedPreferences sharedPreferences;
     ClaimToCartData claimToCartData;
     SessionManager sessionManager;
+    private Typeface font;
+
 
     public RewardAdapter(Context context, ArrayList<DataRewards> partyName) {
         this.context = context;
@@ -82,8 +85,9 @@ public class RewardAdapter extends RecyclerView.Adapter<RewardAdapter.MyViewHold
 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, int position) {
-
+        font = Typeface.createFromAsset(context.getAssets(), "fonts/opensansbold.ttf");
         final DataRewards f1=partyName.get(position);
+        holder.cafeNAme.setTypeface(font);
         holder.cafeNAme.setText(f1.getCafe_name());
 
         if(holder.isTablet(context))
@@ -107,17 +111,21 @@ public class RewardAdapter extends RecyclerView.Adapter<RewardAdapter.MyViewHold
 
 
         };
+        if(f1.getRewardCompleted()==null)
+        {
+            f1.setRewardCompleted("0");
+        }
 
         if(Integer.parseInt(f1.getRewardCompleted())>=Integer.parseInt(f1.getQuantity()))
         {
             holder.claim.setVisibility(View.VISIBLE);
             holder.recyclerView.setVisibility(View.GONE);
             holder.tv_rewardsdetail.setText(f1.getQuantity()+"/"+f1.getQuantity());
-            holder.tv_info.setText("You are ready to cliam ");
+            holder.tv_info.setText("Claim your reward");
         }
         else {
             int leftrewards=Integer.parseInt(f1.getQuantity())-Integer.parseInt(f1.getRewardCompleted());
-            holder.tv_info.setText("You are "+String.valueOf(leftrewards)+" order away from Reward");
+            holder.tv_info.setText("You are "+String.valueOf(leftrewards)+" orders away from claiming your reward");
             holder.tv_rewardsdetail.setText(f1.getRewardCompleted()+"/"+f1.getQuantity());
             int numberOfColumns = 6;
             rewardsQuantityAdapter = new RewardsQuantityAdapter(context, Integer.parseInt(f1.getQuantity()), f1.getRewardCompleted());
@@ -186,11 +194,12 @@ public class RewardAdapter extends RecyclerView.Adapter<RewardAdapter.MyViewHold
                                                                         Intent intent=new Intent(context, OrderActivity.class);
                                                                         intent.putExtra("fromPage","rewardActivity");
                                                                         intent.putExtra("sid",f1.getCafe_id());
-                                                                        intent.putExtra("rewardcompleted",f1.getRewardCompleted());
-                                                                        intent.putExtra("rewardQuantity",f1.getQuantity());
+                                                                        intent.putExtra("tittle",f1.getCafe_name());
+                                                                        intent.putExtra("status",f1.getCafeStatus());
+                                                                        intent.putExtra("image",f1.getImageurl());
+                                                                        sessionManager.createRewardsSession(f1.getRewardCompleted(),f1.getQuantity(),f1.getCafeStatus());
                                                                         context.startActivity(intent);
                                                                         ((Activity)context).finish();
-
 
 
                                                                     }
@@ -231,8 +240,9 @@ public class RewardAdapter extends RecyclerView.Adapter<RewardAdapter.MyViewHold
                                     Intent intent=new Intent(context, OrderActivity.class);
                                     intent.putExtra("fromPage","rewardActivity");
                                     intent.putExtra("sid",f1.getCafe_id());
-                                    intent.putExtra("rewardcompleted",f1.getRewardCompleted());
-                                    intent.putExtra("rewardQuantity",f1.getQuantity());
+                                    intent.putExtra("tittle",f1.getCafe_name());
+                                    intent.putExtra("status",f1.getCafeStatus());
+                                    intent.putExtra("image",f1.getImageurl());
                                     context.startActivity(intent);
                                     ((Activity)context).finish();
 

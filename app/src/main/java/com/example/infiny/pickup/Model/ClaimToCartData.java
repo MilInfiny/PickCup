@@ -7,6 +7,15 @@ package com.example.infiny.pickup.Model;
 public class ClaimToCartData {
     String title;
     String error;
+    String message;
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
 
     public String getTitle() {
         return title;
