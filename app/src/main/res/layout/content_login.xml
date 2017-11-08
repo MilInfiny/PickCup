@@ -67,7 +67,7 @@
                     android:maxLines="1"
                     android:textCursorDrawable="@null"
 
-                    android:hint="mail2gmail.com"
+                    android:hint="mail@gmail.com"
                     android:singleLine="true"
                     android:textColor="@android:color/white"
                     android:textColorHint="@android:color/darker_gray"
@@ -133,9 +133,9 @@
                 android:gravity="center"
                 android:text="Forgot Password?"
                 android:textColor="@color/white"
-                android:layout_centerInParent="true"
-                android:layout_marginTop="15dp"
-                android:layout_below="@+id/button_layout"/>
+                android:layout_marginTop="24dp"
+                android:layout_below="@+id/button_layout"
+                android:layout_centerHorizontal="true" />
         </RelativeLayout>
     </ScrollView>
 

@@ -40,6 +40,7 @@ import com.example.infiny.pickup.Adapters.CafeListAdapter;
 import com.example.infiny.pickup.Helpers.BadgeDrawerArrowDrawable;
 import com.example.infiny.pickup.Helpers.BadgeDrawerToggle;
 import com.example.infiny.pickup.Helpers.CafeLIstingHelpers;
+import com.example.infiny.pickup.Helpers.GPSTracker;
 import com.example.infiny.pickup.Helpers.RetroFitClient;
 import com.example.infiny.pickup.Helpers.SessionManager;
 import com.example.infiny.pickup.Interfaces.ApiIntegration;
@@ -107,6 +108,7 @@ public class MainActivity extends AppCompatActivity
     ClaimToCartData claimToCartData;
     TextView username,email,Notifications,Rewards;
     ImageView profileView;
+    GPSTracker gps;
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -287,6 +289,15 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
+        gps = new GPSTracker(context);
+        if (gps.canGetLocation()) {
+            double latitude = gps.getLatitude();
+            double longitude = gps.getLongitude();
+            sessionManager.storeLocation(latitude, longitude);
+        }
+        else {
+            gps.showSettingsAlert();
+        }
     }
 
     @Override
@@ -433,6 +444,7 @@ public class MainActivity extends AppCompatActivity
                                 getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                                 Toast.makeText(context,claimToCartData.getTitle(), Toast.LENGTH_SHORT).show();
                             } else {
+                                sessionManager.clear();
                                 Intent intent=new Intent(MainActivity.this,LoginActivity.class);
                                 startActivity(intent);
                                 finish();

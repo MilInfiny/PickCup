@@ -8,6 +8,7 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
@@ -95,8 +96,9 @@ public class FpemailsubmitActivity extends AppCompatActivity {
                                         progressBarCyclic.setVisibility(View.GONE);
                                         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                                         Intent intent = new Intent(FpemailsubmitActivity.this, FpotpActivity.class);
+                                        intent.putExtra("email",etEmail.getEditText().getText().toString());
                                         startActivity(intent);
-                                        finish();
+
                                     }
 
                                 }else {
@@ -137,14 +139,28 @@ public class FpemailsubmitActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            onBackpresss();
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                super.onBackPressed();  // optional depending on your needs
+                onBackpresss();
+
         }
         return super.onOptionsItemSelected(item);
     }
 
+    public void onBackpresss() {
+        Intent intent = new Intent(context, LoginActivity.class);
+        startActivity(intent);
+
+    }
 
     @Override
     protected void attachBaseContext(Context newBase) {

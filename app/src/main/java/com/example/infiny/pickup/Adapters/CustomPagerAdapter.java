@@ -126,7 +126,7 @@ public class CustomPagerAdapter  extends PagerAdapter {
 
 
                     builder.setTitle("Set Primary")
-                            .setMessage("Want To Set Primary?")
+                            .setMessage("Want to set primary?")
                             .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
                                     progressBarCyclic.setVisibility(View.VISIBLE);
@@ -207,7 +207,7 @@ public class CustomPagerAdapter  extends PagerAdapter {
 
 
                 builder.setTitle("Delete")
-                        .setMessage("Delete Card?")
+                        .setMessage("Delete card?")
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 progressBarCyclic.setVisibility(View.VISIBLE);
@@ -230,7 +230,7 @@ public class CustomPagerAdapter  extends PagerAdapter {
                                                     ((Activity)mContext).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                                                     Toast.makeText(mContext,cardListingData.getTitle(), Toast.LENGTH_SHORT).show();
                                                 } else {
-                                                    Toast.makeText(mContext,"Card Deleted Successfully", Toast.LENGTH_SHORT).show();
+                                                    Toast.makeText(mContext,"Card deleted successfully", Toast.LENGTH_SHORT).show();
                                                     Intent intent=new Intent(mContext,Card_Activity.class);
                                                     mContext.startActivity(intent);
                                                 }

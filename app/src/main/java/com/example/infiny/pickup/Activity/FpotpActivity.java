@@ -8,6 +8,7 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
@@ -22,6 +23,7 @@ import com.example.infiny.pickup.Helpers.RetroFitClient;
 import com.example.infiny.pickup.Helpers.SessionManager;
 import com.example.infiny.pickup.Interfaces.ApiIntegration;
 import com.example.infiny.pickup.Model.ForgotPasswordData;
+import com.example.infiny.pickup.Model.FpResetPasswordData;
 import com.example.infiny.pickup.Model.VerifyFpOtp;
 import com.example.infiny.pickup.R;
 
@@ -56,7 +58,9 @@ public class FpotpActivity extends AppCompatActivity {
     SessionManager sessionManager;
     @BindView(R.id.progressBar_cyclic)
     ProgressBar progressBarCyclic;
+    ForgotPasswordData forgotPasswordData;
     Boolean status;
+    String email;
     Context context;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,8 +71,59 @@ public class FpotpActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         appbar.setOutlineProvider(null);
         getSupportActionBar().setTitle("");
+        Intent intent=getIntent();
+        email=intent.getStringExtra("email");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         context=this;
+        twRecent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                progressBarCyclic.setVisibility(View.VISIBLE);
+                getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                        WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                retroFitClient = new RetroFitClient(context).getBlankRetrofit();
+                Call<ForgotPasswordData> call = retroFitClient
+                        .create(ApiIntegration.class)
+                        .getForgotPassword(email);
+                call.enqueue(new Callback<ForgotPasswordData>() {
+
+                    @Override
+                    public void onResponse(Call<ForgotPasswordData> call, Response<ForgotPasswordData> response) {
+                        if (response != null) {
+                            forgotPasswordData = response.body();
+                            if (forgotPasswordData != null) {
+                                if (forgotPasswordData.getError().equals("true")) {
+                                    progressBarCyclic.setVisibility(View.GONE);
+                                    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                    Toast.makeText(context,forgotPasswordData.getTitle(), Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(context, R.string.email_sent_please_check, Toast.LENGTH_SHORT).show();
+                                    progressBarCyclic.setVisibility(View.GONE);
+                                    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
+                                }
+
+                            }else {
+                                if (response.code() == 404 || response.code() == 500) {
+                                    progressBarCyclic.setVisibility(View.GONE);
+                                    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                    Toast.makeText(context, R.string.server_not_responding, Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ForgotPasswordData> call, Throwable t) {
+                        progressBarCyclic.setVisibility(View.GONE);
+                        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                        Toast.makeText(context,R.string.Something_went_wrong,Toast.LENGTH_SHORT);
+
+                    }
+                });
+
+            }
+        });
         btOtp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -99,7 +154,6 @@ public class FpotpActivity extends AppCompatActivity {
                                         Intent intent = new Intent(FpotpActivity.this, fpresetpassword.class);
                                         intent.putExtra("token",etOtp.getEditText().getText().toString());
                                         startActivity(intent);
-                                        finish();
                                     }
 
                                 }else {
@@ -140,14 +194,28 @@ public class FpotpActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            onBackpresss();
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                super.onBackPressed();  // optional depending on your needs
+                onBackpresss();
+
         }
         return super.onOptionsItemSelected(item);
     }
 
+    public void onBackpresss() {
+        Intent intent = new Intent(context, FpemailsubmitActivity.class);
+        startActivity(intent);
+
+    }
 
     @Override
     protected void attachBaseContext(Context newBase) {

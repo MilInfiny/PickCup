@@ -18,7 +18,7 @@
             android:layout_width="match_parent"
             android:visibility="gone"
             android:layout_height="match_parent"
-            android:background="@color/gray">
+            >
             <ProgressBar
                 android:id="@+id/progressBar_cyclic"
                 android:layout_width="wrap_content"
@@ -408,10 +408,10 @@
 
 
                 <EditText
+
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                    android:layout_marginTop="45dp"
-                    android:layout_marginBottom="24dp"
                     android:background="@color/white"
                     android:enabled="false"
                     android:gravity="top|left"
@@ -431,6 +431,13 @@
                     android:id="@+id/tv_notes"
                     android:textColor="#8e8e8e"
                     android:textSize="14sp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/colorLightGray"
+                    android:layout_below="@id/tv_notes"
+                    />
 
             </RelativeLayout>
         </RelativeLayout>

@@ -201,5 +201,23 @@ public interface ApiIntegration {
                                        @Part("address") RequestBody address,
                                        @Part("city") RequestBody city,
                                        @Part("postalcode") RequestBody postcode);
+
+    @Multipart
+    @POST("editprofile")
+    Call<EditProfileData> editProfilewithpassword (@Header("userToken") String token,
+                                       @Header("imageexist") String imageexist,
+                                       @Part("files\"; filename=\"pp.png\" ") RequestBody file,
+                                       @Part("userToken") RequestBody token1,
+                                       @Part("email") RequestBody email,
+                                       @Part("firstname") RequestBody name,
+                                       @Part("lastname") RequestBody surname,
+                                       @Part("imageUpload") RequestBody imageUpload,
+                                       @Part("dob") RequestBody dob,
+                                       @Part("contact") RequestBody contact,
+                                       @Part("address") RequestBody address,
+                                       @Part("city") RequestBody city,
+                                       @Part("password") RequestBody password,
+                                       @Part("postalcode") RequestBody postcode);
 }
+
 

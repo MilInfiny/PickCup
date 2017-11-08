@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.text.method.PasswordTransformationMethod;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
@@ -92,7 +93,7 @@ public class fpresetpassword extends AppCompatActivity {
                     Call<FpResetPasswordData> call = retroFitClient
                             .create(ApiIntegration.class)
                             .getResetpassword(token,
-                                    etConfirmpassword.getEditText().getText().toString());
+                                    etNewpassword.getEditText().getText().toString());
                     call.enqueue(new Callback<FpResetPasswordData>() {
 
                         @Override
@@ -109,6 +110,7 @@ public class fpresetpassword extends AppCompatActivity {
                                         progressBarCyclic.setVisibility(View.GONE);
                                         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                                         Intent intent = new Intent(fpresetpassword.this, LoginActivity.class);
+
                                         startActivity(intent);
                                         finish();
                                     }
@@ -125,6 +127,9 @@ public class fpresetpassword extends AppCompatActivity {
 
                         @Override
                         public void onFailure(Call<FpResetPasswordData> call, Throwable t) {
+                            progressBarCyclic.setVisibility(View.GONE);
+                            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                            Toast.makeText(context, R.string.server_not_responding, Toast.LENGTH_SHORT).show();
 
                         }
                     });
@@ -150,12 +155,27 @@ public class fpresetpassword extends AppCompatActivity {
     }
 
     @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            onBackpresss();
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                super.onBackPressed();  // optional depending on your needs
+                onBackpresss();
+
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void onBackpresss() {
+        Intent intent = new Intent(context, FpemailsubmitActivity.class);
+        startActivity(intent);
+
     }
 
 

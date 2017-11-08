@@ -24,6 +24,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
@@ -149,11 +150,11 @@ public class ProfileActivity extends AppCompatActivity {
         appbar.setOutlineProvider(null);
         getSupportActionBar().setTitle("");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        etPassword.setVisibility(View.GONE);
-        etConfirmpassword.setVisibility(View.GONE);
+
         btsave.setText("Save");
         context = this;
-
+        tiePassword.setTransformationMethod(new PasswordTransformationMethod());
+        tieConfipassword.setTransformationMethod(new PasswordTransformationMethod());
 
         sessionManager = new SessionManager(context);
         sharedPreferences = getSharedPreferences(sessionManager.PREF_NAME, 0);
@@ -214,6 +215,10 @@ public class ProfileActivity extends AppCompatActivity {
                     } else {
                         imageexist = "false";
                     }
+
+                        RequestBody password = RequestBody.create(MediaType.parse("text/plain"), etPassword.getEditText().getText().toString().trim());
+
+
                     RequestBody imageUpload = RequestBody.create(MediaType.parse("text/plain"), sharedPreferences.getString(sessionManager.imageUpload, null));
                     RequestBody token = RequestBody.create(MediaType.parse("text/plain"), sharedPreferences.getString("token", null));
                     RequestBody email = RequestBody.create(MediaType.parse("text/plain"), etEmail.getEditText().getText().toString().trim());
@@ -229,11 +234,22 @@ public class ProfileActivity extends AppCompatActivity {
                     getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
                             WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                     retroFitClient = new RetroFitClient(context).getBlankRetrofit();
+                    Call<EditProfileData> call=null;
+                    if(password !=null)
+                    {
+                        call = retroFitClient
+                                .create(ApiIntegration.class)
+                                .editProfilewithpassword(sharedPreferences.getString("token", null), imageexist,
+                                        fbody, token, email, name, surname, imageUpload, dob,contact, address, city, password,postcode);
+                    }
+                    else
+                    {
+                         call = retroFitClient
+                                .create(ApiIntegration.class)
+                                .editProfile(sharedPreferences.getString("token", null), imageexist,
+                                        fbody, token, email, name, surname, imageUpload, dob,contact, address, city, postcode);
+                    }
 
-                    Call<EditProfileData> call = retroFitClient
-                            .create(ApiIntegration.class)
-                            .editProfile(sharedPreferences.getString("token", null), imageexist,
-                                    fbody, token, email, name, surname, imageUpload, dob,contact, address, city, postcode);
                     call.enqueue(new Callback<EditProfileData>() {
 
                         @Override
@@ -244,8 +260,9 @@ public class ProfileActivity extends AppCompatActivity {
                                     if (editProfileData.getError().equals("true")) {
                                         progressBarCyclic.setVisibility(View.GONE);
                                         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                        Toast.makeText(context, R.string.email_already_exists, Toast.LENGTH_SHORT).show();
                                     } else {
-
+                                        Toast.makeText(context, R.string.profile_updated_successfully, Toast.LENGTH_SHORT).show();
                                         sessionManager.createLoginSession(editProfileData.getUser().getFirstname(), editProfileData.getUser().getEmail(), editProfileData.getUser().getLastname(), sharedPreferences.getString("token", null), editProfileData.getUser().getDob(), editProfileData.getUser().getAddress().getPostalCode(), editProfileData.getUser().getAddress().getCity(), editProfileData.getUser().getAddress().getAddress(), editProfileData.getUser().getImageUrl(),editProfileData.getUser().getContact());
                                         if (isTablet(context)) {
                                             new DownloadImage().execute(editProfileData.getUser().getImageUrl() + "_large.jpg");
@@ -594,6 +611,12 @@ public class ProfileActivity extends AppCompatActivity {
             etContactNumber.getEditText().setError("Please Enter Contact Number");
             status = false;
         }
+
+        if (!etPassword.getEditText().getText().toString().trim().equals(etConfirmpassword.getEditText().getText().toString().trim())) {
+            etConfirmpassword.getEditText().setError("Password & Confirm Password Should Be Same");
+            status = false;
+        }
+
 
 
 

@@ -106,7 +106,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService{
            mBuilder.setContentText(message);
            mBuilder.setPriority(Notification.PRIORITY_HIGH);
            mBuilder.setVisibility(Notification.VISIBILITY_PUBLIC);
-           mBuilder.setSmallIcon(R.drawable.logo);
+           mBuilder.setSmallIcon(R.drawable.notification );
            mBuilder.setColor(R.color.colorPrimary);
            mBuilder.setAutoCancel(true);
            mBuilder.setDefaults(Notification.DEFAULT_ALL);
@@ -115,7 +115,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService{
            resultIntent.putExtra("orderId", orderId);
        resultIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
        notification.flags |= Notification.FLAG_AUTO_CANCEL;
-
+       TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+       stackBuilder.addParentStack(SplashActivity.class);
+       stackBuilder.addNextIntent(resultIntent);
 
        PendingIntent notificationIntent= PendingIntent.getActivity(getApplicationContext(),0, resultIntent,PendingIntent.FLAG_UPDATE_CURRENT);
 
@@ -131,7 +133,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService{
         mBuilder.setContentText(message);
         mBuilder.setPriority(Notification.PRIORITY_HIGH);
         mBuilder.setVisibility(Notification.VISIBILITY_PUBLIC);
-        mBuilder.setSmallIcon(R.drawable.logo);
+        mBuilder.setSmallIcon(R.drawable.notification);
         mBuilder.setColor(R.color.colorPrimary);
         mBuilder.setAutoCancel(true);
         mBuilder.setDefaults(Notification.DEFAULT_ALL);
@@ -140,7 +142,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService{
         resultIntent.putExtra("orderId", orderId);
         resultIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         notification.flags |= Notification.FLAG_AUTO_CANCEL;
-
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+        stackBuilder.addParentStack(SplashActivity.class);
+        stackBuilder.addNextIntent(resultIntent);
 
         PendingIntent notificationIntent= PendingIntent.getActivity(getApplicationContext(),0, resultIntent,PendingIntent.FLAG_UPDATE_CURRENT);
 

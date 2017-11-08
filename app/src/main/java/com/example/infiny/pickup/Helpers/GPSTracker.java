@@ -166,7 +166,7 @@ public class GPSTracker extends Service implements LocationListener {
 
 
         // Setting Dialog Message
-        alertDialog.setMessage("To countinue, let your device turn on location, which uses location service");
+        alertDialog.setMessage("To continue, let your device turn on location, which uses location service");
 
         // Setting Icon to Dialog
         //alertDialog.setIcon(R.drawable.delete);

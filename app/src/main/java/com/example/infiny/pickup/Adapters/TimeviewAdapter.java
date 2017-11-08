@@ -165,14 +165,12 @@ public class TimeviewAdapter extends ExpandableRecyclerViewAdapter<TimeviewAdapt
                                 {
 
 
-                                    timebutton.setText(selectedHour + ":0" + selectedMinute+" "+timeSet);
-                                    OrderActivity.dateString = currentDate+" "+ selectedHour + ":0" + selectedMinute+":"+"00";
+                                    OrderActivity.dateString = currentDate+" "+ selectedHour + ":0" + selectedMinute+":"+"13";
 
 
                                 }
                                 else {
-                                    timebutton.setText(selectedHour + ":" + selectedMinute+" "+timeSet);
-                                    OrderActivity.dateString = currentDate+" "+ selectedHour + ":0" + selectedMinute+":"+"00";
+                                    OrderActivity.dateString = currentDate+" "+ selectedHour + ":" + selectedMinute+":"+"13";
 
 
                                 }
@@ -235,7 +233,7 @@ public class TimeviewAdapter extends ExpandableRecyclerViewAdapter<TimeviewAdapt
                     if(OrderActivity.parcel.equals("true"))
                     {
                         minute=minute+10;
-                        if(minute>60)
+                        if(minute>=60)
                         {
                             hour=hour+1;
                             if(hour>23)
@@ -247,11 +245,11 @@ public class TimeviewAdapter extends ExpandableRecyclerViewAdapter<TimeviewAdapt
                         }
                         if(minute<10)
                         {
-                            OrderActivity.dateString = currentDate+" "+ hour + ":0" + minute+":"+"00";
+                            OrderActivity.dateString = currentDate+" "+ hour + ":0" + minute+":"+"13";
 
                         }
                         else {
-                            OrderActivity.dateString = currentDate+" "+ hour + ":0" + minute+":"+"00";
+                            OrderActivity.dateString = currentDate+" "+ hour + ":" + minute+":"+"13";
 
 
                         }
@@ -282,11 +280,11 @@ public class TimeviewAdapter extends ExpandableRecyclerViewAdapter<TimeviewAdapt
                         minute = mcurrentTime.get(Calendar.MINUTE);
                         if(minute<10)
                         {
-                            OrderActivity.dateString = currentDate+" "+ hour + ":0" + minute+":"+"00";
+                            OrderActivity.dateString = currentDate+" "+ hour + ":0" + minute+":"+"13";
 
                         }
                         else {
-                            OrderActivity.dateString = currentDate+" "+ hour + ":0" + minute+":"+"00";
+                            OrderActivity.dateString = currentDate+" "+ hour + ":" + minute+":"+"13";
 
 
                         }

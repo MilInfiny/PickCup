@@ -76,7 +76,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
 
 
 
-        holder.textView.setText(dataNotification.getMessage());
+
         final SpannableStringBuilder sb = new SpannableStringBuilder(dataNotification.getMessage());
         final StyleSpan bss = new StyleSpan(android.graphics.Typeface.BOLD);
         int  startstringPosition =dataNotification.getMessage().indexOf(dataNotification.getShopDetail().getCafe_name());

@@ -95,7 +95,7 @@ public class RewardAdapter extends RecyclerView.Adapter<RewardAdapter.MyViewHold
             Picasso.with(context)
                     .invalidate(f1.getImageurl()+"_large.jpg");
             Picasso.with(context)
-                    .load(f1.getImageurl()+"_large.png")
+                    .load(f1.getImageurl()+"_large.jpg")
                     .placeholder(R.drawable.cofeecup)
                     .into(holder.imageView);
 
@@ -105,8 +105,8 @@ public class RewardAdapter extends RecyclerView.Adapter<RewardAdapter.MyViewHold
             Picasso.with(context)
                     .invalidate(f1.getImageurl()+"_small.jpg");
             Picasso.with(context)
-                    .load(f1.getImageurl()+"_small.png")
-                    .placeholder(R.drawable.ic_person_black_48dp)
+                    .load(f1.getImageurl()+"_small.jpg")
+                    .placeholder(R.drawable.cofeecup)
                     .into(holder.imageView);
 
 
@@ -189,6 +189,8 @@ public class RewardAdapter extends RecyclerView.Adapter<RewardAdapter.MyViewHold
                                                                         ((Activity) context).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
                                                                     } else {
+                                                                        sessionManager.createRewardsSession(f1.getRewardCompleted(),f1.getQuantity(),f1.getCafeStatus());
+
                                                                         RewardActivity.progressBarCyclic.setVisibility(View.GONE);
                                                                         ((Activity) context).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                                                                         Intent intent=new Intent(context, OrderActivity.class);
@@ -237,6 +239,8 @@ public class RewardAdapter extends RecyclerView.Adapter<RewardAdapter.MyViewHold
                                 } else {
                                     RewardActivity.progressBarCyclic.setVisibility(View.GONE);
                                     ((Activity) context).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                    sessionManager.createRewardsSession(f1.getRewardCompleted(),f1.getQuantity(),f1.getCafeStatus());
+
                                     Intent intent=new Intent(context, OrderActivity.class);
                                     intent.putExtra("fromPage","rewardActivity");
                                     intent.putExtra("sid",f1.getCafe_id());

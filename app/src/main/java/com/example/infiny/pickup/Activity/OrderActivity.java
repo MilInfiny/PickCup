@@ -73,7 +73,7 @@ public class OrderActivity extends AppCompatActivity implements OnItemClickListe
     SessionManager sessionManager;
     SharedPreferences sharedPreferences;
     CreateOrderData createOrderData;
-    public static String dateString = null, parcel = "false", note;
+    public static String dateString = null, parcel = "false", note="";
     String total;
     ;
     OnItemClickListener onItemClickListener;
@@ -216,19 +216,7 @@ public class OrderActivity extends AppCompatActivity implements OnItemClickListe
             paylayout.setText("Claim Reward");
 
         }
-        if(sharedPreferences.getString(sessionManager.status,null).equals("ready"))
-        {
-            statusButton.setBackground(context.getResources().getDrawable(R.drawable.button_bg_round_green));
-        }
-        if(sharedPreferences.getString(sessionManager.status,null).equals("closed"))
-        {
-            statusButton.setBackground(context.getResources().getDrawable(R.drawable.button_bg_round_red));
-        }
-        if(sharedPreferences.getString(sessionManager.status,null).equals("busy"))
-        {
-            statusButton.setBackground(context.getResources().getDrawable(R.drawable.button_bg_round_yellow));
-
-        };
+        etNote.setText(note);
 
         rewarddetails.setText(sharedPreferences.getString(sessionManager.rewardsCompleted,null)+"/"+sharedPreferences.getString(sessionManager.rewardsQuantity,null));
         progressBarCyclic.setVisibility(View.VISIBLE);
@@ -276,6 +264,19 @@ public class OrderActivity extends AppCompatActivity implements OnItemClickListe
 
                         } else {
                             layoutyscrollview.setVisibility(View.VISIBLE);
+                            if(sharedPreferences.getString(sessionManager.status,null).equals("ready"))
+                            {
+                                statusButton.setBackground(context.getResources().getDrawable(R.drawable.button_bg_round_green));
+                            }
+                            if(sharedPreferences.getString(sessionManager.status,null).equals("closed"))
+                            {
+                                statusButton.setBackground(context.getResources().getDrawable(R.drawable.button_bg_round_red));
+                            }
+                            if(sharedPreferences.getString(sessionManager.status,null).equals("busy"))
+                            {
+                                statusButton.setBackground(context.getResources().getDrawable(R.drawable.button_bg_round_yellow));
+
+                            };
 
                             if (isTablet(context)) {
 
@@ -546,11 +547,13 @@ public class OrderActivity extends AppCompatActivity implements OnItemClickListe
                     if (createOrderData != null) {
                         if (createOrderData.getError().equals("true")) {
                             dateString = null;
+                            parcel="false";
                             progressBarCyclic.setVisibility(View.GONE);
                             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
                         } else {
                             dateString = null;
+                            parcel="false";
                             Intent intent = new Intent(context, MainActivity.class);
                             startActivity(intent);
                             finish();

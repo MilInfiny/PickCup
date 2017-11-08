@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
@@ -248,10 +249,6 @@ public class OrderDetailsActivity extends AppCompatActivity implements OnItemCli
                                         .load(findpartiOrder.getData()[0].getShopDetail().getImageurl()+"_small.jpg")
                                         .placeholder(R.drawable.cofeecup)
                                         .into(Bottomtittleimage);
-
-
-
-
                             };
                             tvCustomerName.setText(findpartiOrder.getData()[0].getShopDetail().getCafe_name());
                             tvOrderNumber.setText(findpartiOrder.getData()[0].getOrderId());
@@ -266,12 +263,19 @@ public class OrderDetailsActivity extends AppCompatActivity implements OnItemCli
                             String ogdate = date[0];
                             String ogTime = date[1];
                             tvDate.setText(ogdate);
-                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                            Log.d("Time fs", findpartiOrder.getData()[0].getTimeForPickcup());
 
-                            sdf.setTimeZone(TimeZone.getDefault());
-                            try {
-                                Date myDate = sdf.parse(findpartiOrder.getData()[0].getTimeForPickcup());
+                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                            sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+
+                             try {
+                                 Date date2  = sdf.parse(findpartiOrder.getData()[0].getTimeForPickcup());
+                                 sdf.setTimeZone(TimeZone.getDefault());
+                                 String formattedDate = sdf.format(date2);
+                                 Log.d("fmd", formattedDate);
+                                 SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                                 SimpleDateFormat timesdf = new SimpleDateFormat("HH:mm:ss");
+                                 Date myDate=sdf1.parse(formattedDate);
                                 String timeString = timesdf.format(myDate);
                                 String timeformate[] = timeString.split(":");
                                 int hour = Integer.parseInt(timeformate[0]);

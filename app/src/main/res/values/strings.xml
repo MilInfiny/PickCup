@@ -61,4 +61,6 @@
     <string name="Cafe_Closed">Cafe is closed now. You can\'t order</string>
     <string name="busyPopup">This cafe is busy. Your order will take more time. Do you want to continue?</string>
     <string name="already_Primary">Card is Already Primary</string>
+    <string name="email_already_exists">Email already exists</string>
+    <string name="profile_updated_successfully">Profile updated successfully</string>
 </resources>

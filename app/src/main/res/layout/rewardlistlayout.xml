@@ -82,11 +82,11 @@
             android:id="@+id/tv_info"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="You are 5 order away from Reward"
+            android:text="You are 5 orders away from claiming your rewards Reward"
             android:layout_toRightOf="@+id/iv_info"
             android:layout_marginStart="10dp"
             android:layout_below="@+id/middlelayout"
-            android:layout_marginTop="14dp"
+            android:layout_marginTop="10dp"
             android:textColor="@color/darkergray"/>
 
 

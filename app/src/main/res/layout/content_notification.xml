@@ -17,6 +17,7 @@
         android:minWidth="50dp"
         android:visibility="gone"
         android:indeterminate="true"
+        android:translationZ="2dp"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />
     <TextView
